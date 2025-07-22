@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LayoutCraft - AI Visual Asset Generator</title>
+    <meta name="description" content="Transform your ideas into stunning visuals with AI-powered design generation">
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+        as="style">
+    <link rel="preload" href="css/main.css" as="style">
+    <link rel="preload" href="js/main.js" as="script">
+
+    <!-- External resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/premium.css">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <!-- Animated background -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div
+            class="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl animate-float">
+        </div>
+        <div
+            class="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-pink-400/20 to-indigo-600/20 rounded-full blur-3xl animate-float-delayed">
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" x-data="layoutCraftApp()" class="relative z-10">
+        <!-- Header -->
+        <header class="glass-card mx-4 mt-4 p-4 md:mx-8 md:mt-8 md:p-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div
+                        class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <h1
+                        class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                        LayoutCraft
+                    </h1>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex items-center space-x-6">
+                    <div class="hidden md:flex space-x-6">
+                        <a href="#" class="text-gray-600 hover:text-indigo-600 transition-colors">Gallery</a>
+                        <a href="#" class="text-gray-600 hover:text-indigo-600 transition-colors">Templates</a>
+                        <a href="#" class="text-gray-600 hover:text-indigo-600 transition-colors">About</a>
+                    </div>
+
+                    <!-- Authentication UI -->
+                    <div class="flex items-center space-x-4">
+                        <!-- Usage Counter (authenticated users) -->
+                        <div x-show="$store.auth.isAuthenticated"
+                            class="hidden md:flex items-center space-x-2 text-sm text-gray-600">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                </path>
+                            </svg>
+                            <span>
+                                <span x-text="$store.auth.user?.usage_count || 0"></span> /
+                                <span
+                                    x-text="$store.auth.user?.subscription_tier === 'enterprise' ? '∞' : ($store.auth.user?.subscription_tier === 'pro' ? '500' : '10')"></span>
+                            </span>
+                        </div>
+
+                        <!-- Login/Register buttons (unauthenticated) -->
+                        <div x-show="!$store.auth.isAuthenticated" class="flex items-center space-x-3">
+                            <button @click="$store.auth.showLoginModal = true"
+                                class="text-gray-600 hover:text-indigo-600 transition-colors font-medium">
+                                Login
+                            </button>
+                            <button @click="$store.auth.showRegisterModal = true"
+                                class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-4 py-2 rounded-lg font-medium hover:shadow-lg transition-all">
+                                Sign Up
+                            </button>
+                        </div>
+
+                        <!-- Profile dropdown (authenticated) -->
+                        <div x-show="$store.auth.isAuthenticated" class="relative">
+                            <div x-data="{ isOpen: false }" @click.away="isOpen = false">
+                                <!-- Profile Button -->
+                                <button @click="isOpen = !isOpen"
+                                    class="flex items-center space-x-3 p-2 rounded-lg hover:bg-white hover:bg-opacity-10 transition-all">
+                                    <div
+                                        class="w-8 h-8 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full flex items-center justify-center">
+                                        <span class="text-white font-medium text-sm"
+                                            x-text="$store.auth.user?.full_name?.charAt(0) || $store.auth.user?.email?.charAt(0) || 'U'"></span>
+                                    </div>
+                                    <div class="hidden md:block text-left">
+                                        <p class="text-sm font-medium text-gray-900"
+                                            x-text="$store.auth.user?.full_name || 'User'"></p>
+                                        <p class="text-xs text-gray-500"
+                                            x-text="$store.auth.user?.subscription_tier || 'free'"></p>
+                                    </div>
+                                    <svg class="w-4 h-4 text-gray-500 transition-transform"
+                                        :class="{ 'rotate-180': isOpen }" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+
+                                <!-- Dropdown Menu -->
+                                <div x-show="isOpen" x-transition:enter="transition ease-out duration-200"
+                                    x-transition:enter-start="opacity-0 transform scale-95"
+                                    x-transition:enter-end="opacity-100 transform scale-100"
+                                    x-transition:leave="transition ease-in duration-150"
+                                    x-transition:leave-start="opacity-100 transform scale-100"
+                                    x-transition:leave-end="opacity-0 transform scale-95"
+                                    class="absolute right-0 mt-2 w-56 glass-card rounded-lg shadow-lg z-50">
+
+                                    <!-- User Info -->
+                                    <div class="px-4 py-3 border-b border-white border-opacity-10">
+                                        <p class="text-sm font-medium text-gray-900"
+                                            x-text="$store.auth.user?.full_name || 'User'"></p>
+                                        <p class="text-xs text-gray-500" x-text="$store.auth.user?.email"></p>
+                                        <div class="flex items-center mt-1">
+                                            <span
+                                                class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                                <span x-text="$store.auth.user?.subscription_tier || 'free'"></span>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Usage Stats -->
+                                    <div class="px-4 py-3 border-b border-white border-opacity-10">
+                                        <div class="flex items-center justify-between text-sm">
+                                            <span class="text-gray-600">Usage this month</span>
+                                            <span class="font-medium"
+                                                x-text="$store.auth.user?.usage_count || 0"></span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2 mt-1">
+                                            <div class="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full"
+                                                :style="{ width: Math.min(($store.auth.user?.usage_count || 0) / (($store.auth.user?.subscription_tier === 'enterprise') ? 100 : ($store.auth.user?.subscription_tier === 'pro' ? 500 : 10)) * 100, 100) + '%' }">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Menu Items -->
+                                    <div class="py-2">
+                                        <button @click="$store.auth.showDashboard(); isOpen = false"
+                                            class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-white hover:bg-opacity-10 transition-colors">
+                                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
+                                                </path>
+                                            </svg>
+                                            Dashboard
+                                        </button>
+
+                                        <button @click="$store.auth.showGenerationHistory(); isOpen = false"
+                                            class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-white hover:bg-opacity-10 transition-colors">
+                                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            Generation History
+                                        </button>
+
+                                        <button @click="$store.auth.showAccountSettings(); isOpen = false"
+                                            class="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-white hover:bg-opacity-10 transition-colors">
+                                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                                                </path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            </svg>
+                                            Account Settings
+                                        </button>
+
+                                        <div class="border-t border-white border-opacity-10 mt-2 pt-2">
+                                            <button @click="$store.auth.showUpgradePlan(); isOpen = false"
+                                                class="flex items-center w-full px-4 py-2 text-sm text-indigo-600 hover:bg-indigo-50 hover:bg-opacity-10 transition-colors">
+                                                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                                </svg>
+                                                Upgrade Plan
+                                            </button>
+
+                                            <button @click="$store.auth.handleLogout(); isOpen = false"
+                                                class="flex items-center w-full px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:bg-opacity-10 transition-colors">
+                                                <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor"
+                                                    viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        stroke-width="2"
+                                                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                                    </path>
+                                                </svg>
+                                                Sign Out
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="px-4 py-12 md:px-8 text-center">
+            <div class="max-w-4xl mx-auto">
+                <h2
+                    class="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
+                    Create Stunning Visuals with AI
+                </h2>
+                <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                    Transform your ideas into professional-quality images using our advanced AI-powered design system
+                </p>
+
+                <!-- Authentication prompt for unauthenticated users -->
+                <div x-show="!$store.auth.isAuthenticated" class="mb-8">
+                    <div class="glass-card p-6 max-w-md mx-auto">
+                        <p class="text-gray-700 mb-4">Join thousands of creators already using LayoutCraft</p>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <button @click="$store.auth.showRegisterModal = true"
+                                class="flex-1 bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition-all">
+                                Start Creating Free
+                            </button>
+                            <button @click="$store.auth.showLoginModal = true"
+                                class="flex-1 glass-card py-3 px-6 rounded-lg font-semibold hover:shadow-lg transition-all">
+                                Sign In
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <main class="px-4 md:px-8 pb-12">
+            <div class="max-w-6xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Input Panel -->
+                    <div class="lg:col-span-2">
+                        <div class="glass-card p-6 md:p-8">
+                            <form @submit.prevent="generateImage" class="space-y-6" data-auth-required>
+
+                                <div class="flex items-center justify-between mb-6">
+                                    <h3 class="text-xl font-bold text-gray-900">Create Your Image</h3>
+                                    <span x-show="$store.auth.isAuthenticated" :class="`tier-badge ${$store.auth.user?.subscription_tier || 'free'}`">
+                                        <span x-text="$store.auth.user?.subscription_tier || 'free'"></span>
+                                    </span>                          
+                                </div>
+                                <!-- Prompt Input -->
+                                <div class="space-y-2">
+                                    <label for="prompt" class="block text-sm font-medium text-gray-700">
+                                        Describe your vision
+                                    </label>
+                                    <div class="relative">
+                                        <textarea id="prompt" x-model="prompt"
+                                            placeholder="A modern tech startup header with glassmorphism design, featuring the company name 'InnovateTech' with a gradient background..."
+                                            class="prompt-input w-full h-32 p-4 border-0 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                                            :disabled="isGenerating"></textarea>
+                                        <div class="absolute bottom-3 right-3 text-xs text-gray-400">
+                                            <span x-text="prompt.length"></span>/500
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Quick Templates -->
+                                <div class="template-section">
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Quick Templates
+                                    </label>
+                                    <div class="flex flex-wrap gap-2">
+                                        <button type="button" @click="setTemplate('social')" class="template-btn">
+                                            Social Media
+                                        </button>
+                                        <button type="button" @click="setTemplate('blog')" class="template-btn">
+                                            Blog Header
+                                        </button>
+                                        <button type="button" @click="setTemplate('presentation')" class="template-btn">
+                                            Presentation
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Advanced Settings -->
+                                <div x-show="showAdvanced" x-transition class="advanced-settings">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <div class="dimension-input">
+                                            <label for="width" class="block text-sm font-medium text-gray-700 mb-2">
+                                                Width
+                                            </label>
+                                            <input type="number" id="width" x-model="dimensions.width"
+                                                class="glass-input w-full p-3 rounded-lg" min="100" max="3000">
+                                        </div>
+                                        <div class="dimension-input">
+                                            <label for="height" class="block text-sm font-medium text-gray-700 mb-2">
+                                                Height
+                                            </label>
+                                            <input type="number" id="height" x-model="dimensions.height"
+                                                class="glass-input w-full p-3 rounded-lg" min="100" max="3000">
+                                        </div>
+                                    </div>
+                                    <div class="model-select">
+                                        <label for="model" class="block text-sm font-medium text-gray-700 mb-2">
+                                            AI Model
+                                        </label>
+                                        <select id="model" x-model="selectedModel"
+                                            class="glass-input w-full p-3 rounded-lg">
+                                            <option value="gemini-1.5-flash">Gemini 1.5 Flash (Fast)</option>
+                                            <option value="gemini-1.5-pro">Gemini 1.5 Pro (Quality)</option>
+                                            <option value="gemini-2.0-flash">Gemini 2.0 Flash (Beta)</option>
+                                            <option value="gemini-2.5-flash">Gemini 2.5 Flash (Fastest)</option>
+                                            <option value="gemini-2.5-pro">Gemini 2.5 Pro (Beta)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Controls -->
+                                <div class="control-buttons">
+                                    <button type="submit" :disabled="isGenerating || !prompt.trim()"
+                                        class="generate-btn" data-generate-button>
+                                        <div class="flex items-center justify-center space-x-2">
+                                            <div x-show="isGenerating"
+                                                class="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full">
+                                            </div>
+                                            <span
+                                                x-text="!$store.auth.isAuthenticated ? 'Login to Generate' : (isGenerating ? 'Generating...' : 'Generate Image')"></span>
+                                        </div>
+                                    </button>
+                                    <button type="button" @click="showAdvanced = !showAdvanced" class="settings-btn">
+                                        <svg class="w-5 h-5 mx-auto" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4">
+                                            </path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Results Panel -->
+                    <div class="lg:col-span-1">
+                        <div class="result-panel glass-card p-6 md:p-8 min-h-[400px]">
+                            <div x-show="!generatedImage && !isGenerating" class="empty-state">
+                                <div class="text-center">
+                                    <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                        </path>
+                                    </svg>
+                                    <p class="text-lg font-medium mb-2">Your creation will appear here</p>
+                                    <p class="text-sm">Enter a prompt and click generate to start</p>
+                                </div>
+                            </div>
+
+                            <div x-show="isGenerating" class="loading-state">
+                                <div class="text-center">
+                                    <div class="loading-animation w-16 h-16 mx-auto mb-4"></div>
+                                    <p class="text-lg font-medium mb-2">Creating your image...</p>
+                                    <p class="text-sm text-gray-600">This may take up to 2 minutes</p>
+                                </div>
+                            </div>
+
+                            <div x-show="generatedImage" class="image-result">
+                                <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden mb-4">
+                                    <img :src="generatedImage" alt="Generated image" class="w-full h-full object-cover"
+                                        x-show="generatedImage">
+                                </div>
+                                <div class="result-actions">
+                                    <a :href="generatedImage" :download="filename" class="download-btn">
+                                        Download
+                                    </a>
+                                    <button @click="regenerateImage" class="regenerate-btn">
+                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                            </path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Authentication Modals -->
+        <!-- Login Modal -->
+        <div x-show="$store.auth.showLoginModal" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+
+            <div class="glass-card p-8 max-w-md w-full relative" x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 transform scale-95"
+                x-transition:enter-end="opacity-100 transform scale-100"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 transform scale-100"
+                x-transition:leave-end="opacity-0 transform scale-95">
+
+                <!-- Close button -->
+                <button @click="$store.auth.showLoginModal = false"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <h2
+                        class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                        Welcome Back
+                    </h2>
+                    <p class="text-gray-600">Sign in to your LayoutCraft account</p>
+                </div>
+
+                <!-- Login Form -->
+                <form @submit.prevent="$store.auth.handleLogin($event)">
+                    <!-- Email Field -->
+                    <div class="mb-4">
+                        <label for="login-email" class="block text-sm font-medium text-gray-700 mb-2">
+                            Email Address
+                        </label>
+                        <input type="email" id="login-email" x-model="$store.auth.loginForm.email"
+                            class="auth-input w-full p-3 rounded-lg" placeholder="Enter your email"
+                            :class="{'border-red-500': $store.auth.loginErrors.email}" required>
+                        <p x-show="$store.auth.loginErrors.email" class="text-red-500 text-sm mt-1"
+                            x-text="$store.auth.loginErrors.email"></p>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="mb-6">
+                        <label for="login-password" class="block text-sm font-medium text-gray-700 mb-2">
+                            Password
+                        </label>
+                        <div class="relative">
+                            <input :type="$store.auth.showPassword ? 'text' : 'password'" id="login-password"
+                                x-model="$store.auth.loginForm.password" class="auth-input w-full p-3 rounded-lg pr-10"
+                                placeholder="Enter your password"
+                                :class="{'border-red-500': $store.auth.loginErrors.password}" required>
+                            <button type="button" @click="$store.auth.showPassword = !$store.auth.showPassword"
+                                class="absolute right-3 top-3 text-gray-400 hover:text-gray-600">
+                                <svg x-show="!$store.auth.showPassword" class="w-5 h-5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                    </path>
+                                </svg>
+                                <svg x-show="$store.auth.showPassword" class="w-5 h-5" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                        <p x-show="$store.auth.loginErrors.password" class="text-red-500 text-sm mt-1"
+                            x-text="$store.auth.loginErrors.password"></p>
+                    </div>
+
+                    <!-- General Error -->
+                    <div x-show="$store.auth.loginErrors.general"
+                        class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <p class="text-red-600 text-sm" x-text="$store.auth.loginErrors.general"></p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" :disabled="$store.auth.isLoading"
+                        class="auth-submit-btn w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-show="!$store.auth.isLoading">Sign In</span>
+                        <span x-show="$store.auth.isLoading" class="flex items-center justify-center">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            Signing In...
+                        </span>
+                    </button>
+                </form>
+
+                <!-- Footer -->
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600">
+                        Don't have an account?
+                        <button @click="$store.auth.showRegisterModal = true; $store.auth.showLoginModal = false"
+                            class="text-indigo-600 hover:text-indigo-800 font-medium">
+                            Sign up
+                        </button>
+                    </p>
+                    <button @click="$store.auth.showForgotPasswordModal()"
+                        class="text-sm text-gray-500 hover:text-gray-700 mt-2">
+                        Forgot your password?
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Register Modal -->
+        <div x-show="$store.auth.showRegisterModal" x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+            x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
+            x-transition:leave-end="opacity-0"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+
+            <div class="glass-card p-8 max-w-md w-full relative max-h-[90vh] overflow-y-auto"
+                x-transition:enter="transition ease-out duration-300"
+                x-transition:enter-start="opacity-0 transform scale-95"
+                x-transition:enter-end="opacity-100 transform scale-100"
+                x-transition:leave="transition ease-in duration-200"
+                x-transition:leave-start="opacity-100 transform scale-100"
+                x-transition:leave-end="opacity-0 transform scale-95">
+
+                <!-- Close button -->
+                <button @click="$store.auth.showRegisterModal = false"
+                    class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                        </path>
+                    </svg>
+                </button>
+
+                <!-- Header -->
+                <div class="text-center mb-8">
+                    <h2
+                        class="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent mb-2">
+                        Create Account
+                    </h2>
+                    <p class="text-gray-600">Join LayoutCraft and start creating amazing visuals</p>
+                </div>
+
+                <!-- Registration Form -->
+                <form @submit.prevent="$store.auth.handleRegister($event)">
+                    <!-- Full Name Field -->
+                    <div class="mb-4">
+                        <label for="register-name" class="block text-sm font-medium text-gray-700 mb-2">
+                            Full Name
+                        </label>
+                        <input type="text" id="register-name" x-model="$store.auth.registerForm.full_name"
+                            class="auth-input w-full p-3 rounded-lg" placeholder="Enter your full name"
+                            :class="{'border-red-500': $store.auth.registerErrors.full_name}" required>
+                        <p x-show="$store.auth.registerErrors.full_name" class="text-red-500 text-sm mt-1"
+                            x-text="$store.auth.registerErrors.full_name"></p>
+                    </div>
+
+                    <!-- Email Field -->
+                    <div class="mb-4">
+                        <label for="register-email" class="block text-sm font-medium text-gray-700 mb-2">
+                            Email Address
+                        </label>
+                        <input type="email" id="register-email" x-model="$store.auth.registerForm.email"
+                            class="auth-input w-full p-3 rounded-lg" placeholder="Enter your email"
+                            :class="{'border-red-500': $store.auth.registerErrors.email}" required>
+                        <p x-show="$store.auth.registerErrors.email" class="text-red-500 text-sm mt-1"
+                            x-text="$store.auth.registerErrors.email"></p>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="mb-4">
+                        <label for="register-password" class="block text-sm font-medium text-gray-700 mb-2">
+                            Password
+                        </label>
+                        <div class="relative">
+                            <input :type="$store.auth.showPassword ? 'text' : 'password'" id="register-password"
+                                x-model="$store.auth.registerForm.password"
+                                class="auth-input w-full p-3 rounded-lg pr-10" placeholder="Create a strong password"
+                                :class="{'border-red-500': $store.auth.registerErrors.password}" required>
+                            <button type="button" @click="$store.auth.showPassword = !$store.auth.showPassword"
+                                class="absolute right-3 top-3 text-gray-400 hover:text-gray-600">
+                                <svg x-show="!$store.auth.showPassword" class="w-5 h-5" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                    </path>
+                                </svg>
+                                <svg x-show="$store.auth.showPassword" class="w-5 h-5" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L3 3m6.878 6.878L21 21">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                        <p x-show="$store.auth.registerErrors.password" class="text-red-500 text-sm mt-1"
+                            x-text="$store.auth.registerErrors.password"></p>
+                        <p class="text-gray-500 text-xs mt-1">
+                            Must contain uppercase, lowercase, number, and special character
+                        </p>
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="mb-4">
+                        <label for="register-confirm-password" class="block text-sm font-medium text-gray-700 mb-2">
+                            Confirm Password
+                        </label>
+                        <input :type="$store.auth.showConfirmPassword ? 'text' : 'password'"
+                            id="register-confirm-password" x-model="$store.auth.registerForm.confirmPassword"
+                            class="auth-input w-full p-3 rounded-lg" placeholder="Confirm your password"
+                            :class="{'border-red-500': $store.auth.registerErrors.confirmPassword}" required>
+                        <p x-show="$store.auth.registerErrors.confirmPassword" class="text-red-500 text-sm mt-1"
+                            x-text="$store.auth.registerErrors.confirmPassword"></p>
+                    </div>
+
+                    <!-- Terms Checkbox -->
+                    <div class="mb-6">
+                        <label class="flex items-start space-x-3">
+                            <input type="checkbox" x-model="$store.auth.registerForm.acceptTerms"
+                                class="mt-1 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                :class="{'border-red-500': $store.auth.registerErrors.acceptTerms}" required>
+                            <span class="text-sm text-gray-600">
+                                I agree to the
+                                <a href="#" class="text-indigo-600 hover:text-indigo-800">Terms of Service</a>
+                                and
+                                <a href="#" class="text-indigo-600 hover:text-indigo-800">Privacy Policy</a>
+                            </span>
+                        </label>
+                        <p x-show="$store.auth.registerErrors.acceptTerms" class="text-red-500 text-sm mt-1"
+                            x-text="$store.auth.registerErrors.acceptTerms"></p>
+                    </div>
+
+                    <!-- General Error -->
+                    <div x-show="$store.auth.registerErrors.general"
+                        class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                        <p class="text-red-600 text-sm" x-text="$store.auth.registerErrors.general"></p>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" :disabled="$store.auth.isLoading"
+                        class="auth-submit-btn w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 px-4 rounded-lg font-semibold hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span x-show="!$store.auth.isLoading">Create Account</span>
+                        <span x-show="$store.auth.isLoading" class="flex items-center justify-center">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                                fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                            Creating Account...
+                        </span>
+                    </button>
+                </form>
+
+                <!-- Footer -->
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600">
+                        Already have an account?
+                        <button @click="$store.auth.showLoginModal = true; $store.auth.showRegisterModal = false"
+                            class="text-indigo-600 hover:text-indigo-800 font-medium">
+                            Sign in
+                        </button>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Modal -->
+        <div x-show="errorMessage" x-transition
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+            <div class="glass-card p-6 max-w-md w-full">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900">Error</h3>
+                </div>
+                <p class="text-gray-600 mb-4" x-text="errorMessage"></p>
+                <button @click="errorMessage = null"
+                    class="w-full bg-gradient-to-r from-red-500 to-pink-600 text-white py-2 px-4 rounded-lg font-semibold hover:shadow-lg transition-all">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="config/app.config.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/auth-guards.js"></script>
+    <script src="js/protected-components.js"></script>
+    <script src="js/main.js"></script>
+    <script src="components/premium/SubscriptionManager.js"></script>
+    <script src="components/premium/PremiumFeatures.js"></script>
+    <script src="components/subscription/PricingPlans.js"></script>
+    <script src="components/subscription/SubscriptionStatus.js"></script>
+    <script src="js/premium-indicators.js"></script>
+    <script>
+        // Initialize premium components
+        window.subscriptionManager = new SubscriptionManager();
+        window.premiumFeatures = new PremiumFeatures();
+    </script>
+</body>
+
+</html>

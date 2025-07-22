@@ -1,0 +1,5 @@
+<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="loading-spinner">
+  <circle cx="32" cy="32" r="28" stroke="#6366f1" stroke-width="4" fill="none" stroke-linecap="round" stroke-dasharray="44 132" stroke-dashoffset="0">
+    <animateTransform attributeName="transform" type="rotate" from="0 32 32" to="360 32 32" dur="1s" repeatCount="indefinite"/>
+  </circle>
+</svg>

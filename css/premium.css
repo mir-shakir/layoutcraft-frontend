@@ -1,0 +1,165 @@
+/* Premium feature styles */
+.premium-locked {
+    position: relative;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.premium-locked::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent 40%, rgba(99, 102, 241, 0.1) 50%, transparent 60%);
+    border-radius: inherit;
+    pointer-events: none;
+}
+
+.premium-indicator {
+    margin-top: 0.25rem;
+}
+
+.tier-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tier-badge.free {
+    background-color: #f3f4f6;
+    color: #6b7280;
+}
+
+.tier-badge.pro {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.tier-badge.enterprise {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.upgrade-prompt {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.upgrade-prompt button {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.upgrade-prompt button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+/* Usage progress bar enhancements */
+.usage-progress {
+    position: relative;
+    overflow: hidden;
+}
+
+.usage-progress.warning .usage-bar {
+    background: linear-gradient(90deg, #f59e0b, #ef4444);
+}
+
+.usage-progress.danger .usage-bar {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Subscription status indicators */
+.subscription-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.subscription-status.active {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.subscription-status.past_due {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.subscription-status.canceled {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+/* Premium feature cards */
+.feature-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+.feature-card.locked {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.feature-card.locked::before {
+    content: '';
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 1rem;
+    height: 1rem;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%236b7280'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .premium-indicator {
+        font-size: 0.75rem;
+    }
+
+    .tier-badge {
+        font-size: 0.625rem;
+        padding: 0.125rem 0.5rem;
+    }
+}
