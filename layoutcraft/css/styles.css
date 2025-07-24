@@ -95,6 +95,48 @@ body {
     transform: translateY(-1px);
 }
 
+/* Engine Selection Buttons */
+.engine-btn {
+    background: rgba(255, 255, 255, 0.6);
+    border-color: rgba(200, 200, 200, 0.3);
+    transition: all 0.3s ease;
+}
+
+.engine-btn:hover {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-1px);
+}
+
+.engine-btn-active {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Template Cards */
+.template-card {
+    background: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--border-radius-lg);
+    padding: 1rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.template-card:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.template-card-content {
+    display: flex;
+    align-items: center;
+    space-x: 0.5rem;
+    gap: 0.5rem;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
     width: 6px;
@@ -126,7 +168,7 @@ body {
 }
 
 /* COMPONENT STYLES */
-/* Template buttons */
+/* Template buttons (legacy - keeping for compatibility) */
 .template-btn {
     position: relative;
     overflow: hidden;
@@ -165,21 +207,22 @@ body {
 .generate-btn {
     position: relative;
     overflow: hidden;
-    flex: 1;
     padding: 1rem 1.5rem;
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     color: white;
     border: none;
     border-radius: var(--border-radius-xl);
     font-weight: 600;
+    font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
     transform: translateZ(0);
 }
 
 .generate-btn:disabled {
-    opacity: 0.5;
+    opacity: 0.6;
     cursor: not-allowed;
+    transform: none;
 }
 
 .generate-btn:hover:not(:disabled) {
@@ -242,6 +285,7 @@ body {
     text-align: center;
     flex-direction: column;
     color: #6b7280;
+    min-height: 400px;
 }
 
 .result-panel .image-result {
@@ -253,17 +297,22 @@ body {
 /* Result actions */
 .result-actions {
     display: flex;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
 .download-btn {
     flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     padding: 0.75rem 1rem;
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
     text-decoration: none;
     border-radius: var(--border-radius-lg);
     font-weight: 600;
+    font-size: 0.875rem;
     text-align: center;
     transition: all 0.3s ease;
 }
@@ -274,18 +323,22 @@ body {
 }
 
 .regenerate-btn {
-    padding: 0.75rem 1rem;
+    padding: 0.75rem;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: var(--border-radius-lg);
     cursor: pointer;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .regenerate-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.2);
 }
 
 /* Advanced settings */
@@ -308,6 +361,34 @@ body {
     gap: 0.5rem;
 }
 
+/* Image preview enhancements */
+.image-result img {
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Loading states improvements */
+.empty-state svg,
+.loading-state .loading-animation {
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
+}
+
+/* Success toast */
+.success-toast {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced error modal */
+.error-modal {
+    backdrop-filter: blur(8px);
+}
+
+/* Feedback section */
+details[open] summary {
+    margin-bottom: 0.75rem;
+}
 
 /* ANIMATIONS */
 /* Floating animation for background elements */
@@ -341,6 +422,7 @@ body {
     border-left-color: #6366f1;
     border-radius: 50%;
     animation: spin 1s linear infinite;
+    margin: 0 auto;
 }
 
 @keyframes spin {
@@ -349,11 +431,67 @@ body {
     }
 }
 
+/* Pulse animation for generate button */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.generate-btn:disabled {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, input, textarea, select {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Enhanced hover effects */
+.glass-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 50px 0 rgba(31, 38, 135, 0.4);
+}
+
+/* Image hover effect */
+.image-result img {
+    transition: transform 0.3s ease;
+}
+
+.image-result:hover img {
+    transform: scale(1.02);
+}
+
 /* Respect user motion preferences */
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+    }
+    
+    /* Still allow some basic transitions for usability */
+    button, a, input, textarea {
+        transition: opacity 0.2s ease, background-color 0.2s ease;
+    }
+}
+
+/* Dark mode support (optional enhancement) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --glass-bg: rgba(0, 0, 0, 0.25);
+        --glass-border: rgba(255, 255, 255, 0.1);
+    }
+}
+
+/* Print styles */
+@media print {
+    .glass-card {
+        background: white;
+        border: 1px solid #e5e7eb;
+        box-shadow: none;
     }
 }
