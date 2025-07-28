@@ -1,357 +1,787 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
     <title>LayoutCraft - AI Visual Asset Generator</title>
-    <meta name="description" content="Transform your ideas into stunning visuals with AI-powered design generation">
+    <meta name="title" content="LayoutCraft - AI Visual Asset Generator">
+    <meta name="description"
+        content="Turn prompts into production-ready designs. Create stunning blog headers, social media posts, and presentations with AI that understands layout and style.">
+    <meta name="keywords"
+        content="AI design generator, visual asset creator, blog header generator, social media design, presentation maker, artificial intelligence design, automated graphic design">
+    <meta name="author" content="LayoutCraft">
+    <meta name="robots" content="index, follow">
 
-    <!-- Preload critical resources -->
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
-        as="style">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://layoutcraft.tech">
+    <meta property="og:title" content="LayoutCraft - AI Visual Asset Generator">
+    <meta property="og:description"
+        content="Turn prompts into production-ready designs with AI that understands layout and style.">
+    <meta property="og:image" content="https://layoutcraft.tech/assets/images/og-image.png">
 
-    <!-- External resources -->
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://layoutcraft.tech">
+    <meta property="twitter:title" content="LayoutCraft - AI Visual Asset Generator">
+    <meta property="twitter:description"
+        content="Turn prompts into production-ready designs with AI that understands layout and style.">
+    <meta property="twitter:image" content="https://layoutcraft.tech/assets/images/og-image.png">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest.json">
+    <link rel="shortcut icon" href="/favicon.ico">
+
+    <!-- Preload & Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnected" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+
+    <!-- Styles & Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 20s ease-in-out infinite',
+                        'float-delayed': 'float-delayed 25s ease-in-out infinite',
+                        'spin-slow': 'spin 3s linear infinite',
+                        'pulse-subtle': 'pulse-subtle 2s ease-in-out infinite',
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                }
+            }
+        }
+    </script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 
-    <!-- Custom MVP styles -->
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJ5GEKEX8H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DJ5GEKEX8H');
+    </script>
     <link rel="stylesheet" href="css/styles.css">
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg">
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-    <!-- Animated background -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 text-gray-800 antialiased font-sans"
+    x-data="layoutCraftApp" x-cloak>
+
+    <!-- Background Animation -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden="true">
         <div
-            class="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl animate-float">
+            class="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-blue-400/10 to-purple-600/10 rounded-full blur-3xl animate-float">
         </div>
         <div
-            class="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-pink-400/20 to-indigo-600/20 rounded-full blur-3xl animate-float-delayed">
+            class="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-pink-400/10 to-indigo-600/10 rounded-full blur-3xl animate-float-delayed">
         </div>
     </div>
 
-    <!-- Main App -->
-    <div id="app" x-data="layoutCraftApp()" class="relative z-10 p-4 md:p-8">
-        <!-- Header -->
-        <header class="text-center mb-8">
-            <div class="inline-flex items-center space-x-3">
-                <div
-                    class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
-                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                    </svg>
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-40 bg-white/70 backdrop-blur-lg border-b border-gray-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <button @click="showSection('generator')"
+                        class="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+                        <div
+                            class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-xl font-bold text-gray-800">LayoutCraft</span>
+                    </button>
                 </div>
-                <div>
-                    <h1
-                        class="text-4xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
-                        LayoutCraft
-                    </h1>
-                    <p class="text-sm text-gray-600 font-medium">AI Visual Designer</p>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex md:items-center md:space-x-8">
+                    <button @click="showSection('generator')"
+                        :class="activeSection === 'generator' ? 'text-indigo-600 font-semibold' : 'text-gray-500 hover:text-gray-800'"
+                        class="transition-colors">
+                        Generator
+                    </button>
+                    <button @click="showSection('examples')"
+                        :class="activeSection === 'examples' ? 'text-indigo-600 font-semibold' : 'text-gray-500 hover:text-gray-800'"
+                        class="transition-colors">
+                        Examples
+                    </button>
+                    <button @click="showSection('about')"
+                        :class="activeSection === 'about' ? 'text-indigo-600 font-semibold' : 'text-gray-500 hover:text-gray-800'"
+                        class="transition-colors">
+                        About
+                    </button>
+                    <button @click="showSection('faq')"
+                        :class="activeSection === 'faq' ? 'text-indigo-600 font-semibold' : 'text-gray-500 hover:text-gray-800'"
+                        class="transition-colors">
+                        FAQ
+                    </button>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div x-show="mobileMenuOpen" x-transition class="md:hidden py-4 border-t border-gray-200/50">
+                <div class="flex flex-col space-y-2">
+                    <button @click="showSection('generator'); mobileMenuOpen = false"
+                        :class="activeSection === 'generator' ? 'text-indigo-600 font-semibold' : 'text-gray-500'"
+                        class="text-left py-2">Generator</button>
+                    <button @click="showSection('examples'); mobileMenuOpen = false"
+                        :class="activeSection === 'examples' ? 'text-indigo-600 font-semibold' : 'text-gray-500'"
+                        class="text-left py-2">Examples</button>
+                    <button @click="showSection('about'); mobileMenuOpen = false"
+                        :class="activeSection === 'about' ? 'text-indigo-600 font-semibold' : 'text-gray-500'"
+                        class="text-left py-2">About</button>
+                    <button @click="showSection('faq'); mobileMenuOpen = false"
+                        :class="activeSection === 'faq' ? 'text-indigo-600 font-semibold' : 'text-gray-500'"
+                        class="text-left py-2">FAQ</button>
                 </div>
             </div>
-        </header>
+        </div>
+    </header>
+
+    <main class="relative p-4 md:p-8" x-show="isReady">
 
         <!-- Hero Section -->
-        <section class="text-center mb-12">
+        <section x-show="activeSection === 'generator'" x-transition class="text-center mb-16 md:mb-20">
             <div class="max-w-4xl mx-auto">
-                <h2
-                    class="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-                    Create Professional Visuals in Seconds
-                </h2>
-                <p class="text-lg text-gray-600 mb-6 max-w-2xl mx-auto">
-                    Turn your ideas into stunning blog headers, social media posts, and presentations with our AI-powered design engine.
+                <h1
+                    class="text-4xl md:text-6xl font-extrabold mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent !leading-snug">
+                    Stop Generating AI Art. Start Creating Designs.
+                </h1>
+                <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+                    Tired of chaotic AI images with messy layouts and unreadable text? LayoutCraft creates structured,
+                    pixel-perfect visuals ready for your blog, social media, and marketing.
                 </p>
-                <div class="flex justify-center items-center space-x-6 text-sm text-gray-500">
-                    <div class="flex items-center space-x-2">
-                        <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                        <span>No signup required</span>
+            </div>
+        </section>
+
+        <!-- Generator Section -->
+        <section x-show="activeSection === 'generator'" x-transition>
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                <!-- Left Panel: Controls -->
+                <div class="glass-card p-6 md:p-8 space-y-6 transition-all duration-300">
+
+                    <!-- Step 1: Prompt -->
+                    <div>
+                        <label for="prompt" class="block text-lg font-semibold mb-3 text-gray-700">
+                            1. Describe Your Vision
+                        </label>
+                        <div class="relative w-full">
+                            <textarea id="prompt" x-model="prompt" @input="saveDraft" rows="4" maxlength="500"
+                                class="w-full p-4 pb-10 rounded-xl border-2 border-white/30 bg-white/80 backdrop-blur-sm focus:border-indigo-400 focus:bg-white/90 focus:ring-4 focus:ring-indigo-100 transition-all duration-300 resize-none text-gray-700"
+                                placeholder="e.g., A modern blog header for 'The Future of AI in Design'. Use clean typography with blue accents and subtle geometric patterns."
+                                :disabled="isGenerating"></textarea>
+
+                            <span class="absolute bottom-3 right-4 text-xs text-gray-400 pointer-events-none"
+                                :class="{ 'text-red-500 font-medium': prompt.length > 500 }"
+                                x-text="`${prompt.length}/500`">
+                            </span>
+                        </div>
+
+                        <div class="mt-2 text-right h-4">
+                            <div x-show="retryMessage"
+                                class="retry-suggestion inline-block text-xs text-orange-600 font-medium"
+                                x-text="retryMessage"></div>
+                        </div>
+                        <div class="mt-4 flex items-center gap-3">
+                            <span class="text-sm text-gray-600 font-medium flex-shrink-0">Try:</span>
+
+                            <div
+                                class="flex-1 flex items-center gap-2 overflow-x-auto whitespace-nowrap py-1 scrollbar-hide">
+                                <template x-for="quickPrompt in quickPrompts.slice(0, 3)" :key="quickPrompt.id">
+                                    <button @click="useQuickPrompt(quickPrompt)"
+                                        class="prompt-suggestion-btn flex-shrink-0" :disabled="isGenerating">
+                                        <span x-text="quickPrompt.title"></span>
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
-                        <span>Multiple design styles</span>
+
+                    <!-- Step 2: Style Selection -->
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-700">2. Choose a Style</h3>
+                            <button @click="styleExpanded = !styleExpanded"
+                                class="md:hidden p-2 hover:bg-white/50 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 transition-transform duration-200"
+                                    :class="styleExpanded ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="mt-3" x-show="styleExpanded" x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100">
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                <button @click="selectedTheme = 'auto'"
+                                    :class="selectedTheme === 'auto' ? 'bg-indigo-100 border-indigo-400 text-indigo-700' : 'bg-white/60 border-white/30 text-gray-600 hover:bg-white/80'"
+                                    class="p-3 rounded-lg text-sm font-medium border-2 transition-all duration-200 hover:scale-105"
+                                    :disabled="isGenerating">
+                                    ✨ Auto (Surprise Me)
+                                </button>
+                                <template x-for="theme in themes" :key="theme.id">
+                                    <button @click="selectedTheme = theme.id"
+                                        :class="selectedTheme === theme.id ? 'bg-indigo-100 border-indigo-400 text-indigo-700' : 'bg-white/60 border-white/30 text-gray-600 hover:bg-white/80'"
+                                        class="p-3 rounded-lg text-sm font-medium border-2 transition-all duration-200 hover:scale-105 capitalize"
+                                        :disabled="isGenerating" x-text="theme.name.replace(/_/g, ' ')">
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
                     </div>
-                    <div class="flex items-center space-x-2">
-                        <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-                        <span>Instant downloads</span>
+
+                    <!-- Step 3: Engine Selection -->
+                    <div>
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-semibold text-gray-700">3. Select Quality</h3>
+                            <button @click="qualityExpanded = !qualityExpanded"
+                                class="md:hidden p-2 hover:bg-white/50 rounded-lg transition-colors">
+                                <svg class="w-4 h-4 transition-transform duration-200"
+                                    :class="qualityExpanded ? 'rotate-180' : ''" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="mt-3" x-show="qualityExpanded" x-transition:enter="transition ease-out duration-200"
+                            x-transition:enter-start="opacity-0 scale-95"
+                            x-transition:enter-end="opacity-100 scale-100">
+                            <div class="grid grid-cols-2 gap-3">
+                                <button @click="selectedEngine = 'fast'"
+                                    :class="selectedEngine === 'fast' ? 'bg-emerald-100 border-emerald-400 text-emerald-700' : 'bg-white/60 border-white/30 text-gray-600 hover:bg-white/80'"
+                                    class="p-4 rounded-lg text-sm font-medium border-2 transition-all duration-200 hover:scale-105"
+                                    :disabled="isGenerating">
+                                    <div class="text-base">⚡ Fast</div>
+                                    <div class="text-xs opacity-75">Quick results (~30s)</div>
+                                </button>
+                                <button @click="selectedEngine = 'pro'"
+                                    :class="selectedEngine === 'pro' ? 'bg-purple-100 border-purple-400 text-purple-700' : 'bg-white/60 border-white/30 text-gray-600 hover:bg-white/80'"
+                                    class="p-4 rounded-lg text-sm font-medium border-2 transition-all duration-200 hover:scale-105"
+                                    :disabled="isGenerating">
+                                    <div class="text-base">💎 Pro</div>
+                                    <div class="text-xs opacity-75">High quality (~60s)</div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generate Button -->
+                    <div class="pt-4">
+                        <button @click="generateImage"
+                            :disabled="isGenerating || !prompt.trim() || prompt.length < 10 || prompt.length > 500"
+                            class="w-full flex items-center justify-center space-x-3 py-4 px-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:animate-pulse-subtle">
+                            <span x-show="!isGenerating" class="text-lg">Generate Design</span>
+                            <span x-show="isGenerating" class="text-lg loading-dots" x-text="loadingMessage"></span>
+                            <svg x-show="!isGenerating" class="w-6 h-6" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                            <div x-show="isGenerating"
+                                class="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin">
+                            </div>
+                        </button>
+                        <div x-show="prompt.length > 0 && (prompt.length < 10 || prompt.length > 500)"
+                            class="text-red-500 text-sm mt-2">
+                            <span x-show="prompt.length < 10">Please provide a more detailed description (at least 10
+                                characters)</span>
+                            <span x-show="prompt.length > 500">Please shorten your prompt (maximum 500
+                                characters)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Panel: Result -->
+                <div x-ref="resultPanel" class="glass-card p-6 min-h-[500px] flex flex-col transition-all duration-300">
+                    <!-- Empty State -->
+                    <div x-show="!isGenerating && !generatedImage"
+                        class="flex-1 flex flex-col items-center justify-center text-center space-y-4">
+                        <div
+                            class="w-20 h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center">
+                            <svg class="w-10 h-10 text-indigo-400" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                </path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-gray-700 mb-2">Your design will appear here</h4>
+                            <p class="text-gray-500">Try a quick start prompt above, or describe your vision and let our
+                                AI create
+                                something amazing.</p>
+                        </div>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div x-show="isGenerating"
+                        class="flex-1 flex flex-col items-center justify-center text-center space-y-4">
+                        <div class="w-16 h-16 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin">
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold text-gray-700 loading-dots" x-text="loadingMessage"></h4>
+                            <p class="text-gray-500 mt-2"
+                                x-text="selectedEngine === 'pro' ? 'This can take up to 60 seconds for Pro quality.' : 'Fast generation in progress...'">
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Generated Image -->
+                    <div x-show="generatedImage" class="flex-1 flex flex-col">
+                        <div class="flex-1 flex items-center justify-center mb-4">
+                            <img :src="generatedImage" alt="AI generated design"
+                                class="max-w-full max-h-96 object-contain rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                                @load="imageLoaded = true" @error="imageError = true">
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex gap-3">
+                            <a :href="generatedImage" :download="filename" @click="downloadImage"
+                                class="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                </svg>
+                                Download
+                            </a>
+                            <button @click="regenerateImage" :disabled="isGenerating"
+                                class="p-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg hover:bg-white hover:shadow-md transition-all duration-200 disabled:opacity-50"
+                                title="Generate variation">
+                                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <!-- Email Signup Form -->
+                        <div x-show="showEmailForm && !emailSubmitted" x-transition
+                            class="mt-6 p-4 border-t border-gray-200/50">
+                            <h4 class="font-semibold text-center text-gray-700 mb-1">Love the results?</h4>
+                            <p class="text-sm text-center text-gray-500 mb-4">Get updates on new features and styles.
+                            </p>
+                            <form @submit.prevent="submitEmail" class="flex flex-col sm:flex-row gap-2">
+                                <input type="email" x-model="emailForUpdates" placeholder="your.email@example.com"
+                                    required
+                                    class="flex-1 p-3 rounded-lg border border-gray-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all duration-200"
+                                    :disabled="isSubmittingEmail">
+
+                                <button type="submit" :disabled="isSubmittingEmail || !emailForUpdates.trim()"
+                                    class="bg-indigo-600 text-white px-6 py-3 font-semibold rounded-lg hover:bg-indigo-700 transition-all duration-200 disabled:opacity-50 whitespace-nowrap">
+                                    <span x-show="!isSubmittingEmail">Get Updates</span><span
+                                        x-show="isSubmittingEmail">Subscribing...</span>
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Email Success Message -->
+                        <div x-show="emailSubmitted" x-transition
+                            class="mt-6 p-4 border-t border-gray-200/50 text-center">
+                            <div class="flex items-center justify-center gap-2 text-emerald-600">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-medium">Thanks for subscribing!</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Main Content -->
-        <main class="pb-12">
-            <div class="max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-5 gap-8">
-                    <!-- Input Panel -->
-                    <div class="lg:col-span-3">
-                        <div class="glass-card p-6 md:p-8">
-                            <form @submit.prevent="generateImage" class="space-y-6">
+        <!-- Examples Section -->
+        <section x-show="activeSection === 'examples'" x-transition class="max-w-6xl mx-auto">
+            <div class="glass-card p-8 md:p-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">Examples & Inspiration</h2>
+                <p class="text-center text-gray-600 mb-12 text-lg">See what's possible with LayoutCraft. Each design was
+                    generated from a simple text prompt.</p>
 
-                                <div class="flex items-center justify-between">
-                                    <h3 class="text-xl font-bold text-gray-900">Design Your Visual</h3>
-                                    <div class="flex items-center space-x-2 text-sm text-gray-500">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        <span>Press Ctrl+Enter to generate</span>
-                                    </div>
-                                </div>
-                                
-                                <!-- Prompt Input -->
-                                <div class="space-y-2">
-                                    <label for="prompt" class="block text-sm font-medium text-gray-700">
-                                        Describe what you want to create
-                                    </label>
-                                    <div class="relative">
-                                        <textarea id="prompt" x-model="prompt"
-                                            maxlength="1000"
-                                            placeholder="A modern tech blog header about artificial intelligence, featuring clean typography and a futuristic gradient background..."
-                                            class="prompt-input w-full h-32 p-4 border-0 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
-                                            :disabled="isGenerating"></textarea>
-                                        <div class="absolute bottom-3 right-3 text-xs text-gray-400">
-                                            <span x-text="prompt.length"></span>/1000
-                                        </div>
-                                    </div>
-                                </div>
+                <!-- Example Gallery -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                    <template x-for="example in examples" :key="example.id">
+                        <div
+                            class="bg-white/50 rounded-xl p-6 border border-white/30 hover:bg-white/70 transition-all duration-300 hover:scale-105">
+                            <div
+                                class="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                                <img :src="example.imagePath" :alt="example.title + ' example'"
+                                    class="w-full h-full object-cover" loading="lazy"
+                                    onerror="this.parentElement.innerHTML='<span class=\'text-gray-500 text-sm\'>Example Image</span>'">
+                            </div>
+                            <h3 class="font-semibold text-gray-800 mb-2" x-text="example.title"></h3>
+                            <p class="text-sm text-gray-600 mb-3" x-text="example.description"></p>
+                            <button @click="useExample(example)"
+                                class="text-indigo-600 text-sm font-medium hover:text-indigo-700 transition-colors">
+                                Use This Prompt →
+                            </button>
+                        </div>
+                    </template>
+                </div>
 
-                                <!-- Engine Selection -->
-                                <div class="space-y-2">
-                                    <label class="block text-sm font-medium text-gray-700">
-                                        AI Engine
-                                    </label>
-                                    <div class="grid grid-cols-2 gap-3">
-                                        <button type="button" @click="selectedEngine = 'fast'" 
-                                            :class="selectedEngine === 'fast' ? 'engine-btn-active' : 'engine-btn'"
-                                            class="text-left p-3 rounded-lg border-2 transition-all">
-                                            <div class="flex items-center justify-between">
-                                                <div>
-                                                    <div class="font-semibold text-sm">Lightning Fast</div>
-                                                    <div class="text-xs text-gray-500">Quick results • Good quality</div>
-                                                </div>
-                                                <div class="w-2 h-2 bg-green-500 rounded-full"></div>
-                                            </div>
-                                        </button>
-                                        <button type="button" @click="selectedEngine = 'pro'" 
-                                            :class="selectedEngine === 'pro' ? 'engine-btn-active' : 'engine-btn'"
-                                            class="text-left p-3 rounded-lg border-2 transition-all">
-                                            <div class="flex items-center justify-between">
-                                                <div>
-                                                    <div class="font-semibold text-sm">Professional</div>
-                                                    <div class="text-xs text-gray-500">Takes longer • Best quality</div>
-                                                </div>
-                                                <div class="w-2 h-2 bg-purple-500 rounded-full"></div>
-                                            </div>
-                                        </button>
-                                    </div>
+                <!-- Prompting Guide -->
+                <div class="border-t border-gray-200/50 pt-8">
+                    <h3 class="text-2xl font-bold text-center mb-6">Tips for Better Results</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="text-indigo-600 font-bold">1</span>
                                 </div>
-
-                                <!-- Quick Templates -->
-                                <div class="template-section">
-                                    <label class="block text-sm font-medium text-gray-700 mb-3">
-                                        Popular Templates
-                                    </label>
-                                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                        <button type="button" @click="setTemplate('blog')" class="template-card">
-                                            <div class="template-card-content">
-                                                <svg class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
-                                                </svg>
-                                                <span class="font-medium">Blog Header</span>
-                                            </div>
-                                        </button>
-                                        <button type="button" @click="setTemplate('social')" class="template-card">
-                                            <div class="template-card-content">
-                                                <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2h4a1 1 0 011 1v2a1 1 0 01-1 1h-1v12a2 2 0 01-2 2H6a2 2 0 01-2-2V8H3a1 1 0 01-1-1V5a1 1 0 011-1h4z"></path>
-                                                </svg>
-                                                <span class="font-medium">Social Post</span>
-                                            </div>
-                                        </button>
-                                        <button type="button" @click="setTemplate('presentation')" class="template-card">
-                                            <div class="template-card-content">
-                                                <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                                </svg>
-                                                <span class="font-medium">Presentation</span>
-                                            </div>
-                                        </button>
-                                    </div>
-                                </div>
-
-                                <!-- Generate Button -->
                                 <div>
-                                    <button type="submit" :disabled="isGenerating || !prompt.trim()"
-                                        class="generate-btn w-full">
-                                        <div class="flex items-center justify-center space-x-2">
-                                            <div x-show="isGenerating"
-                                                class="animate-spin w-5 h-5 border-2 border-white border-t-transparent rounded-full">
-                                            </div>
-                                            <span x-text="isGenerating ? 'Creating your design...' : 'Generate Visual'"></span>
-                                        </div>
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Results Panel -->
-                    <div class="lg:col-span-2">
-                        <div class="glass-card p-6 md:p-8 min-h-[500px]">
-                            <!-- Empty State -->
-                            <div x-show="!generatedImage && !isGenerating" class="empty-state">
-                                <div class="w-20 h-20 mx-auto mb-4 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center">
-                                    <svg class="w-10 h-10 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                    </svg>
-                                </div>
-                                <h4 class="text-lg font-semibold mb-2 text-gray-800">Ready to create</h4>
-                                <p class="text-sm text-gray-600 mb-4">Enter a description and hit generate to see the magic happen</p>
-                                <div class="text-xs text-gray-500">
-                                    <div class="flex items-center justify-center space-x-4">
-                                        <span>• High-quality images</span>
-                                        <span>• Multiple styles</span>
-                                        <span>• Instant preview</span>
-                                    </div>
+                                    <h4 class="font-semibold text-gray-800">Be Specific</h4>
+                                    <p class="text-gray-600 text-sm">Instead of "cool header," try "Modern tech company
+                                        header with dark blue background and glowing geometric lines."</p>
                                 </div>
                             </div>
-
-                            <!-- Loading State -->
-                            <div x-show="isGenerating" class="loading-state">
-                                <div class="loading-animation mb-4"></div>
-                                <h4 class="text-lg font-semibold mb-2 text-gray-800" x-text="loadingMessage"></h4>
-                                <p class="text-sm text-gray-600 mb-4">This usually takes 10-30 seconds</p>
-                                <div class="text-xs text-gray-500" x-text="'Using ' + (selectedEngine === 'fast' ? 'Lightning Fast' : 'Professional') + ' engine'"></div>
-                            </div>
-
-                            <!-- Image Result -->
-                            <div x-show="generatedImage" class="image-result">
-                                <div class="relative group cursor-pointer" @click="showPreview = true">
-                                    <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg">
-                                        <img :src="generatedImage" alt="Generated design" class="w-full h-full object-cover transition-transform group-hover:scale-105">
-                                    </div>
-                                    <div class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all flex items-center justify-center">
-                                        <div class="opacity-0 group-hover:opacity-100 transition-opacity">
-                                            <div class="bg-white rounded-full p-3 shadow-lg">
-                                                <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="text-indigo-600 font-bold">2</span>
                                 </div>
-                                
-                                <div class="mt-4 space-y-3">
-                                    <div class="text-xs text-gray-500 text-center">
-                                        Click image to preview • <span x-text="dimensions.width + 'x' + dimensions.height"></span> pixels
-                                    </div>
-                                    <div class="result-actions">
-                                        <a :href="generatedImage" :download="filename" class="download-btn">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                            </svg>
-                                            Download PNG
-                                        </a>
-                                        <button @click="regenerateImage" class="regenerate-btn" title="Generate new variation">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Include Text Content</h4>
+                                    <p class="text-gray-600 text-sm">Specify any text you want: "Header with the text
+                                        'Summer Sale - 50% Off' in bold white letters."</p>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Feedback Section -->
-                        <div class="mt-6 glass-card p-4">
-                            <details class="group">
-                                <summary class="flex items-center justify-between cursor-pointer list-none">
-                                    <span class="text-sm font-medium text-gray-700">💡 Help us improve</span>
-                                    <svg class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </summary>
-                                <div class="mt-3 space-y-3">
-                                    <textarea x-model="feedbackMessage" placeholder="Share your thoughts, suggestions, or report issues..." 
-                                        class="w-full h-20 p-3 text-sm border border-gray-200 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
-                                    <input type="email" x-model="feedbackEmail" placeholder="Email (optional)" 
-                                        class="w-full p-3 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent" />
-                                    <button @click="submitFeedback" :disabled="!feedbackMessage.trim() || isSubmittingFeedback"
-                                        class="w-full bg-gradient-to-r from-gray-500 to-gray-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:shadow-lg transition-all disabled:opacity-50">
-                                        <span x-text="isSubmittingFeedback ? 'Sending...' : 'Send Feedback'"></span>
-                                    </button>
+                        <div class="space-y-4">
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="text-indigo-600 font-bold">3</span>
                                 </div>
-                            </details>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Define the Mood</h4>
+                                    <p class="text-gray-600 text-sm">Use descriptive words like "minimalist," "vibrant,"
+                                        "corporate," "playful," or "elegant."</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div
+                                    class="w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                                    <span class="text-indigo-600 font-bold">4</span>
+                                </div>
+                                <div>
+                                    <h4 class="font-semibold text-gray-800">Mention Colors</h4>
+                                    <p class="text-gray-600 text-sm">Guide the palette: "Use warm earth tones" or
+                                        "bright green and gold accents."</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
 
-        <!-- Image Preview Modal -->
-        <div x-show="showPreview" x-transition 
-            class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center p-4 z-50"
-            @click="showPreview = false">
-            <div class="max-w-4xl max-h-full overflow-hidden" @click.stop>
-                <img :src="generatedImage" alt="Full size preview" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
-                <div class="absolute top-4 right-4">
-                    <button @click="showPreview = false" class="bg-black bg-opacity-50 text-white rounded-full p-2 hover:bg-opacity-75 transition-all">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
+                <div class="mt-8 p-4 bg-gray-50 rounded-lg border">
+                    <p class="text-sm text-gray-600"><strong>Disclaimer:</strong> Examples shown are for demonstration
+                        purposes. Actual
+                        results may vary based on your specific prompts and selected options. Always review generated
+                        content before
+                        use.</p>
                 </div>
             </div>
+        </section>
+
+        <!-- About Section -->
+        <section x-show="activeSection === 'about'" x-transition class="max-w-4xl mx-auto">
+            <div class="glass-card p-8 md:p-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">A Designer's Superpower, Not a Replacement
+                </h2>
+                <div class="prose prose-lg max-w-none text-gray-700 space-y-6">
+                    <p class="text-xl leading-relaxed">In a world flooded with AI image generators that produce
+                        beautiful but
+                        often chaotic and unusable "art," LayoutCraft was built on a different philosophy. We believe
+                        the future
+                        of AI in design isn't about replacing human creativity, but augmenting it.</p>
+
+                    <div class="bg-indigo-50 p-6 rounded-xl border border-indigo-100">
+                        <h3 class="text-xl font-semibold text-indigo-800 mb-3">Built for Real-World Design</h3>
+                        <p class="text-indigo-700">LayoutCraft doesn't just generate pretty pictures—it creates
+                            production-ready visuals
+                            that follow professional design principles. Our AI understands the difference between
+                            artistic expression and
+                            functional design.</p>
+                    </div>
+
+                    <p>This means cleaner layouts, readable typography, and consistent branding—every time. No more
+                        rolling the dice with generic AI art generators.</p>
+
+                    <h3 class="text-2xl font-semibold mt-8 mb-4">We Solve Real Problems:</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-white/50 p-6 rounded-xl border border-white/30">
+                            <h4 class="font-semibold text-gray-800 mb-2">The "Messy Output" Problem</h4>
+                            <p class="text-gray-600 text-sm">No more fighting with AI to get legible text or balanced
+                                layouts.
+                            </p>
+                        </div>
+                        <div class="bg-white/50 p-6 rounded-xl border border-white/30">
+                            <h4 class="font-semibold text-gray-800 mb-2">The "Endless Rerolling" Problem</h4>
+                            <p class="text-gray-600 text-sm">Get closer to your desired output on the first try with
+                                structural
+                                rules.</p>
+                        </div>
+                        <div class="bg-white/50 p-6 rounded-xl border border-white/30">
+                            <h4 class="font-semibold text-gray-800 mb-2">The "Generic Stock Photo" Problem</h4>
+                            <p class="text-gray-600 text-sm">Get custom designs that match your specific content and
+                                brand, not recycled
+                                templates everyone else is using.</p>
+                        </div>
+                        <div class="bg-white/50 p-6 rounded-xl border border-white/30">
+                            <h4 class="font-semibold text-gray-800 mb-2">The "Brand Consistency" Problem</h4>
+                            <p class="text-gray-600 text-sm">Structured generation means predictable, professional
+                                results that
+                                follow design principles.</p>
+                        </div>
+                    </div>
+
+
+                    <p class="text-lg">LayoutCraft is for developers who need a quick blog header, marketers who need
+                        social media posts
+                        that follow brand guidelines, and designers who want a powerful assistant to accelerate their
+                        workflow. It's about
+                        moving from chaotic AI art to structured, production-ready AI design.</p>
+
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mt-6">
+                        <p class="text-sm text-yellow-800"><strong>MVP Notice:</strong> LayoutCraft is currently in MVP
+                            (Minimum Viable
+                            Product) stage. While we strive for high-quality results, please review all generated
+                            designs before using them
+                            in production. We're continuously improving based on user feedback.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section x-show="activeSection === 'faq'" x-transition class="max-w-4xl mx-auto">
+            <div class="glass-card p-8 md:p-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-8">Frequently Asked Questions</h2>
+                <div class="space-y-4">
+                    <template x-for="faq in faqs" :key="faq.id">
+                        <details
+                            class="group bg-white/50 border border-white/30 rounded-xl p-6 hover:bg-white/70 transition-all duration-200">
+                            <summary
+                                class="font-semibold text-gray-800 cursor-pointer list-none flex items-center justify-between">
+                                <span x-text="faq.question"></span>
+                                <svg class="w-5 h-5 text-gray-500 transform group-open:rotate-180 transition-transform duration-200"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7">
+                                    </path>
+                                </svg>
+                            </summary>
+                            <div class="mt-4 text-gray-600 space-y-3" x-html="faq.answer"></div>
+                        </details>
+                    </template>
+                </div>
+            </div>
+        </section>
+
+        <!-- Coming Soon & Feedback Section -->
+        <section class="max-w-4xl mx-auto mt-16 md:mt-24">
+            <div class="glass-card p-8 md:p-12">
+                <div class="text-center mb-8">
+                    <h3 class="text-2xl md:text-3xl font-bold mb-4">Coming Soon: Even More Features</h3>
+                    <p class="text-gray-600 text-lg">We're working on exciting new capabilities to make LayoutCraft the
+                        ultimate AI design companion for professionals.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                    <div class="text-center p-6 bg-white/30 rounded-xl border border-white/20">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                                </path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold text-gray-800 mb-2">Custom Brand Kits</h4>
+                        <p class="text-sm text-gray-600">Define your brand colors, fonts, and style guidelines for
+                            consistent designs.</p>
+                    </div>
+
+                    <div class="text-center p-6 bg-white/30 rounded-xl border border-white/20">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold text-gray-800 mb-2">Multiple Formats</h4>
+                        <p class="text-sm text-gray-600">Generate designs in various sizes for different platforms and
+                            use cases.</p>
+                    </div>
+
+                    <div class="text-center p-6 bg-white/30 rounded-xl border border-white/20">
+                        <div
+                            class="w-12 h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg mx-auto mb-4 flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
+                                </path>
+                            </svg>
+                        </div>
+                        <h4 class="font-semibold text-gray-800 mb-2">Iterative Editing</h4>
+                        <p class="text-sm text-gray-600">Don't like something? Easily make adjustments using follow-up
+                            prompts.</p>
+                    </div>
+                </div>
+
+                <!-- Feedback Form -->
+                <div class="border-t border-gray-200/50 pt-8">
+                    <div x-show="!feedbackSubmitted">
+                        <h4 class="text-xl font-semibold text-center mb-4">Help Shape LayoutCraft's Future</h4>
+                        <p class="text-center text-gray-600 mb-6">Your feedback helps us build exactly what you need.
+                            Share your thoughts!</p>
+                        <form @submit.prevent="submitStandaloneFeedback" class="max-w-2xl mx-auto space-y-4">
+                            <div>
+                                <input type="email" x-model="standaloneEmail" placeholder="Your email address" required
+                                    class="w-full p-4 rounded-lg border border-gray-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all duration-200"
+                                    :disabled="isSubmittingStandaloneFeedback">
+                            </div>
+                            <div>
+                                <textarea x-model="standaloneFeedbackMessage"
+                                    placeholder="What features would you like to see? Any issues or suggestions?"
+                                    required rows="4"
+                                    class="w-full p-4 rounded-lg border border-gray-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all duration-200 resize-none"
+                                    :disabled="isSubmittingStandaloneFeedback"></textarea>
+                            </div>
+                            <button type="submit"
+                                :disabled="isSubmittingStandaloneFeedback || !standaloneEmail.trim() || !standaloneFeedbackMessage.trim()"
+                                class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold py-4 px-6 rounded-lg hover:shadow-lg transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
+                                <span x-show="!isSubmittingStandaloneFeedback">Send Feedback</span>
+                                <span x-show="isSubmittingStandaloneFeedback">Sending...</span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div x-show="feedbackSubmitted" x-transition class="text-center">
+                        <div
+                            class="w-16 h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-semibold text-gray-800 mb-2">Thank You!</h4>
+                        <p class="text-gray-600">Your feedback has been received. We'll use it to make LayoutCraft even
+                            better!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Loading Spinner (Initial) -->
+    <div x-show="!isReady" class="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="text-center">
+            <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
+            <p class="text-gray-600">Loading LayoutCraft...</p>
         </div>
+    </div>
 
-        <!-- Error Modal -->
-        <div x-show="isReady && errorMessage" x-transition
-            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div class="glass-card p-6 max-w-md w-full">
-                <div class="flex items-start space-x-3 mb-4">
-                    <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
-                        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-1">Something went wrong</h3>
-                        <p class="text-indigo-100 text-sm" x-text="errorMessage"></p>
-                    </div>
+    <!-- Error Modal -->
+    <div x-show="errorMessage" x-transition:enter="transition ease-out duration-300"
+        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
+        x-transition:leave-end="opacity-0"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+        @click.self="errorMessage = null">
+        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all duration-300"
+            x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-90"
+            x-transition:enter-end="opacity-100 scale-100">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
                 </div>
-                <div class="flex space-x-3">
-                    <button @click="errorMessage = null"
-                        class="flex-1 bg-gradient-to-r from-gray-500 to-gray-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:shadow-lg transition-all">
-                        Close
-                    </button>
-                    <button @click="regenerateImage(); errorMessage = null"
-                        class="flex-1 bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium hover:shadow-lg transition-all">
-                        Try Again
-                    </button>
-                </div>
+                <h3 class="text-xl font-bold text-gray-800">Generation Failed</h3>
             </div>
-        </div>
-
-        <!-- Success Toast -->
-        <div x-show="isReady && showSuccessToast" x-transition 
-            class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
-            <div class="flex items-center space-x-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                <span>Feedback sent successfully!</span>
+            <p class="text-gray-600 mb-6" x-text="errorMessage"></p>
+            <div class="flex justify-end gap-3">
+                <button @click="errorMessage = null"
+                    class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">
+                    Close
+                </button>
+                <button @click="errorMessage = null; generateImage()"
+                    class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                    Try Again
+                </button>
             </div>
         </div>
     </div>
 
-    <!-- MVP Script -->
+    <!-- Success Toast -->
+    <div x-show="showSuccessToast" x-transition:enter="transition ease-out duration-300 transform"
+        x-transition:enter-start="translate-y-full opacity-0" x-transition:enter-end="translate-y-0 opacity-100"
+        x-transition:leave="transition ease-in duration-200 transform"
+        x-transition:leave-start="translate-y-0 opacity-100" x-transition:leave-end="translate-y-full opacity-0"
+        class="fixed bottom-6 right-6 bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-4 rounded-xl shadow-lg z-50">
+        <div class="flex items-center gap-3">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <span class="font-medium" x-text="successMessage"></span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white/30 border-t border-gray-200/50 mt-16 md:mt-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="text-center space-y-4">
+                <div class="flex justify-center space-x-6 text-sm text-gray-600">
+                    <button
+                        onclick="alert('Terms: All generated designs are provided as-is. Users are responsible for reviewing content before use. Commercial use permitted.')"
+                        class="hover:text-gray-800">Terms of Use</button>
+                    <button
+                        onclick="alert('Privacy: We don\'t permanently store your prompts or images. Standard web analytics are collected to improve our service.')"
+                        class="hover:text-gray-800">Privacy Policy</button>
+                </div>
+                <p class="text-sm text-gray-500">&copy; 2025 LayoutCraft. All rights reserved.</p>
+                <p class="text-xs text-gray-400">Turning AI art into production-ready designs. MVP Version.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
     <script src="js/scripts.js"></script>
 </body>
 
