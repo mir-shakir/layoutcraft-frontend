@@ -588,6 +588,35 @@ footer {
     /* Firefox */
 }
 
+
+/* Add this at the end of styles.css */
+
+.mvp-banner {
+    background: rgba(224, 231, 255, 0.8); /* --indigo-100 with transparency */
+    color: var(--indigo-700);
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid rgba(199, 210, 254, 0.5); /* --indigo-200 */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+}
+
+.close-banner-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 9999px;
+    transition: background-color var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.close-banner-btn:hover {
+    background-color: rgba(199, 210, 254, 0.5);
+}
+
 @media (max-width: 480px) {
     .hero-gradient-text {
         font-size: 2rem;

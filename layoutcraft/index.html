@@ -80,6 +80,19 @@
 <body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 text-gray-800 antialiased font-sans"
     x-data="layoutCraftApp" x-cloak>
 
+    <div x-show="showMvpBanner" x-transition class="mvp-banner">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
+            <p class="text-sm font-medium">
+                <span class="font-bold">Welcome!</span> This is an early MVP version of LayoutCraft. Your feedback is invaluable in helping us improve.
+            </p>
+            <button @click="dismissMvpBanner" class="close-banner-btn" aria-label="Dismiss banner">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
     <!-- Background Animation -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden="true">
         <div

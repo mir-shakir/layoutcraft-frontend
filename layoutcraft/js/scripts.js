@@ -48,6 +48,7 @@ document.addEventListener('alpine:init', () => {
         standaloneFeedbackMessage: '',
         isSubmittingStandaloneFeedback: false,
         feedbackSubmitted: false,
+        showMvpBanner: true,
 
         // --- CONFIGURATION --- //
         API_BASE_URL: 'https://layoutcraft-backend.onrender.com', 
@@ -184,10 +185,12 @@ document.addEventListener('alpine:init', () => {
 
         // --- LIFECYCLE METHODS --- //
         init() {
+            this.showMvpBanner = localStorage.getItem('layoutcraftMvpBannerDismissed') !== 'true';
             this.loadDraft();
             this.setupKeyboardShortcuts();
             this.setupCleanupHandlers();
             this.setupMobileCollapse();
+            this.showMvpBanner = localStorage.getItem('layoutcraftMvpBannerDismissed') !== 'true';
 
             // Simulate loading time for better perceived performance
             setTimeout(() => {
@@ -230,6 +233,10 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
+        dismissMvpBanner() {
+            this.showMvpBanner = false;
+            localStorage.setItem('layoutcraftMvpBannerDismissed', 'true');
+        },
         // --- QUICK PROMPT HANDLING --- //
         useQuickPrompt(quickPrompt) {
             this.prompt = quickPrompt.prompt;
