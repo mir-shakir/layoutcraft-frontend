@@ -617,6 +617,220 @@ footer {
     background-color: rgba(199, 210, 254, 0.5);
 }
 
+
+
+
+/* ===========================================
+   AUTHENTICATION MODAL STYLES
+   ========================================== */
+
+/* This prevents the page from scrolling when the modal is open */
+.body-no-scroll {
+    overflow: hidden;
+}
+
+/* Profile dropdown animations */
+.profile-dropdown-enter {
+    animation: profile-dropdown-enter 0.15s ease-out;
+}
+
+@keyframes profile-dropdown-enter {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Auth modal form field focus styles */
+.auth-modal-panel input:focus {
+    transition: var(--transition-fast);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+/* Pro model unavailable overlay */
+.pro-unavailable-overlay {
+    background: rgba(107, 114, 128, 0.8);
+    backdrop-filter: blur(2px);
+}
+
+/* Profile avatar styling */
+.profile-avatar {
+    background: linear-gradient(135deg, var(--indigo-100), var(--purple-100));
+    color: var(--indigo-600);
+    font-weight: 600;
+}
+
+
+
+/* Enhanced mobile spacing - add to the end of styles.css */
+@media (max-width: 768px) {
+    /* Tighter mobile spacing */
+    .glass-card {
+        margin: 0 var(--spacing-xs);
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+
+    .hero-gradient-text {
+        font-size: 2rem;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+    }
+
+    /* Mobile-specific spacing adjustments */
+    main {
+        padding: var(--spacing-md) var(--spacing-md) 5rem; /* Extra bottom padding for sticky button */
+    }
+
+    /* Style grid improvements for mobile */
+    .theme-grid-mobile {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    /* Better button feedback */
+    .active\:scale-95:active {
+        transform: scale(0.95);
+    }
+
+    /* FAQ mobile improvements */
+    .faq-mobile summary {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .faq-mobile .faq-content {
+        padding: 0 1rem 1rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Image fade-in animation */
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced button feedback */
+.active\:scale-95:active {
+    transform: scale(0.95);
+}
+
+/* Sticky button styling */
+.sticky-generate-btn {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Progress indicator styling */
+.progress-bar {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    background-size: 200% 100%;
+    animation: progress-shimmer 2s infinite;
+}
+
+@keyframes progress-shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Better visual feedback for all interactive elements */
+button:not(:disabled):active,
+.interactive:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease-out;
+}
+
+/* Enhanced loading state */
+.loading-enhanced {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading-enhanced::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: loading-sweep 2s infinite;
+}
+
+@keyframes loading-sweep {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Mobile-optimized modal */
+@media (max-width: 480px) {
+    .modal-mobile {
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+    }
+}
+
+/* Improved empty state button */
+.empty-state-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+}
+
+.empty-state-btn:hover {
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    transform: translateY(-2px);
+}
+
+/* Better spacing for smaller screens */
+@media (max-width: 640px) {
+    .section-spacing {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+    
+    .hero-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .grid-gap-mobile {
+        gap: 1rem;
+    }
+}
+
+/* Mobile auth buttons */
+@media (max-width: 768px) {
+    .mobile-auth-section {
+        border-top: 1px solid rgba(209, 213, 219, 0.3);
+        padding-top: var(--spacing-md);
+        margin-top: var(--spacing-md);
+    }
+}
+
 @media (max-width: 480px) {
     .hero-gradient-text {
         font-size: 2rem;

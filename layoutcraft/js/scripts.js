@@ -1,6 +1,6 @@
 /**
  * LayoutCraft MVP - Production Ready Application Logic
- * Enhanced with proper error handling, performance optimizations, and user experience improvements
+ * Enhanced with Authentication System Integration
  */
 
 document.addEventListener('alpine:init', () => {
@@ -27,6 +27,19 @@ document.addEventListener('alpine:init', () => {
         failedAttempts: 0,
         retryMessage: '',
 
+        // --- AUTHENTICATION STATE --- //
+        isLoggedIn: false,
+        currentUser: null,
+        isAuthModalOpen: false,
+        authMode: 'login', // 'login' or 'signup'
+        authForm: {
+            email: '',
+            password: '',
+            full_name: '',
+            errorMessage: '',
+            isLoading: false
+        },
+
         // --- UI STATE --- //
         activeSection: 'generator',
         mobileMenuOpen: false,
@@ -52,6 +65,12 @@ document.addEventListener('alpine:init', () => {
 
         // --- CONFIGURATION --- //
         API_BASE_URL: 'https://layoutcraft-backend.onrender.com', 
+        // API_BASE_URL: 'http://localhost:8000', // Use local backend for development
+        PROMPT_MAX_LENGTH: 500,
+
+        // --- AUTH SERVICE INSTANCE --- //
+        authService: null,
+
         // --- DATA COLLECTIONS --- //
         themes: [
             { id: "glassmorphism_premium", name: "Glassmorphism" },
@@ -184,13 +203,19 @@ document.addEventListener('alpine:init', () => {
         },
 
         // --- LIFECYCLE METHODS --- //
-        init() {
+        async init() {
+            // Initialize AuthService
+            this.authService = new AuthService(this.API_BASE_URL);
+
             this.showMvpBanner = localStorage.getItem('layoutcraftMvpBannerDismissed') !== 'true';
             this.loadDraft();
             this.setupKeyboardShortcuts();
             this.setupCleanupHandlers();
             this.setupMobileCollapse();
-            this.showMvpBanner = localStorage.getItem('layoutcraftMvpBannerDismissed') !== 'true';
+            this.generationProgress = 0;
+
+            // Restore user session
+            await this.restoreSession();
 
             // Simulate loading time for better perceived performance
             setTimeout(() => {
@@ -200,22 +225,268 @@ document.addEventListener('alpine:init', () => {
             console.log('LayoutCraft MVP initialized successfully');
         },
 
+        // --- AUTHENTICATION METHODS --- //
+
+        /**
+         * Restore user session on app load
+         */
+        async restoreSession() {
+            try {
+                const userProfile = await this.authService.validateSession();
+                if (userProfile) {
+                    this.isLoggedIn = true;
+                    this.currentUser = userProfile;
+                    console.log('Session restored for user:', userProfile.email);
+                } else {
+                    this.isLoggedIn = false;
+                    this.currentUser = null;
+                }
+            } catch (error) {
+                console.warn('Failed to restore session:', error);
+                this.isLoggedIn = false;
+                this.currentUser = null;
+            }
+        },
+
+        /**
+         * Open authentication modal
+         * @param {string} mode - 'login' or 'signup'
+         */
+        openAuthModal(mode = 'login') {
+            this.authMode = mode;
+            this.isAuthModalOpen = true;
+            this.resetAuthForm();
+
+            // Prevent body scroll when modal is open
+            document.body.classList.add('body-no-scroll');
+
+            // Analytics
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'auth_modal_open', {
+                    event_category: 'Authentication',
+                    event_label: mode
+                });
+            }
+        },
+
+        /**
+         * Close authentication modal
+         */
+        closeAuthModal() {
+            this.isAuthModalOpen = false;
+            this.resetAuthForm();
+
+            // Restore body scroll
+            document.body.classList.remove('body-no-scroll');
+        },
+
+        /**
+         * Toggle between login and signup modes
+         */
+        toggleAuthMode() {
+            this.authMode = this.authMode === 'login' ? 'signup' : 'login';
+            this.resetAuthForm();
+        },
+
+        /**
+         * Reset authentication form
+         */
+        resetAuthForm() {
+            this.authForm = {
+                email: '',
+                password: '',
+                full_name: '',
+                errorMessage: '',
+                isLoading: false
+            };
+        },
+
+        /**
+         * Handle user login
+         */
+        async handleLogin() {
+            if (this.authForm.isLoading) return;
+
+            this.authForm.isLoading = true;
+            this.authForm.errorMessage = '';
+
+            try {
+                const credentials = {
+                    email: this.authForm.email.trim(),
+                    password: this.authForm.password
+                };
+
+                const loginResponse = await this.authService.login(credentials);
+
+                // Update app state
+                this.isLoggedIn = true;
+                this.currentUser = loginResponse.user;
+
+                // Close modal and show success
+                this.closeAuthModal();
+                this.showSuccessMessage(`Welcome back, ${loginResponse.user.full_name || loginResponse.user.email}!`);
+
+                // Analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'login_success', {
+                        event_category: 'Authentication',
+                        event_label: 'email_login'
+                    });
+                }
+
+            } catch (error) {
+                this.authForm.errorMessage = this.formatAuthError(error);
+
+                // Analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'login_failure', {
+                        event_category: 'Authentication',
+                        event_label: error.message
+                    });
+                }
+            } finally {
+                this.authForm.isLoading = false;
+            }
+        },
+
+        /**
+         * Handle user signup
+         */
+        async handleSignup() {
+            if (this.authForm.isLoading) return;
+
+            // Basic validation
+            if (this.authForm.password.length < 6) {
+                this.authForm.errorMessage = 'Password must be at least 6 characters long.';
+                return;
+            }
+
+            this.authForm.isLoading = true;
+            this.authForm.errorMessage = '';
+
+            try {
+                const userData = {
+                    email: this.authForm.email.trim(),
+                    password: this.authForm.password,
+                    full_name: this.authForm.full_name.trim() || undefined
+                };
+
+                const registerResponse = await this.authService.register(userData);
+
+                // Show success message and switch to login mode
+                this.showSuccessMessage('Registration successful! Please check your email to confirm your account, then log in.');
+                this.authMode = 'login';
+                this.resetAuthForm();
+
+                // Analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'signup_success', {
+                        event_category: 'Authentication',
+                        event_label: 'email_signup'
+                    });
+                }
+
+            } catch (error) {
+                this.authForm.errorMessage = this.formatAuthError(error);
+
+                // Analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'signup_failure', {
+                        event_category: 'Authentication',
+                        event_label: error.message
+                    });
+                }
+            } finally {
+                this.authForm.isLoading = false;
+            }
+        },
+
+        /**
+         * Handle user logout
+         */
+        handleLogout() {
+            this.authService.logout();
+            this.isLoggedIn = false;
+            this.currentUser = null;
+
+            this.showSuccessMessage('You have been logged out successfully.');
+
+            // Analytics
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'logout', {
+                    event_category: 'Authentication'
+                });
+            }
+        },
+
+        /**
+         * Format authentication error messages
+         */
+        formatAuthError(error) {
+            const message = error.message || error.toString();
+
+            // Common error message improvements
+            if (message.includes('Invalid email or password')) {
+                return 'Invalid email or password. Please check your credentials and try again.';
+            }
+
+            if (message.includes('Email already registered') || message.includes('already be registered')) {
+                return 'An account with this email already exists. Try logging in instead.';
+            }
+
+            if (message.includes('Invalid email format')) {
+                return 'Please enter a valid email address.';
+            }
+
+            if (message.includes('timeout') || message.includes('NetworkError')) {
+                return 'Connection failed. Please check your internet and try again.';
+            }
+
+            return message || 'An unexpected error occurred. Please try again.';
+        },
+
+        /**
+         * Check if Pro model should be available for current user
+         */
+        canUseProModel() {
+            if (this.isLoggedIn) {
+                return true; // Logged-in users have unlimited Pro access
+            }
+
+            return !this.authService.hasUsedFreePro(); // Anonymous users get one free Pro
+        },
+
+        /**
+         * Get Pro model availability message
+         */
+        getProModelMessage() {
+            if (this.isLoggedIn) {
+                return 'Unlimited Pro generations';
+            }
+
+            if (this.authService.hasUsedFreePro()) {
+                return 'Sign up for unlimited Pro access';
+            }
+
+            return 'Sign up to unlock all features';
+        },
+
         // --- MOBILE COLLAPSE SETUP --- //
         setupMobileCollapse() {
-            // Check if mobile screen size and collapse sections by default
-            const checkMobile = () => {
-                const isMobile = window.innerWidth < 768;
-                if (isMobile) {
-                    this.styleExpanded = false;
-                    this.qualityExpanded = false;
-                } else {
-                    this.styleExpanded = true;
-                    this.qualityExpanded = true;
-                }
-            };
+            // // Check if mobile screen size and collapse sections by default
+            // const checkMobile = () => {
+            //     const isMobile = window.innerWidth < 768;
+            //     if (isMobile) {
+            //         this.styleExpanded = false;
+            //         this.qualityExpanded = false;
+            //     } else {
+            //         this.styleExpanded = true;
+            //         this.qualityExpanded = true;
+            //     }
+            // };
 
-            checkMobile();
-            window.addEventListener('resize', checkMobile);
+            // checkMobile();
+            // window.addEventListener('resize', checkMobile);
         },
 
         // --- NAVIGATION METHODS --- //
@@ -237,9 +508,55 @@ document.addEventListener('alpine:init', () => {
             this.showMvpBanner = false;
             localStorage.setItem('layoutcraftMvpBannerDismissed', 'true');
         },
+
+
+        useExamplePrompt() {
+            // Pick a random example from the examples array
+            const randomExample = this.examples[Math.floor(Math.random() * this.examples.length)];
+
+            // Set the prompt
+            this.prompt = randomExample.prompt;
+
+            // Auto-select appropriate theme based on the example
+            const themeMapping = {
+                'Tech Blog Header': 'dark_neon_tech',
+                'Summer Sale Post': 'vibrant_gradient_energy',
+                'Luxury Background': 'minimal_luxury_space',
+                'Product Launch': 'glassmorphism_premium',
+                'Newsletter Header': 'editorial_magazine_layout',
+                'Course Thumbnail': 'bold_geometric_solid'
+            };
+
+            this.selectedTheme = themeMapping[randomExample.title] || 'auto';
+
+            this.saveDraft();
+
+            // Show the generator section
+            this.showSection('generator');
+
+            // Track example usage
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'use_empty_state_example', {
+                    event_category: 'Engagement',
+                    event_label: randomExample.title
+                });
+            }
+        },
         // --- QUICK PROMPT HANDLING --- //
         useQuickPrompt(quickPrompt) {
             this.prompt = quickPrompt.prompt;
+
+            // Auto-select the corresponding theme
+            const themeMapping = {
+                'tech blog header': 'dark_neon_tech',
+                'summer sale post': 'vibrant_gradient_energy',
+                'luxury background': 'minimal_luxury_space',
+                'event banner': 'editorial_magazine_layout'
+            };
+
+            const promptKey = quickPrompt.title.toLowerCase();
+            this.selectedTheme = themeMapping[promptKey] || 'auto';
+
             this.saveDraft();
 
             // Track quick prompt usage
@@ -251,10 +568,22 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
-        // --- EXAMPLE HANDLING --- //
         useExample(example) {
             this.prompt = example.prompt;
             this.showSection('generator');
+
+            // Auto-select appropriate theme based on the example
+            const themeMapping = {
+                'Tech Blog Header': 'dark_neon_tech',
+                'Summer Sale Post': 'vibrant_gradient_energy',
+                'Luxury Background': 'minimal_luxury_space',
+                'Product Launch': 'glassmorphism_premium',
+                'Newsletter Header': 'editorial_magazine_layout',
+                'Course Thumbnail': 'bold_geometric_solid'
+            };
+
+            this.selectedTheme = themeMapping[example.title] || 'auto';
+
             this.saveDraft();
 
             // Track example usage
@@ -312,6 +641,9 @@ document.addEventListener('alpine:init', () => {
                 if (e.key === 'Escape') {
                     this.errorMessage = null;
                     this.mobileMenuOpen = false;
+                    if (this.isAuthModalOpen) {
+                        this.closeAuthModal();
+                    }
                 }
             });
         },
@@ -379,6 +711,30 @@ document.addEventListener('alpine:init', () => {
             this.loadingMessage = 'Warming up the AI engine...';
         },
 
+        startProgressSimulation() {
+            const duration = this.selectedEngine === 'pro' ? 60000 : 30000; // 60s for pro, 30s for fast
+            const interval = 100; // Update every 100ms
+            const increment = (100 / duration) * interval;
+
+            this.progressInterval = setInterval(() => {
+                if (this.generationProgress < 95) { // Never reach 100% until actually complete
+                    this.generationProgress += increment;
+                    // Slow down as we approach the end
+                    if (this.generationProgress > 80) {
+                        this.generationProgress += increment * 0.3;
+                    }
+                }
+            }, interval);
+        },
+
+        stopProgressSimulation() {
+            if (this.progressInterval) {
+                clearInterval(this.progressInterval);
+                this.progressInterval = null;
+            }
+            this.generationProgress = 100; // Complete the progress bar
+        },
+
         // --- ERROR HANDLING --- //
         formatErrorMessage(error) {
             const message = error.message || error.toString();
@@ -422,6 +778,13 @@ document.addEventListener('alpine:init', () => {
                 return;
             }
 
+            // Check Pro model availability for anonymous users
+            if (!this.isLoggedIn && this.selectedEngine === 'pro' && !this.canUseProModel()) {
+                this.errorMessage = 'You\'ve used your free Pro generation. Sign up for unlimited Pro access!';
+                this.openAuthModal('signup');
+                return;
+            }
+
             // Reset state
             this.isGenerating = true;
             this.errorMessage = null;
@@ -431,6 +794,10 @@ document.addEventListener('alpine:init', () => {
             this.imageError = false;
             this.saveDraft();
             this.startLoadingAnimation();
+            this.isGenerating = true;
+            this.generationProgress = 0;
+
+            this.startProgressSimulation();
 
             if (window.innerWidth < 768) { // Checks for mobile screen width
                 this.$nextTick(() => {
@@ -445,36 +812,16 @@ document.addEventListener('alpine:init', () => {
                 themeToSend = randomTheme.id;
             }
 
-            // Setup request with timeout
-            const API_TIMEOUT = this.selectedEngine === 'fast' ? 90000 : 180000;
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), API_TIMEOUT);
-
             try {
-                const response = await fetch(`${this.API_BASE_URL}/api/generate`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'image/png'
-                    },
-                    body: JSON.stringify({
-                        prompt: this.prompt.trim(),
-                        width: 1200,
-                        height: 630,
-                        model: this.modelMapping[this.selectedEngine],
-                        theme: themeToSend
-                    }),
-                    signal: controller.signal
-                });
+                const generationData = {
+                    prompt: this.prompt.trim(),
+                    width: 1200,
+                    height: 630,
+                    model: this.modelMapping[this.selectedEngine],
+                    theme: themeToSend
+                };
 
-                clearTimeout(timeoutId);
-
-                if (!response.ok) {
-                    const errorData = await response.json().catch(() => ({}));
-                    throw new Error(errorData.detail || `Server error (${response.status})`);
-                }
-
-                const imageBlob = await response.blob();
+                const imageBlob = await this.authService.generateImage(generationData, this.isLoggedIn);
 
                 // Validate blob
                 if (!imageBlob || imageBlob.size === 0) {
@@ -488,7 +835,16 @@ document.addEventListener('alpine:init', () => {
 
                 this.generatedImage = URL.createObjectURL(imageBlob);
                 this.filename = this.generateFilename();
-                this.showEmailForm = true;
+
+                // Only show email form for anonymous users
+                this.showEmailForm = !this.isLoggedIn;
+
+                this.$nextTick(() => {
+                    this.$refs.resultPanel.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                });
 
                 // Clear retry message on success
                 this.clearRetryMessage();
@@ -503,13 +859,13 @@ document.addEventListener('alpine:init', () => {
                         event_label: this.selectedEngine,
                         custom_parameters: {
                             theme: themeToSend,
-                            prompt_length: this.prompt.length
+                            prompt_length: this.prompt.length,
+                            user_type: this.isLoggedIn ? 'authenticated' : 'anonymous'
                         }
                     });
                 }
 
             } catch (error) {
-                clearTimeout(timeoutId);
                 this.failedAttempts++;
                 this.updateRetryMessage();
                 this.errorMessage = this.formatErrorMessage(error);
@@ -522,13 +878,15 @@ document.addEventListener('alpine:init', () => {
                         event_label: error.name || 'Unknown',
                         custom_parameters: {
                             error_message: error.message || 'Unknown error',
-                            attempt_number: this.failedAttempts
+                            attempt_number: this.failedAttempts,
+                            user_type: this.isLoggedIn ? 'authenticated' : 'anonymous'
                         }
                     });
                 }
             } finally {
                 this.isGenerating = false;
                 this.stopLoadingAnimation();
+                this.stopProgressSimulation();
             }
         },
 
@@ -558,7 +916,10 @@ document.addEventListener('alpine:init', () => {
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'regenerate', {
                     event_category: 'Generation',
-                    event_label: 'variation'
+                    event_label: 'variation',
+                    custom_parameters: {
+                        user_type: this.isLoggedIn ? 'authenticated' : 'anonymous'
+                    }
                 });
             }
         },
@@ -575,8 +936,7 @@ document.addEventListener('alpine:init', () => {
             return `layoutcraft_${promptSlug}_${this.selectedTheme}_${timestamp}.png`;
         },
 
-        // --- EMAIL SUBMISSION --- Same as feedback submission but uses default message ---
-
+        // --- EMAIL SUBMISSION --- //
         async submitEmail() {
             if (!this.emailForUpdates.trim() || this.isSubmittingEmail) return;
 
@@ -636,10 +996,7 @@ document.addEventListener('alpine:init', () => {
             this.isSubmittingEmail = false;
         },
 
-
         // --- STANDALONE FEEDBACK SUBMISSION --- //
-        // scripts.js
-
         async submitStandaloneFeedback() {
             // --- 1. Validation (No changes here) ---
             if (!this.standaloneEmail.trim() || !this.standaloneFeedbackMessage.trim() || this.isSubmittingStandaloneFeedback) return;
@@ -709,7 +1066,8 @@ document.addEventListener('alpine:init', () => {
                     event_label: this.selectedEngine,
                     custom_parameters: {
                         theme: this.selectedTheme,
-                        filename: this.filename
+                        filename: this.filename,
+                        user_type: this.isLoggedIn ? 'authenticated' : 'anonymous'
                     }
                 });
             }
