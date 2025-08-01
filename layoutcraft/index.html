@@ -36,12 +36,57 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="manifest" href="/site.webmanifest.json">
     <link rel="shortcut icon" href="/favicon.ico">
-
+    
     <!-- Preload & Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnected" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    
+    <script>
+        (function handleSupabaseRedirect() {
+            const isCallback = window.location.pathname === '/auth/callback';
+            const hash = window.location.hash;
 
+            if (!isCallback || !hash) return;
+
+            const params = new URLSearchParams(hash.substring(1));
+
+            // 🧨 If Supabase sent an error (e.g., expired link)
+            if (params.has('error')) {
+                const errorDesc = decodeURIComponent(params.get('error_description') || 'Login link is invalid or expired.');
+
+                // Save to localStorage or display via modal later
+                localStorage.setItem('sb-layoutcraft-auth-error', errorDesc);
+
+                // Redirect home with clean URL
+                window.history.replaceState({}, document.title, '/');
+                location.reload();
+                return;
+            }
+
+            // ✅ If valid session is present
+            const access_token = params.get('access_token');
+            const refresh_token = params.get('refresh_token');
+            const expires_at = parseInt(params.get('expires_at'), 10);
+            const token_type = params.get('token_type') || 'bearer';
+
+            if (access_token && refresh_token && expires_at) {
+                const session = {
+                    access_token,
+                    refresh_token,
+                    expires_at,
+                    token_type,
+                    user: null
+                };
+
+                localStorage.setItem('sb-layoutcraft-auth-token', JSON.stringify(session));
+                window.history.replaceState({}, document.title, '/');
+                location.reload();
+            }
+        })();
+    </script>
+    
+    
     <!-- Styles & Scripts -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>

@@ -204,7 +204,6 @@ document.addEventListener('alpine:init', () => {
 
         // --- LIFECYCLE METHODS --- //
         async init() {
-              this.handleSupabaseRedirect();
             // Initialize AuthService
             this.authService = new AuthService(this.API_BASE_URL);
 
@@ -246,37 +245,6 @@ document.addEventListener('alpine:init', () => {
                 console.warn('Failed to restore session:', error);
                 this.isLoggedIn = false;
                 this.currentUser = null;
-            }
-        },
-        // Callback for handling Supabase redirect after OAuth login
-        handleSupabaseRedirect() {
-            const hash = window.location.hash;
-            if (hash.includes('access_token')) {
-                const params = new URLSearchParams(hash.substring(1));
-
-                const access_token = params.get('access_token');
-                const refresh_token = params.get('refresh_token');
-                const expires_at = parseInt(params.get('expires_at'), 10);
-                const token_type = params.get('token_type') || 'bearer';
-
-                if (access_token && refresh_token && expires_at) {
-                    const session = {
-                        access_token,
-                        refresh_token,
-                        expires_at,
-                        token_type,
-                        user: null // optional
-                    };
-
-                    // Save using your existing AuthService logic
-                    AuthService.setToken(session);
-
-                    // Clean up the URL
-                    window.history.replaceState({}, document.title, '/');
-
-                    // Force reload to re-run init & restore session
-                    location.reload();
-                }
             }
         },
 
