@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>LayoutCraft Blog – Design & Development Insights</title>
+    <meta name="title" content="LayoutCraft Blog – Design & Development Insights">
+    <meta name="description" content="Expert insights on modern web design, development best practices, and creative solutions for building exceptional user interfaces.">
+    
+    <meta name="keywords" content="web design, development, UI/UX, CSS, JavaScript, frontend, design systems, layout, responsive design">
+    <meta name="author" content="LayoutCraft Team">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Language" content="en">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://layoutcraft.tech/blog/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://layoutcraft.tech/blog/">
+    <meta property="og:title" content="LayoutCraft Blog – Design & Development Insights">
+    <meta property="og:description" content="Expert insights on modern web design, development best practices, and creative solutions for building exceptional user interfaces.">
+    <meta property="og:image" content="https://layoutcraft.tech/blog/assets/images/og-image-layoutcraft.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://layoutcraft.tech/blog/">
+    <meta property="twitter:title" content="LayoutCraft Blog – Design & Development Insights">
+    <meta property="twitter:description" content="Expert insights on modern web design, development best practices, and creative solutions for building exceptional user interfaces.">
+    <meta property="twitter:image" content="https://layoutcraft.tech/blog/assets/images/og-image-layoutcraft.png">
+    
+    <meta name="language" content="English">
+    <meta property="og:site_name" content="LayoutCraft">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#2563eb">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../shared/css/variables.css">
+    <link rel="stylesheet" href="../shared/css/base.css">
+    <link rel="stylesheet" href="../shared/css/layout.css">
+    <link rel="stylesheet" href="css/blog.css">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Source+Serif+Pro:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Schema.org markup -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "name": "LayoutCraft Blog",
+        "description": "Expert insights on modern web design, development best practices, and creative solutions for building exceptional user interfaces.",
+        "url": "https://layoutcraft.tech/blog/",
+        "publisher": {
+            "@type": "Organization",
+            "name": "LayoutCraft",
+            "url": "https://layoutcraft.tech"
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://layoutcraft.tech/blog/"
+        }
+    }
+    </script>
+</head>
+
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-layer-group"></i>
+                </div>
+                <a href="../" class="logo-text">LayoutCraft</a>
+            </div>
+
+            <nav class="main-nav">
+                <a href="../" class="nav-link">Home</a>
+                <a href="../#features" class="nav-link">Features</a>
+                <a href="./" class="nav-link active">Blog</a>
+                <a href="../#about" class="nav-link">About</a>
+                <a href="../#contact" class="nav-link">Contact</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="theme-switcher-btn" id="themeSwitcher" title="Switch to dark mode" aria-label="Switch to dark mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="blog-section">
+            <div class="blog-container">
+                <div class="section-header">
+                    <h1 class="section-title">Design & Development Blog</h1>
+                    <p class="section-description">
+                        Expert insights on modern web design, development best practices, and creative solutions for building exceptional user interfaces.
+                    </p>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="blogSearchInput" class="search-input"
+                            placeholder="Search articles...">
+                        <button class="search-clear" id="blogSearchClear" style="display: none;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tag Filter Section -->
+                <section class="tag-filter-section">
+                    <div class="tag-filter-header">
+                        <h3>Explore by Topic:</h3>
+                        <button id="clearTagFilter" class="clear-filter-btn" style="display: none;">Clear Filter</button>
+                    </div>
+                    <div class="tag-cloud" id="tagCloud">
+                        <!-- Tags will be dynamically loaded here by JavaScript -->
+                    </div>
+                </section>
+
+                <!-- Featured Post Section -->
+                <section class="featured-post-section">
+                    <a href="#" class="featured-post-card">
+                        <div class="featured-post-content">
+                            <span class="featured-badge"><i class="fas fa-star"></i> Featured Article</span>
+                            <h2 class="featured-post-title"></h2>
+                            <p class="featured-post-excerpt"></p>
+                            <div class="featured-post-meta">
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <span class="featured-post-button">
+                                Read Article <i class="fas fa-arrow-right"></i>
+                            </span>
+                        </div>
+                        <div class="featured-post-thumbnail"></div>
+                    </a>
+                </section>
+
+                <!-- Blog Grid -->
+                <div class="blog-grid">
+                    <!-- Blog posts will be dynamically loaded here by JavaScript -->
+                </div>
+
+                <!-- No Results Message -->
+                <div class="no-results" id="noBlogResults" style="display: none;">
+                    <div class="no-results-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>No articles found</h3>
+                    <p>Try adjusting your search query or browse by topic.</p>
+                </div>
+
+                <!-- Load More Button -->
+                <div class="load-more-container">
+                    <button id="loadMoreBtn" class="btn">Load More Articles</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <div class="footer-content">
+            <div class="footer-main">
+                <div class="footer-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <strong>LayoutCraft</strong>
+                </div>
+                <p class="footer-description">
+                    Modern tools and insights for crafting exceptional web experiences. 
+                    Building the future of responsive design and development.
+                </p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-section">
+                    <h4>Resources</h4>
+                    <a href="../#features">Features</a>
+                    <a href="./">Blog</a>
+                    <a href="../#documentation">Documentation</a>
+                    <a href="../#examples">Examples</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <a href="../#about">About Us</a>
+                    <a href="../#contact">Contact</a>
+                    <a href="../privacy/">Privacy Policy</a>
+                    <a href="../terms/">Terms of Use</a>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <a href="https://twitter.com/layoutcraft" target="_blank" rel="noopener">Twitter</a>
+                    <a href="https://github.com/layoutcraft" target="_blank" rel="noopener">GitHub</a>
+                    <a href="../#newsletter">Newsletter</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 LayoutCraft. All rights reserved. Building beautiful interfaces, one layout at a time.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script type="module" src="js/blog.js"></script>
+</body>
+
+</html>
