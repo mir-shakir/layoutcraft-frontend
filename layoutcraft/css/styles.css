@@ -740,6 +740,9 @@ footer {
 @media (max-width: 768px) {
     body {
         padding-bottom: 120px; /* Space for fixed generate button */
+        /* Optimize scroll performance on mobile */
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
     }
     
     /* Ensure footer is properly visible */
@@ -747,6 +750,33 @@ footer {
         margin-bottom: 0 !important;
         position: relative;
         z-index: 1;
+    }
+    
+    /* Reduce backdrop-filter on mobile for better performance */
+    .glass-card {
+        backdrop-filter: blur(8px); /* Reduced from 16px */
+        -webkit-backdrop-filter: blur(8px);
+    }
+    
+    /* Disable expensive effects on mobile */
+    .glass-card:hover {
+        transform: none; /* Disable hover transforms on mobile */
+    }
+    
+    .preview-container:hover {
+        transform: none; /* Disable hover scaling on mobile */
+    }
+    
+    /* Optimize sticky elements */
+    .sticky-generate-btn {
+        backdrop-filter: blur(8px); /* Reduced blur */
+        -webkit-backdrop-filter: blur(8px);
+        will-change: transform; /* Optimize for animations */
+    }
+    
+    .mvp-banner {
+        backdrop-filter: blur(4px); /* Reduced blur */
+        -webkit-backdrop-filter: blur(4px);
     }
 }
 
@@ -771,6 +801,35 @@ button:not(:disabled):active,
 .interactive:active {
     transform: scale(0.98);
     transition: transform 0.1s ease-out;
+}
+
+/* Mobile-specific performance optimizations */
+@media (max-width: 768px) {
+    /* Disable complex animations on mobile */
+    button:not(:disabled):active,
+    .interactive:active {
+        transform: none; /* Disable scale animations on mobile */
+    }
+    
+    /* Use simpler alternatives for mobile */
+    .quick-prompt-btn:hover:not(:disabled) {
+        transform: none; /* Disable complex transforms */
+        background: rgba(255, 255, 255, 0.8);
+        border-color: var(--indigo-400);
+    }
+    
+    .engine-btn:hover {
+        transform: none; /* Disable hover transforms */
+        background: rgba(255, 255, 255, 0.8);
+        border-color: var(--indigo-400);
+    }
+    
+    /* Disable shine animations on mobile */
+    .quick-prompt-btn::before,
+    .engine-btn::before,
+    .feature-card::before {
+        display: none;
+    }
 }
 
 /* Enhanced loading state */
