@@ -68,8 +68,8 @@ document.addEventListener('alpine:init', () => {
         showMvpBanner: true,
 
         // --- CONFIGURATION --- //
-        // API_BASE_URL: 'https://layoutcraft-backend.onrender.com', 
-        API_BASE_URL: 'http://localhost:8000', // Use local backend for development
+        API_BASE_URL: 'https://layoutcraft-backend.onrender.com', 
+        // API_BASE_URL: 'http://localhost:8000', // Use local backend for development
         PROMPT_MAX_LENGTH: 500,
 
         // --- AUTH SERVICE INSTANCE --- //
@@ -422,7 +422,7 @@ document.addEventListener('alpine:init', () => {
                 console.log('Size presets loaded from API:', this.sizePresets.length, 'presets');
                 
             } catch (error) {
-                console.warn('Failed to load size presets from API:', error);
+
                 // Use fallback presets (matches backend exactly) - no error logging for timeout
                 this.sizePresets = [
                     { key: 'blog_header', display_name: 'Blog Header', aspect_ratio: '1200x630', width: 1200, height: 630, purpose: 'A wide blog header graphic (16:9 ratio)' },
