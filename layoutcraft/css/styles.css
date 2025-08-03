@@ -224,6 +224,12 @@ body {
     animation: loading-dots 1.5s infinite;
 }
 
+/* Static loading dots when animation is complete */
+.loading-dots-static::after {
+    content: '...';
+    opacity: 1;
+}
+
 @keyframes loading-dots {
 
     0%,

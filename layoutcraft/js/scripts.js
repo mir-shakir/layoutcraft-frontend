@@ -49,6 +49,7 @@ document.addEventListener('alpine:init', () => {
         mobileMenuOpen: false,
         loadingMessage: 'Warming up the AI engine...',
         loadingInterval: null,
+        loadingAnimationComplete: false,
         styleExpanded: true,
         qualityExpanded: true,
 
@@ -965,27 +966,46 @@ document.addEventListener('alpine:init', () => {
             const messages = this.selectedEngine === 'pro'
                 ? [
                     'Initializing Pro AI engine',
-                    'Analyzing design principles',
+                    'Analyzing your creative vision',
+                    'Exploring design principles',
                     'Crafting high-quality elements',
-                    'Optimizing composition',
+                    'Balancing composition & hierarchy',
+                    'Optimizing color harmony',
+                    'Refining typography choices',
                     'Applying professional polish',
-                    'Final quality check'
+                    'Conducting final quality review',
+                    'Perfecting every detail'
                 ]
                 : [
                     'Firing up Fast AI',
                     'Processing your prompt',
-                    'Assembling visual concepts',
+                    'Generating creative concepts',
+                    'Assembling visual elements',
+                    'Optimizing layout structure',
                     'Rendering your design',
+                    'Adding finishing touches',
                     'Almost ready'
                 ];
 
             let messageIndex = 0;
             this.loadingMessage = messages[messageIndex];
+            this.loadingAnimationComplete = false;
+
+            // Calculate interval to spread messages across the desired duration
+            const totalDuration = this.selectedEngine === 'pro' ? 60000 : 40000; // 60s for pro, 40s for fast
+            const interval = totalDuration / messages.length;
 
             this.loadingInterval = setInterval(() => {
-                messageIndex = (messageIndex + 1) % messages.length;
-                this.loadingMessage = messages[messageIndex];
-            }, this.selectedEngine === 'fast' ? 3000 : 4000);
+                messageIndex++;
+                if (messageIndex < messages.length) {
+                    this.loadingMessage = messages[messageIndex];
+                } else {
+                    // Stop at the last message - clear interval to prevent looping
+                    clearInterval(this.loadingInterval);
+                    this.loadingInterval = null;
+                    this.loadingAnimationComplete = true; // Mark animation as complete
+                }
+            }, interval);
         },
 
         stopLoadingAnimation() {
@@ -994,6 +1014,7 @@ document.addEventListener('alpine:init', () => {
                 this.loadingInterval = null;
             }
             this.loadingMessage = 'Warming up the AI engine...';
+            this.loadingAnimationComplete = false;
         },
 
         startProgressSimulation() {

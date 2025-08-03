@@ -428,7 +428,7 @@
                             :disabled="isGenerating || !prompt.trim() || prompt.length < 10 || prompt.length > 500"
                             class="w-full flex items-center justify-center space-x-3 py-4 px-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:animate-pulse-subtle">
                             <span x-show="!isGenerating" class="text-lg">Generate Design</span>
-                            <span x-show="isGenerating" class="text-lg loading-dots" x-text="loadingMessage"></span>
+                            <span x-show="isGenerating" :class="loadingAnimationComplete ? 'text-lg loading-dots-static' : 'text-lg loading-dots'" x-text="loadingMessage"></span>
                             <svg x-show="!isGenerating" class="w-6 h-6" fill="none" stroke="currentColor"
                                 viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -490,7 +490,7 @@
                                 </div>
                             </div>
                             <div>
-                                <h4 class="text-base md:text-lg font-semibold text-gray-700 loading-dots" x-text="loadingMessage"></h4>
+                                <h4 :class="loadingAnimationComplete ? 'text-base md:text-lg font-semibold text-gray-700 loading-dots-static' : 'text-base md:text-lg font-semibold text-gray-700 loading-dots'" x-text="loadingMessage"></h4>
                                 <p class="text-xs md:text-sm text-gray-500 mt-2"
                                     x-text="selectedEngine === 'pro' ? 'This can take up to 60 seconds for Pro quality.' : 'Fast generation in progress...'">
                                 </p>
@@ -846,7 +846,7 @@
             :disabled="isGenerating || !prompt.trim() || prompt.length < 10 || prompt.length > 500"
             class="w-full flex items-center justify-center space-x-3 py-4 px-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
             <span x-show="!isGenerating" class="text-lg">Generate Design</span>
-            <span x-show="isGenerating" class="text-lg loading-dots" x-text="loadingMessage"></span>
+            <span x-show="isGenerating" :class="loadingAnimationComplete ? 'text-lg loading-dots-static' : 'text-lg loading-dots'" x-text="loadingMessage"></span>
             <svg x-show="!isGenerating" class="w-6 h-6" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
