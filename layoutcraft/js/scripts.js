@@ -16,8 +16,9 @@ document.addEventListener('alpine:init', () => {
         // --- CORE STATE --- //
         isReady: false,
         prompt: '',
-        selectedEngine: 'fast',
+        selectedEngine: 'pro',
         selectedTheme: 'auto',
+        selectedSize: 'blog_header',
         isGenerating: false,
         generatedImage: null,
         errorMessage: null,
@@ -26,6 +27,9 @@ document.addEventListener('alpine:init', () => {
         imageError: false,
         failedAttempts: 0,
         retryMessage: '',
+        
+        // --- PREVIEW DIMENSIONS --- //
+        previewAspectRatio: 1.9, // Default blog header ratio (1200/630)
 
         // --- AUTHENTICATION STATE --- //
         isLoggedIn: false,
@@ -64,14 +68,16 @@ document.addEventListener('alpine:init', () => {
         showMvpBanner: true,
 
         // --- CONFIGURATION --- //
-        API_BASE_URL: 'https://layoutcraft-backend.onrender.com', 
-        // API_BASE_URL: 'http://localhost:8000', // Use local backend for development
+        // API_BASE_URL: 'https://layoutcraft-backend.onrender.com', 
+        API_BASE_URL: 'http://localhost:8000', // Use local backend for development
         PROMPT_MAX_LENGTH: 500,
 
         // --- AUTH SERVICE INSTANCE --- //
         authService: null,
 
         // --- DATA COLLECTIONS --- //
+        sizePresets: [],
+        
         themes: [
             { id: "glassmorphism_premium", name: "Glassmorphism" },
             { id: "bold_geometric_solid", name: "Bold Geometric" },
@@ -212,7 +218,11 @@ document.addEventListener('alpine:init', () => {
             this.setupKeyboardShortcuts();
             this.setupCleanupHandlers();
             this.setupMobileCollapse();
+            this.setupResizeHandler();
             this.generationProgress = 0;
+
+            // Load size presets from backend
+            await this.loadSizePresets();
 
             // Restore user session
             await this.restoreSession();
@@ -223,6 +233,215 @@ document.addEventListener('alpine:init', () => {
             }, 800);
 
             console.log('LayoutCraft MVP initialized successfully');
+        },
+
+        // --- PREVIEW CALCULATION --- //
+        updatePreviewAspectRatio() {
+            if (this.sizePresets.length === 0) return;
+            
+            const selectedPreset = this.sizePresets.find(preset => preset.key === this.selectedSize);
+            if (selectedPreset) {
+                this.previewAspectRatio = selectedPreset.width / selectedPreset.height;
+                console.log(`Updated preview aspect ratio: ${this.previewAspectRatio} for ${selectedPreset.display_name} (${selectedPreset.width}x${selectedPreset.height})`);
+            }
+        },
+
+        getPreviewStyle() {
+            return this.calculateResponsiveDimensions(this.previewAspectRatio, 'preview');
+        },
+
+        calculateResponsiveDimensions(aspectRatio, type = 'preview') {
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            
+            // Define responsive breakpoints and constraints
+            const breakpoints = {
+                xs: { max: 375, padding: 48 },      // Extra small phones - more padding to prevent overflow
+                sm: { max: 480, padding: 64 },      // Small phones  
+                md: { max: 768, padding: 80 },      // Tablets
+                lg: { max: 1024, padding: 80 },     // Small laptops
+                xl: { max: 1440, padding: 100 },    // Large laptops
+                xxl: { max: Infinity, padding: 120 } // Large desktops
+            };
+            
+            // Determine current breakpoint
+            let currentBreakpoint = 'xxl';
+            for (const [key, bp] of Object.entries(breakpoints)) {
+                if (screenWidth <= bp.max) {
+                    currentBreakpoint = key;
+                    break;
+                }
+            }
+            
+            const bp = breakpoints[currentBreakpoint];
+            
+            // Calculate available space with safer mobile constraints
+            const availableWidth = screenWidth - bp.padding;
+            const availableHeight = Math.min(screenHeight * 0.6, screenHeight - 200); // Max 60% of screen height, leave room for UI
+            
+            // Define size factors - larger for big screens, safer for mobile
+            let sizeFactor;
+            if (type === 'empty') {
+                // Empty state is more conservative
+                sizeFactor = {
+                    xs: 0.75, sm: 0.8, md: 0.85, lg: 0.9, xl: 0.95, xxl: 1.0
+                }[currentBreakpoint];
+            } else {
+                // Preview and loading states use full size factors
+                sizeFactor = {
+                    xs: 0.8, sm: 0.85, md: 0.9, lg: 0.95, xl: 1.0, xxl: 1.0
+                }[currentBreakpoint];
+            }
+            
+            // Calculate max dimensions with better scaling for large screens
+            const maxWidth = Math.min(availableWidth * sizeFactor, currentBreakpoint === 'xxl' ? 900 : 800); // Larger cap for xxl screens
+            const maxHeight = Math.min(availableHeight * sizeFactor, currentBreakpoint === 'xxl' ? 700 : 600); // Larger cap for xxl screens
+            
+            let width, height;
+            
+            // Scale based on aspect ratio while respecting constraints
+            if (aspectRatio > maxWidth / maxHeight) {
+                // Wide content - constrain by width
+                width = maxWidth;
+                height = width / aspectRatio;
+            } else {
+                // Tall content - constrain by height  
+                height = maxHeight;
+                width = height * aspectRatio;
+            }
+            
+            // Apply minimum size constraints based on screen size
+            const minSizes = {
+                xs: { width: 140, height: 100 },
+                sm: { width: 160, height: 120 },
+                md: { width: 200, height: 150 },
+                lg: { width: 250, height: 180 },
+                xl: { width: 300, height: 200 },
+                xxl: { width: 350, height: 220 }
+            };
+            
+            const minSize = minSizes[currentBreakpoint];
+            
+            if (width < minSize.width) {
+                const scale = minSize.width / width;
+                width = minSize.width;
+                height = height * scale;
+            }
+            
+            if (height < minSize.height) {
+                const scale = minSize.height / height;
+                height = minSize.height;
+                width = width * scale;
+            }
+            
+            // Final safety check - ensure we never exceed available space
+            // Apply stricter mobile constraints
+            if (currentBreakpoint === 'xs' || currentBreakpoint === 'sm') {
+                // For mobile, be extra conservative and leave more margin
+                const mobileMaxWidth = screenWidth * 0.85; // Only use 85% of screen width
+                const mobileMaxHeight = screenHeight * 0.4; // Only use 40% of screen height
+                
+                if (width > mobileMaxWidth) {
+                    const scale = mobileMaxWidth / width;
+                    width = mobileMaxWidth;
+                    height = height * scale;
+                }
+                
+                if (height > mobileMaxHeight) {
+                    const scale = mobileMaxHeight / height;
+                    height = height * scale;
+                    width = width * scale;
+                }
+            } else {
+                // Desktop safety checks
+                if (width > availableWidth) {
+                    const scale = availableWidth / width;
+                    width = availableWidth;
+                    height = height * scale;
+                }
+                
+                if (height > availableHeight) {
+                    const scale = availableHeight / height;
+                    height = height * scale;
+                    width = width * scale;
+                }
+            }
+            
+            return {
+                width: `${Math.round(width)}px`,
+                height: `${Math.round(height)}px`,
+                aspectRatio: aspectRatio,
+                breakpoint: currentBreakpoint
+            };
+        },
+
+        getEmptyStateStyle() {
+            // For empty state, use a balanced aspect ratio
+            const defaultAspectRatio = 1.5; // Slightly wide rectangle
+            return this.calculateResponsiveDimensions(defaultAspectRatio, 'empty');
+        },
+
+        // --- SIZE PRESETS LOADING --- //
+        async loadSizePresets() {
+            // Create a promise that rejects after 50ms (for fast fallback)
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('API timeout')), 50);
+            });
+            
+            // Create the actual API call promise
+            const apiCall = fetch(`${this.API_BASE_URL}/api/presets`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch presets: ${response.status}`);
+                    }
+                    return response.json();
+                });
+            
+            try {
+                // Race between API call and timeout
+                const data = await Promise.race([apiCall, timeoutPromise]);
+                
+                // Transform the presets data for frontend use
+                this.sizePresets = Object.entries(data.presets).map(([key, preset]) => ({
+                    key: key,
+                    display_name: preset.display_name,
+                    aspect_ratio: preset.aspect_ratio,
+                    width: preset.width,
+                    height: preset.height,
+                    purpose: preset.purpose
+                }));
+
+                // Set default selection if not already set
+                if (data.default_preset && !this.selectedSize) {
+                    this.selectedSize = data.default_preset;
+                }
+
+                // Update preview aspect ratio
+                this.updatePreviewAspectRatio();
+
+                console.log('Size presets loaded from API:', this.sizePresets.length, 'presets');
+                
+            } catch (error) {
+                console.warn('Failed to load size presets from API:', error);
+                // Use fallback presets (matches backend exactly) - no error logging for timeout
+                this.sizePresets = [
+                    { key: 'blog_header', display_name: 'Blog Header', aspect_ratio: '1200x630', width: 1200, height: 630, purpose: 'A wide blog header graphic (16:9 ratio)' },
+                    { key: 'social_square', display_name: 'Social Post - Square', aspect_ratio: '1080x1080', width: 1080, height: 1080, purpose: 'A square social media post (1:1 ratio)' },
+                    { key: 'social_portrait', display_name: 'Social Post - Portrait', aspect_ratio: '1080x1350', width: 1080, height: 1350, purpose: 'A vertical social media post (4:5 ratio)' },
+                    { key: 'story', display_name: 'Instagram/TikTok Story', aspect_ratio: '1080x1920', width: 1080, height: 1920, purpose: 'A tall story for Instagram or TikTok (9:16 ratio)' },
+                    { key: 'twitter_post', display_name: 'Twitter Post', aspect_ratio: '1600x900', width: 1600, height: 900, purpose: 'A wide image for a Twitter (X) post (16:9 ratio)' },
+                    { key: 'presentation_slide', display_name: 'Presentation Slide', aspect_ratio: '1920x1080', width: 1920, height: 1080, purpose: 'A standard presentation slide (16:9 ratio)' },
+                    { key: 'youtube_thumbnail', display_name: 'YouTube Thumbnail', aspect_ratio: '1280x720', width: 1280, height: 720, purpose: 'A thumbnail for a YouTube video (16:9 ratio)' }
+                ];
+                
+                this.selectedSize = 'blog_header';
+                
+                // Update preview aspect ratio for fallback
+                this.updatePreviewAspectRatio();
+                
+                // Continue API call in background to warm up server (don't await)
+                apiCall.catch(() => {}); // Silently ignore errors for background warming
+            }
         },
 
         // --- AUTHENTICATION METHODS --- //
@@ -275,6 +494,9 @@ document.addEventListener('alpine:init', () => {
         closeAuthModal() {
             this.isAuthModalOpen = false;
             this.resetAuthForm();
+            
+            // Clear any error messages when modal is closed manually
+            this.errorMessage = null;
 
             // Restore body scroll
             document.body.classList.remove('body-no-scroll');
@@ -322,6 +544,9 @@ document.addEventListener('alpine:init', () => {
                 this.isLoggedIn = true;
                 this.currentUser = loginResponse.user;
 
+                // Clear any existing error messages
+                this.errorMessage = null;
+                
                 // Close modal and show success
                 this.closeAuthModal();
                 this.showSuccessMessage(`Welcome back, ${loginResponse.user.full_name || loginResponse.user.email}!`);
@@ -371,12 +596,20 @@ document.addEventListener('alpine:init', () => {
                     full_name: this.authForm.full_name.trim() || undefined
                 };
 
-                const registerResponse = await this.authService.register(userData);
+                await this.authService.register(userData);
 
+                // Clear any existing error messages
+                this.errorMessage = null;
+                
                 // Show success message and switch to login mode
                 this.showSuccessMessage('Registration successful! Please check your email to confirm your account, then log in.');
                 this.authMode = 'login';
                 this.resetAuthForm();
+                
+                // Close the modal after a brief delay to let user see the success message
+                setTimeout(() => {
+                    this.closeAuthModal();
+                }, 2000);
 
                 // Analytics
                 if (typeof gtag !== 'undefined') {
@@ -527,7 +760,19 @@ document.addEventListener('alpine:init', () => {
                 'Course Thumbnail': 'bold_geometric_solid'
             };
 
+            // Auto-select appropriate size preset based on the example
+            const sizeMapping = {
+                'Tech Blog Header': 'blog_header',
+                'Summer Sale Post': 'social_square',
+                'Luxury Background': 'blog_header',
+                'Product Launch': 'twitter_post',
+                'Newsletter Header': 'blog_header',
+                'Course Thumbnail': 'youtube_thumbnail'
+            };
+
             this.selectedTheme = themeMapping[randomExample.title] || 'auto';
+            this.selectedSize = sizeMapping[randomExample.title] || 'blog_header';
+            this.updatePreviewAspectRatio();
 
             this.saveDraft();
 
@@ -554,8 +799,18 @@ document.addEventListener('alpine:init', () => {
                 'event banner': 'editorial_magazine_layout'
             };
 
+            // Auto-select appropriate size preset based on the quick prompt
+            const sizeMapping = {
+                'tech blog header': 'blog_header',
+                'summer sale post': 'social_square',
+                'luxury background': 'blog_header',
+                'event banner': 'twitter_post'
+            };
+
             const promptKey = quickPrompt.title.toLowerCase();
             this.selectedTheme = themeMapping[promptKey] || 'auto';
+            this.selectedSize = sizeMapping[promptKey] || 'blog_header';
+            this.updatePreviewAspectRatio();
 
             this.saveDraft();
 
@@ -582,7 +837,19 @@ document.addEventListener('alpine:init', () => {
                 'Course Thumbnail': 'bold_geometric_solid'
             };
 
+            // Auto-select appropriate size preset based on the example
+            const sizeMapping = {
+                'Tech Blog Header': 'blog_header',
+                'Summer Sale Post': 'social_square',
+                'Luxury Background': 'blog_header',
+                'Product Launch': 'twitter_post',
+                'Newsletter Header': 'blog_header',
+                'Course Thumbnail': 'youtube_thumbnail'
+            };
+
             this.selectedTheme = themeMapping[example.title] || 'auto';
+            this.selectedSize = sizeMapping[example.title] || 'blog_header';
+            this.updatePreviewAspectRatio();
 
             this.saveDraft();
 
@@ -604,8 +871,9 @@ document.addEventListener('alpine:init', () => {
                     // Validate draft data
                     if (data && typeof data === 'object') {
                         this.prompt = data.prompt || '';
-                        this.selectedEngine = data.engine || 'fast';
+                        this.selectedEngine = data.engine || 'pro';
                         this.selectedTheme = data.theme || 'auto';
+                        this.selectedSize = data.size || 'blog_header';
                     }
                 }
             } catch (error) {
@@ -620,6 +888,7 @@ document.addEventListener('alpine:init', () => {
                     prompt: this.prompt,
                     engine: this.selectedEngine,
                     theme: this.selectedTheme,
+                    size: this.selectedSize,
                     timestamp: new Date().toISOString()
                 };
                 localStorage.setItem('layoutcraft-mvp-draft', JSON.stringify(draft));
@@ -654,6 +923,22 @@ document.addEventListener('alpine:init', () => {
                 if (this.generatedImage) {
                     URL.revokeObjectURL(this.generatedImage);
                 }
+            });
+        },
+
+        setupResizeHandler() {
+            // Handle window resize for responsive preview dimensions
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                // Debounce resize events
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    // Force Alpine to re-evaluate the style bindings
+                    this.$nextTick(() => {
+                        // This will trigger re-calculation of preview dimensions
+                        this.updatePreviewAspectRatio();
+                    });
+                }, 250);
             });
         },
 
@@ -793,6 +1078,10 @@ document.addEventListener('alpine:init', () => {
             this.imageLoaded = false;
             this.imageError = false;
             this.saveDraft();
+            
+            // Ensure preview aspect ratio is up to date for loading skeleton
+            this.updatePreviewAspectRatio();
+            
             this.startLoadingAnimation();
             this.isGenerating = true;
             this.generationProgress = 0;
@@ -811,17 +1100,18 @@ document.addEventListener('alpine:init', () => {
                 const randomTheme = this.themes[Math.floor(Math.random() * this.themes.length)];
                 themeToSend = randomTheme.id;
             }
+            console.log(`Generating image with theme: ${themeToSend}`);
 
             try {
                 const generationData = {
                     prompt: this.prompt.trim(),
-                    width: 1200,
-                    height: 630,
                     model: this.modelMapping[this.selectedEngine],
-                    theme: themeToSend
+                    theme: themeToSend,
+                    size_preset: this.selectedSize
                 };
 
                 const imageBlob = await this.authService.generateImage(generationData, this.isLoggedIn);
+                console.log('Image generation response:', imageBlob);
 
                 // Validate blob
                 if (!imageBlob || imageBlob.size === 0) {
@@ -859,6 +1149,7 @@ document.addEventListener('alpine:init', () => {
                         event_label: this.selectedEngine,
                         custom_parameters: {
                             theme: themeToSend,
+                            size_preset: this.selectedSize,
                             prompt_length: this.prompt.length,
                             user_type: this.isLoggedIn ? 'authenticated' : 'anonymous'
                         }
@@ -1093,6 +1384,23 @@ document.addEventListener('alpine:init', () => {
             },
             selectedTheme() {
                 this.saveDraft();
+            },
+            selectedSize() {
+                this.saveDraft();
+                
+                // Update preview aspect ratio when size changes
+                this.updatePreviewAspectRatio();
+                
+                // Track preset selection analytics
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'preset_selected', {
+                        event_category: 'Generation',
+                        event_label: this.selectedSize,
+                        custom_parameters: {
+                            user_type: this.isLoggedIn ? 'authenticated' : 'anonymous'
+                        }
+                    });
+                }
             }
         }
     }));

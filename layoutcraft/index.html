@@ -355,9 +355,25 @@
                         </div>
                     </div>
 
-                    <!-- Step 2: Style Selection -->
+                    <!-- Step 2: Size Selection -->
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-3">2. Choose a Style</h3>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3">2. Choose Output Size</h3>
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                            <template x-for="preset in sizePresets" :key="preset.key">
+                                <button @click="selectedSize = preset.key"
+                                    :class="selectedSize === preset.key ? 'bg-blue-100 border-blue-400 text-blue-700 scale-95' : 'bg-white/60 border-white/30 text-gray-600 hover:bg-white/80'"
+                                    class="p-2 rounded-lg text-xs font-medium border-2 transition-all duration-200 hover:scale-105 active:scale-95 text-left"
+                                    :disabled="isGenerating">
+                                    <div class="font-semibold text-xs mb-1" x-text="preset.display_name"></div>
+                                    <div class="text-xs opacity-75" x-text="preset.aspect_ratio"></div>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Style Selection -->
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3">3. Choose a Style</h3>
                         <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2 md:gap-3">
                             <button @click="selectedTheme = 'auto'"
                                 :class="selectedTheme === 'auto' ? 'bg-indigo-100 border-indigo-400 text-indigo-700 scale-95' : 'bg-white/60 border-white/30 text-gray-600 hover:bg-white/80'"
@@ -375,9 +391,9 @@
                         </div>
                     </div>
 
-                    <!-- Step 3: Quality Selection -->
+                    <!-- Step 4: Quality Selection -->
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-3">3. Select Quality</h3>
+                        <h3 class="text-lg font-semibold text-gray-700 mb-3">4. Select Quality</h3>
                         <div class="grid grid-cols-2 gap-3">
                             <button @click="selectedEngine = 'fast'"
                                 :class="selectedEngine === 'fast' ? 'bg-emerald-100 border-emerald-400 text-emerald-700 scale-95' : 'bg-white/60 border-white/30 text-gray-600 hover:bg-white/80'"
@@ -436,59 +452,67 @@
                 <div x-ref="resultPanel" class="glass-card p-4 md:p-6 min-h-[400px] md:min-h-[500px] flex flex-col transition-all duration-300">
                     <!-- Empty State -->
                     <div x-show="!isGenerating && !generatedImage"
-                        class="flex-1 flex flex-col items-center justify-center text-center space-y-4">
-                        <div
-                            class="w-16 md:w-20 h-16 md:h-20 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center">
-                            <svg class="w-8 md:w-10 h-8 md:h-10 text-indigo-400" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                </path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h4 class="text-lg md:text-xl font-semibold text-gray-700 mb-2">Your design will appear here</h4>
-                            <p class="text-sm md:text-base text-gray-500 mb-4">Try a quick start prompt above, or describe your vision and let our
-                                AI create something amazing.</p>
-                            <button @click="useExamplePrompt()"
-                                class="bg-indigo-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-indigo-700 transform hover:scale-105 active:scale-95 transition-all duration-200">
-                                ✨ Try an Example
-                            </button>
+                        class="flex-1 flex flex-col items-center justify-center text-center">
+                        <div class="empty-state-container relative rounded-lg border-2 border-dashed border-gray-300 bg-gray-50/50 flex flex-col items-center justify-center space-y-4 p-6"
+                             :style="`width: ${getEmptyStateStyle().width}; height: ${getEmptyStateStyle().height}; min-height: 200px;`">
+                            <div
+                                class="w-12 md:w-16 h-12 md:h-16 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center">
+                                <svg class="w-6 md:w-8 h-6 md:h-8 text-indigo-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="text-base md:text-lg font-semibold text-gray-700 mb-2">Your design will appear here</h4>
+                                <p class="text-xs md:text-sm text-gray-500 mb-4">Preview will match the selected dimensions</p>
+                                <button @click="useExamplePrompt()"
+                                    class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transform hover:scale-105 active:scale-95 transition-all duration-200 text-sm">
+                                    ✨ Try an Example
+                                </button>
+                            </div>
                         </div>
                     </div>
 
                     <!-- Loading State -->
                     <div x-show="isGenerating"
-                        class="flex-1 flex flex-col items-center justify-center text-center space-y-4">
-                        <div class="relative">
-                            <div class="w-16 h-16 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin">
+                        class="flex-1 flex flex-col items-center justify-center text-center">
+                        <div class="loading-state-container relative rounded-lg border-2 border-indigo-200 bg-indigo-50/50 flex flex-col items-center justify-center space-y-4 p-6"
+                             :style="`width: ${getPreviewStyle().width}; height: ${getPreviewStyle().height}; min-height: 200px;`">
+                            <div class="relative">
+                                <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin">
+                                </div>
+                                <!-- Progress Ring -->
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="w-8 h-8 border-2 border-purple-300 border-t-purple-600 rounded-full animate-spin"
+                                         style="animation-duration: 1.5s; animation-direction: reverse;"></div>
+                                </div>
                             </div>
-                            <!-- Progress Ring -->
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <div class="w-12 h-12 border-2 border-purple-300 border-t-purple-600 rounded-full animate-spin"
-                                     style="animation-duration: 1.5s; animation-direction: reverse;"></div>
+                            <div>
+                                <h4 class="text-base md:text-lg font-semibold text-gray-700 loading-dots" x-text="loadingMessage"></h4>
+                                <p class="text-xs md:text-sm text-gray-500 mt-2"
+                                    x-text="selectedEngine === 'pro' ? 'This can take up to 60 seconds for Pro quality.' : 'Fast generation in progress...'">
+                                </p>
+                                <!-- Progress indicator -->
+                                <div class="mt-4 w-32 bg-gray-200 rounded-full h-2 mx-auto">
+                                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full animate-pulse"
+                                         :style="`width: ${Math.min(generationProgress, 100)}%`"></div>
+                                </div>
+                                <div class="text-xs text-gray-400 mt-1" x-text="`${Math.round(generationProgress)}% complete`"></div>
                             </div>
-                        </div>
-                        <div>
-                            <h4 class="text-lg md:text-xl font-semibold text-gray-700 loading-dots" x-text="loadingMessage"></h4>
-                            <p class="text-sm md:text-base text-gray-500 mt-2"
-                                x-text="selectedEngine === 'pro' ? 'This can take up to 60 seconds for Pro quality.' : 'Fast generation in progress...'">
-                            </p>
-                            <!-- Progress indicator -->
-                            <div class="mt-4 w-48 bg-gray-200 rounded-full h-2 mx-auto">
-                                <div class="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full animate-pulse"
-                                     :style="`width: ${Math.min(generationProgress, 100)}%`"></div>
-                            </div>
-                            <div class="text-xs text-gray-400 mt-1" x-text="`${Math.round(generationProgress)}% complete`"></div>
                         </div>
                     </div>
 
                     <!-- Generated Image -->
                     <div x-show="generatedImage" class="flex-1 flex flex-col animate-fade-in">
                         <div class="flex-1 flex items-center justify-center mb-4">
-                            <img :src="generatedImage" alt="AI generated design"
-                                class="max-w-full max-h-80 md:max-h-96 object-contain rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 animate-fade-in"
-                                @load="imageLoaded = true" @error="imageError = true">
+                            <div class="preview-container relative rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] animate-fade-in bg-white/10"
+                                 :style="`width: ${getPreviewStyle().width}; height: ${getPreviewStyle().height};`">
+                                <img :src="generatedImage" alt="AI generated design"
+                                    class="w-full h-full"
+                                    @load="imageLoaded = true" @error="imageError = true">
+                            </div>
                         </div>
 
                         <!-- Action Buttons -->
@@ -885,7 +909,7 @@
         x-transition:enter-start="translate-y-full opacity-0" x-transition:enter-end="translate-y-0 opacity-100"
         x-transition:leave="transition ease-in duration-200 transform"
         x-transition:leave-start="translate-y-0 opacity-100" x-transition:leave-end="translate-y-full opacity-0"
-        class="fixed bottom-6 right-6 bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-4 rounded-xl shadow-lg z-50">
+        class="fixed bottom-6 right-6 bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-4 rounded-xl shadow-lg z-[60]">
         <div class="flex items-center gap-3">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
