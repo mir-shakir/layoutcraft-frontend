@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Blog – LayoutCraft Design Articles</title>
+    <meta name="title" content="Blog – LayoutCraft Design Articles">
+    <meta name="description" content="Articles, tutorials, and insights on AI design, visual content creation, and modern design workflows from the LayoutCraft team.">
+    <meta name="keywords" content="AI design blog, visual content creation, design tutorials, layoutcraft, ai design tools, generative design">
+    <meta name="author" content="LayoutCraft">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://layoutcraft.tech/blog/">
+    <meta property="og:title" content="Blog – LayoutCraft Design Articles">
+    <meta property="og:description" content="Articles, tutorials, and insights on AI design, visual content creation, and modern design workflows.">
+    <meta property="og:image" content="https://layoutcraft.tech/assets/images/og-image.png">
+    <meta property="og:site_name" content="LayoutCraft">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://layoutcraft.tech/blog/">
+    <meta property="twitter:title" content="Blog – LayoutCraft Design Articles">
+    <meta property="twitter:description" content="Articles, tutorials, and insights on AI design, visual content creation, and modern design workflows.">
+    <meta property="twitter:image" content="https://layoutcraft.tech/assets/images/og-image.png">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
+    <link rel="manifest" href="../site.webmanifest">
+    <link rel="shortcut icon" href="../favicon.ico">
+    <meta name="theme-color" content="#4f46e5">
+
+    <!-- Preload & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&display=swap">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/blog.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJ5GEKEX8H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DJ5GEKEX8H');
+    </script>
+</head>
+
+<body>
+    <!-- Background Animation -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden="true">
+        <div class="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-blue-400/10 to-purple-600/10 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-pink-400/10 to-indigo-600/10 rounded-full blur-3xl animate-float-delayed"></div>
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-br from-emerald-400/5 to-teal-600/5 rounded-full blur-2xl animate-float"></div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-content">
+                <!-- Logo -->
+                <div class="logo">
+                    <a href="../" class="logo-link">
+                        <div class="logo-icon">
+                            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="logo-text">LayoutCraft</span>
+                    </a>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="nav-desktop">
+                    <a href="../" class="nav-link">Generator</a>
+                    <a href="../#examples" class="nav-link">Examples</a>
+                    <a href="../#about" class="nav-link">About</a>
+                    <a href="../#faq" class="nav-link">FAQ</a>
+                    <a href="./" class="nav-link nav-link-active">Blog</a>
+                </nav>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobileMenuToggle" class="mobile-menu-toggle">
+                    <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="mobile-menu hidden">
+                <div class="mobile-menu-content">
+                    <a href="../" class="mobile-nav-link">Generator</a>
+                    <a href="../#examples" class="mobile-nav-link">Examples</a>
+                    <a href="../#about" class="mobile-nav-link">About</a>
+                    <a href="../#faq" class="mobile-nav-link">FAQ</a>
+                    <a href="./" class="mobile-nav-link mobile-nav-active">Blog</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-container">
+                <h1 class="hero-title">
+                    <span class="hero-gradient-text">Design Insights</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Exploring the intersection of AI, design, and human creativity
+                </p>
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">10K+</span>
+                        <span class="stat-label">Designers Reading</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">25</span>
+                        <span class="stat-label">Expert Contributors</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">95%</span>
+                        <span class="stat-label">Actionable Content</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Content Section -->
+        <section class="blog-section">
+            <div class="blog-container glass-card">
+                <!-- Blog Introduction -->
+                <div class="blog-intro">
+                    <h2 class="blog-intro-title">Latest Insights</h2>
+                    <p class="blog-intro-text">Discover practical strategies, innovative techniques, and industry insights from leading design experts and AI pioneers.</p>
+                </div>
+
+                <!-- Featured Post Section -->
+                <section class="featured-post-section">
+                    <div class="featured-post-card glass-card">
+                        <div class="featured-badge">
+                            <svg fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
+                            </svg>
+                            Featured
+                        </div>
+                        <div class="featured-post-body">
+                            <div class="featured-post-thumbnail"></div>
+                            <div class="featured-post-content">
+                                <h2 class="featured-post-title"></h2>
+                                <p class="featured-post-excerpt"></p>
+                                <div class="featured-post-meta">
+                                    <span class="meta-date"></span>
+                                    <span class="meta-time"></span>
+                                </div>
+                                <a href="#" class="featured-post-button">
+                                    Read Article
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Blog Grid -->
+                <div class="blog-grid" id="blogGrid">
+                    <!-- Blog posts will be loaded by JavaScript -->
+                </div>
+
+                <!-- No Results -->
+                <div class="no-results hidden" id="noBlogResults">
+                    <div class="no-results-icon">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                    </div>
+                    <h3>No articles found</h3>
+                    <p>Try adjusting your search query or browse all topics.</p>
+                </div>
+
+                <!-- Load More Button -->
+                <div class="load-more-container">
+                    <button id="loadMoreBtn" class="engine-btn hidden">
+                        Load More Articles
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="footer-logo">
+                        <div class="logo-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="logo-text">LayoutCraft</span>
+                    </div>
+                    <p class="footer-description">
+                        AI-powered visual asset generator that creates production-ready designs. Turn prompts into professional layouts with structured, predictable results.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-section">
+                        <h4>Product</h4>
+                        <a href="../">Generator</a>
+                        <a href="../#examples">Examples</a>
+                        <a href="../#about">About</a>
+                        <a href="../#faq">FAQ</a>
+                    </div>
+                    <div class="footer-section">
+                        <h4>Resources</h4>
+                        <a href="./">Blog</a>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Use</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
+                <p>Turning AI art into production-ready designs.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script type="module" src="js/blog-config.js"></script>
+    <script type="module" src="js/blog-home-simple.js"></script>
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (mobileMenuToggle && mobileMenu) {
+                mobileMenuToggle.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

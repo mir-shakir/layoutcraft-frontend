@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>{{ BLOG_POST_TITLE }} – LayoutCraft Blog</title>
+    <meta name="title" content="{{ BLOG_POST_TITLE }} – LayoutCraft Blog">
+    <meta name="description" content="{{ BLOG_POST_EXCERPT }}">
+    <meta name="keywords" content="{{ BLOG_POST_KEYWORDS }}">
+    <meta name="author" content="LayoutCraft">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://layoutcraft.tech/blog/{{ BLOG_POST_SLUG }}/">
+    <meta property="og:title" content="{{ BLOG_POST_TITLE }}">
+    <meta property="og:description" content="{{ BLOG_POST_EXCERPT }}">
+    <meta property="og:image" content="https://layoutcraft.tech/blog/assets/images/{{ BLOG_POST_IMAGE }}">
+    <meta property="og:site_name" content="LayoutCraft">
+    <meta property="article:author" content="{{ BLOG_POST_AUTHOR }}">
+    <meta property="article:published_time" content="{{ BLOG_POST_DATE_ISO }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://layoutcraft.tech/blog/{{ BLOG_POST_SLUG }}/">
+    <meta property="twitter:title" content="{{ BLOG_POST_TITLE }}">
+    <meta property="twitter:description" content="{{ BLOG_POST_EXCERPT }}">
+    <meta property="twitter:image" content="https://layoutcraft.tech/blog/assets/images/{{ BLOG_POST_IMAGE }}">
+
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16x16.png">
+    <link rel="manifest" href="../../site.webmanifest">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    <meta name="theme-color" content="#4f46e5">
+
+    <!-- Preload & Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400&display=swap">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/blog.css">
+
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJ5GEKEX8H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-DJ5GEKEX8H');
+    </script>
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": "{{ BLOG_POST_TITLE }}",
+        "description": "{{ BLOG_POST_EXCERPT }}",
+        "image": "https://layoutcraft.tech/blog/assets/images/{{ BLOG_POST_IMAGE }}",
+        "datePublished": "{{ BLOG_POST_DATE_ISO }}",
+        "dateModified": "{{ BLOG_POST_DATE_ISO }}",
+        "author": {
+            "@type": "Person",
+            "name": "{{ BLOG_POST_AUTHOR }}"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "LayoutCraft",
+            "logo": {
+                "@type": "ImageObject",
+                "url": "https://layoutcraft.tech/assets/images/og-image.png"
+            }
+        }
+    }
+    </script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50" x-data="{ mobileMenuOpen: false }" x-cloak>
+    <!-- Scroll Progress Bar -->
+    <div class="scroll-progress-bar"></div>
+
+    <!-- Background Animation - Exact match from LayoutCraft -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden="true">
+        <div class="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-blue-400/10 to-purple-600/10 rounded-full blur-3xl animate-float"></div>
+        <div class="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-pink-400/10 to-indigo-600/10 rounded-full blur-3xl animate-float-delayed"></div>
+    </div>
+
+    <!-- Header Navigation - Exact copy from LayoutCraft -->
+    <header class="sticky top-0 z-40 bg-white/70 backdrop-blur-lg border-b border-gray-200/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="../../" class="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+                        <div class="w-8 h-8 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-lg font-bold text-gray-800">LayoutCraft</span>
+                    </a>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex md:items-center md:space-x-8">
+                    <a href="../../" class="text-gray-500 hover:text-gray-800 transition-colors">Generator</a>
+                    <a href="../../#examples" class="text-gray-500 hover:text-gray-800 transition-colors">Examples</a>
+                    <a href="../../#about" class="text-gray-500 hover:text-gray-800 transition-colors">About</a>
+                    <a href="../../#faq" class="text-gray-500 hover:text-gray-800 transition-colors">FAQ</a>
+                    <a href="../" class="text-indigo-600 font-semibold">Blog</a>
+                </nav>
+
+                <!-- Back to Blog Link (Mobile) -->
+                <div class="md:hidden">
+                    <a href="../" class="text-indigo-600 font-medium hover:text-indigo-700 transition-colors">
+                        ← Blog
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="blog-post-container">
+            <!-- Table of Contents (Desktop Only) -->
+            <aside class="toc-container" id="tocContainer">
+                <h3>Table of Contents</h3>
+                <ul class="toc-list" id="tocList">
+                    <!-- TOC will be auto-generated by JavaScript -->
+                </ul>
+            </aside>
+
+            <!-- Article Content -->
+            <article class="blog-post-article glass-card">
+                <!-- Article Header -->
+                <header class="blog-post-header">
+                    <h1 class="blog-post-title">{{ BLOG_POST_TITLE }}</h1>
+                    <div class="blog-post-meta">
+                        <span>By {{ BLOG_POST_AUTHOR }}</span>
+                        <span>
+                            <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            {{ BLOG_POST_DATE }}
+                        </span>
+                        <span>
+                            <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            {{ BLOG_POST_READ_TIME }}
+                        </span>
+                    </div>
+                    <div class="post-card-tags">
+                        <!-- Replace with actual tags -->
+                        <span class="tag-badge">AI Design</span>
+                        <span class="tag-badge">Tutorial</span>
+                        <span class="tag-badge">LayoutCraft</span>
+                    </div>
+                </header>
+
+                <!-- Article Content -->
+                <div class="blog-post-content" id="articleContent">
+                    <!-- 
+                        BLOG CONTENT GOES HERE
+                        
+                        Use this structure for your content:
+                        
+                        <h2>Main Section Heading</h2>
+                        <p>Your paragraph content goes here.</p>
+                        
+                        <h3>Subsection Heading</h3>
+                        <p>More content here.</p>
+                        
+                        For code blocks:
+                        <pre><code class="language-javascript">
+                        function example() {
+                            console.log("Hello LayoutCraft!");
+                        }
+                        </code></pre>
+                        
+                        For blockquotes:
+                        <blockquote>
+                        <p>💡 <strong>Pro Tip:</strong> This is an important insight readers should remember.</p>
+                        </blockquote>
+                        
+                        For images:
+                        <img src="../assets/images/your-image.png" alt="Description">
+                    -->
+                    
+                    <p>This is a template blog post for LayoutCraft. Replace this content with your actual article content.</p>
+                    
+                    <h2>Getting Started</h2>
+                    <p>To create a new blog post, copy this template and customize it with your content.</p>
+                    
+                    <h3>Important Notes</h3>
+                    <ul>
+                        <li>Replace all {{ PLACEHOLDER }} values with actual content</li>
+                        <li>Update the meta tags, titles, and descriptions</li>
+                        <li>Add your content in the main article section</li>
+                        <li>Update the tags in the header</li>
+                    </ul>
+                    
+                    <blockquote>
+                        <p>Remember to keep your content focused on design, AI tools, and visual creation workflows that align with LayoutCraft's mission.</p>
+                    </blockquote>
+                    
+                    <h2>Code Examples</h2>
+                    <p>You can include code examples like this:</p>
+                    
+                    <pre><code class="language-javascript">
+// Example code block
+function generateDesign(prompt) {
+    return layoutCraftAPI.generate({
+        prompt: prompt,
+        style: 'modern',
+        format: 'blog-header'
+    });
+}
+</code></pre>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <!-- Footer - Exact match from LayoutCraft -->
+    <footer class="bg-white/30 border-t border-gray-200/50 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <div class="flex items-center space-x-2 mb-4">
+                        <div class="w-7 h-7 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-base font-bold text-gray-800">LayoutCraft</span>
+                    </div>
+                    <p class="text-gray-600 max-w-md">
+                        AI-powered visual asset generator that creates production-ready designs. Turn prompts into professional layouts with structured, predictable results.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-800 mb-4">Product</h4>
+                    <div class="space-y-2">
+                        <a href="../../" class="block text-gray-600 hover:text-gray-800">Generator</a>
+                        <a href="../../#examples" class="block text-gray-600 hover:text-gray-800">Examples</a>
+                        <a href="../../#about" class="block text-gray-600 hover:text-gray-800">About</a>
+                        <a href="../../#faq" class="block text-gray-600 hover:text-gray-800">FAQ</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-gray-800 mb-4">Resources</h4>
+                    <div class="space-y-2">
+                        <a href="../" class="block text-gray-600 hover:text-gray-800">Blog</a>
+                        <a href="#" class="block text-gray-600 hover:text-gray-800">Privacy Policy</a>
+                        <a href="#" class="block text-gray-600 hover:text-gray-800">Terms of Use</a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-200/50 mt-8 pt-8 text-center">
+                <p class="text-sm text-gray-500">&copy; 2025 LayoutCraft. All rights reserved.</p>
+                <p class="text-xs text-gray-400 mt-1">Turning AI art into production-ready designs.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script type="module" src="../js/blog-config.js"></script>
+    <script type="module" src="../js/blog-post.js"></script>
+</body>
+
+</html>
