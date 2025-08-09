@@ -10,9 +10,17 @@ document.addEventListener('DOMContentLoaded', () => {
         const prompt = heroInput.value.trim();
         if (prompt) {
             // Encode and redirect to app with prompt
-            const encoded = encodeURIComponent(prompt);
-            window.location.href = `/app/?prompt=${encoded}`;
-            
+            // const encoded = encodeURIComponent(prompt);
+            const promptData = {
+                prompt: prompt,
+                template: "blog_header",
+                style:"auto"
+
+            };
+            sessionStorage.setItem('layoutcraft_initial_data', JSON.stringify(promptData));
+            window.location.href = '/app/';
+            console.log("hero button promt used")
+
             // Track event
             if (typeof gtag !== 'undefined') {
                 gtag('event', 'homepage_generate', {
@@ -29,35 +37,33 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 2000);
         }
     });
-    
+
     // Handle enter key in input
     heroInput?.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
             heroButton.click();
         }
     });
-    
+
     // Handle example chips
     exampleChips.forEach(chip => {
         chip.addEventListener('click', () => {
-            const prompt = chip.getAttribute('data-prompt');
-            heroInput.value = prompt;
-            heroInput.focus();
-            
-            // Highlight the input briefly
-            heroInput.style.backgroundColor = '#eef2ff';
-            setTimeout(() => {
-                heroInput.style.backgroundColor = '';
-            }, 300);
+            const promptData = {
+                prompt: chip.dataset.prompt,
+                style: chip.dataset.style, // Assumes you add data-style="..."
+                template: chip.dataset.template // Assumes you add data-template="..."
+            };
+            sessionStorage.setItem('layoutcraft_initial_data', JSON.stringify(promptData));
+            window.location.href = '/app/';
             // Track example usage
-           if (typeof gtag !== 'undefined') {
-               gtag('event', 'use_homepage_example', {
-                   event_category: 'Engagement',
-                   event_label: chip.textContent.trim()
-               });
-           }
-       });
-   });
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'use_homepage_chip', {
+                    event_category: 'Engagement',
+                    event_label: chip.textContent.trim()
+                });
+            }
+        });
+    });
    
    // Smooth scroll for navigation
    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -80,9 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
 document.querySelectorAll('.example-try').forEach(btn => {
     btn.addEventListener('click', (e) => {
         e.preventDefault();
-        const prompt = btn.dataset.prompt;
-        const encoded = encodeURIComponent(prompt);
-        window.location.href = `/app/?prompt=${encoded}`;
+        const promptData = {
+            prompt: btn.dataset.prompt,
+            style: btn.dataset.style,
+            template: btn.dataset.template
+        };
+        sessionStorage.setItem('layoutcraft_initial_data', JSON.stringify(promptData));
+       window.location.href = '/app/';
         
         // Track event
         if (typeof gtag !== 'undefined') {

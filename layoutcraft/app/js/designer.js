@@ -52,7 +52,7 @@ import { authService } from "../../shared/js/authService.js";
     function init() {
         setupEventListeners();
         checkAuthStatus();
-        checkURLParams();
+        checkSessionForPrompt();
         loadDraft();
         updateUI();
         setupKeyboardShortcuts();
@@ -451,17 +451,39 @@ async function generateDesign() {
         }
     }
 
-    function checkURLParams() {
-        const params = new URLSearchParams(window.location.search);
-        const promptParam = params.get('prompt');
-        if (promptParam) {
-            state.prompt = decodeURIComponent(promptParam);
-            elements.promptInput.value = state.prompt;
-            elements.mobilePromptInput.value = state.prompt;
-            updateCharCount();
-            window.history.replaceState({}, document.title, '/app/');
+    // In /app/js/designer.js, replace the checkSessionForPrompt function
+
+function checkSessionForPrompt() {
+    const dataStr = sessionStorage.getItem('layoutcraft_initial_data');
+
+    if (dataStr) {
+        try {
+            const data = JSON.parse(dataStr);
+
+            // Set the prompt
+            if (data.prompt) {
+                state.prompt = data.prompt;
+                elements.promptInput.value = state.prompt;
+                elements.mobilePromptInput.value = state.prompt;
+                updateCharCount();
+            }
+
+            // Auto-select the style and template
+            if (data.style) {
+                selectStyle(data.style);
+            }
+            if (data.template) {
+                selectTemplate(data.template);
+            }
+
+        } catch (e) {
+            console.error("Failed to parse initial data from session storage:", e);
+        } finally {
+            // ALWAYS remove the item from storage to prevent re-use
+            sessionStorage.removeItem('layoutcraft_initial_data');
         }
     }
+}
 
     function setupKeyboardShortcuts() {
         document.addEventListener('keydown', (e) => {
