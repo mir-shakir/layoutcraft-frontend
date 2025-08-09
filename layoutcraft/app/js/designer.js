@@ -388,7 +388,7 @@ async function generateDesign() {
 
     function downloadImage() {
 
-        if (!state.isLoggedIn) {
+        if (!authService.isLoggedIn) {
         // If not logged in, open the signup modal
         if (window.layoutCraftNav) {
             window.layoutCraftNav.openAuthModal('signup');
