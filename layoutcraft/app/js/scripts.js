@@ -128,35 +128,35 @@ document.addEventListener('alpine:init', () => {
                 title: "Summer Sale Post",
                 description: "Promotional graphic with vibrant gradients and bold text",
                 prompt: "A promotional graphic for a summer sale. Text: 'Summer Sale - 50% Off'. Use a vibrant orange and yellow gradient. Make the text large and bold.",
-                imagePath: "assets/images/example-summer-sale.png"
+                imagePath: "/assets/images/example-summer-sale.png"
             },
             {
                 id: 3,
                 title: "Luxury Background",
                 description: "Elegant, minimalist background with premium feel",
                 prompt: "A simple, elegant website hero background. Use a cream color with a single, thin gold line on the left side. No text.",
-                imagePath: "assets/images/example-luxury-minimal.png"
+                imagePath: "/assets/images/example-luxury-minimal.png"
             },
             {
                 id: 4,
                 title: "Product Launch",
                 description: "Announcement graphic with premium feel and gradient background",
                 prompt: "A product launch announcement for 'New iPhone App - Now Available'. Use a premium gradient background with sleek typography and subtle tech-inspired elements.",
-                imagePath: "assets/images/example-product-launch.png"
+                imagePath: "/assets/images/example-product-launch.png"
             },
             {
                 id: 5,
                 title: "Newsletter Header",
                 description: "Weekly newsletter header with friendly, approachable design",
                 prompt: "A header for 'Weekly Design Newsletter #24'. Use a friendly, approachable design with soft colors, readable typography, and subtle design-related icons.",
-                imagePath: "assets/images/example-newsletter-header.png"
+                imagePath: "/assets/images/example-newsletter-header.png"
             },
             {
                 id: 6,
                 title: "Course Thumbnail",
                 description: "Educational content thumbnail with professional layout",
                 prompt: "A thumbnail for an online course called 'Master Web Design in 30 Days'. Use professional colors, clear typography, and include subtle educational elements like books or computer screens.",
-                imagePath: "assets/images/example-course-thumbnail.png"
+                imagePath: "/assets/image/example-course-thumbnail.png"
             }
         ],
 
@@ -212,6 +212,24 @@ document.addEventListener('alpine:init', () => {
         async init() {
             // Initialize AuthService
             this.authService = new AuthService(this.API_BASE_URL);
+
+            // Check for prompt parameter from homepage
+            const urlParams = new URLSearchParams(window.location.search);
+            const promptFromUrl = urlParams.get('prompt');
+            if (promptFromUrl) {
+                this.prompt = decodeURIComponent(promptFromUrl);
+                // Clear the URL parameter to clean up the URL
+                window.history.replaceState({}, document.title, '/app/');
+
+                // Track homepage -> app conversion
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'homepage_to_app_conversion', {
+                        event_category: 'Conversion',
+                        event_label: 'with_prompt'
+                    });
+                }
+            }
+
 
             this.showMvpBanner = localStorage.getItem('layoutcraftMvpBannerDismissed') !== 'true';
             this.loadDraft();
@@ -704,7 +722,7 @@ document.addEventListener('alpine:init', () => {
             return 'Sign up to unlock all features';
         },
 
-        // --- MOBILE COLLAPSE SETUP --- //
+                // --- MOBILE COLLAPSE SETUP --- //
         setupMobileCollapse() {
             // // Check if mobile screen size and collapse sections by default
             // const checkMobile = () => {
@@ -724,6 +742,17 @@ document.addEventListener('alpine:init', () => {
 
         // --- NAVIGATION METHODS --- //
         showSection(section) {
+
+            if (section === 'about' || section === 'blog') {
+                window.location.href = `/${section}/`;
+                return;
+            }
+            this.activeSection = section;
+            this.mobileMenuOpen = false;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+
+            // Original logic for in-app sections
             this.activeSection = section;
             this.mobileMenuOpen = false;
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -736,6 +765,7 @@ document.addEventListener('alpine:init', () => {
                 });
             }
         },
+        
 
         dismissMvpBanner() {
             this.showMvpBanner = false;

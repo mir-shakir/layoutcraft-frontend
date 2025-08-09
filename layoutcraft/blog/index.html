@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LayoutCraft Blog - AI Design Tips for Non-Designers</title>
+    <meta name="description" content="Learn how to create better designs with AI, tips for writing prompts, and insights into the future of automated design.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="/shared/css/base.css">
+    <link rel="stylesheet" href="/css/homepage.css">
+    <link rel="stylesheet" href="/blog/css/blog.css">
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJ5GEKEX8H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-DJ5GEKEX8H');
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <div id="main-navigation"></div>
+
+
+    <!-- Blog Hero -->
+    <section class="blog-hero">
+        <div class="container">
+            <h1 class="blog-hero-title">LayoutCraft Blog</h1>
+            <p class="blog-hero-subtitle">
+                Tips, tutorials, and insights for creating better designs without being a designer
+            </p>
+        </div>
+    </section>
+
+    <!-- Blog Posts -->
+    <section class="blog-posts">
+        <div class="container">
+            <div class="posts-grid">
+                <!-- Post 1 -->
+                <article class="post-card glass-card">
+                    <div class="post-meta">
+                        <time datetime="2025-01-26">January 26, 2025</time>
+                        <span class="post-category">Getting Started</span>
+                    </div>
+                    <h2 class="post-title">
+                        <a href="/blog/posts/welcome-to-layoutcraft.html">
+                            Welcome to LayoutCraft: AI Design for the Rest of Us
+                        </a>
+                    </h2>
+                    <p class="post-excerpt">
+                        Learn how LayoutCraft is different from other AI image generators and why we built it 
+                        specifically for non-designers who need professional, usable visuals.
+                    </p>
+                    <a href="/blog/posts/welcome-to-layoutcraft.html" class="post-link">
+                        Read more →
+                    </a>
+                </article>
+
+                <!-- Post 2 -->
+                <article class="post-card glass-card">
+                    <div class="post-meta">
+                        <time datetime="2025-01-26">January 26, 2025</time>
+                        <span class="post-category">Tutorial</span>
+                    </div>
+                    <h2 class="post-title">
+                        <a href="/blog/posts/writing-better-prompts.html">
+                            5 Tips for Writing Better Design Prompts
+                        </a>
+                    </h2>
+                    <p class="post-excerpt">
+                        Master the art of prompt writing to get exactly what you want from LayoutCraft. 
+                        Learn the difference between prompts that create chaos and prompts that create clarity.
+                    </p>
+                    <a href="/blog/posts/writing-better-prompts.html" class="post-link">
+                        Read more →
+                    </a>
+                </article>
+
+                <!-- Coming Soon Card -->
+                <div class="post-card glass-card coming-soon">
+                    <div class="coming-soon-content">
+                        <h3>More content coming soon!</h3>
+                        <p>We're working on tutorials, case studies, and design tips.</p>
+                        <a href="/app/" class="btn btn-primary" style="margin-top: 1rem;">
+                            Try LayoutCraft →
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter CTA -->
+    <section class="newsletter-cta">
+        <div class="container">
+            <div class="newsletter-box glass-card">
+                <h2>Stay Updated</h2>
+                <p>Get design tips and LayoutCraft updates delivered to your inbox.</p>
+                <form class="newsletter-form" onsubmit="handleNewsletterSubmit(event)">
+                    <input 
+                        type="email" 
+                        placeholder="your@email.com" 
+                        required
+                        class="newsletter-input"
+                        id="newsletter-email"
+                    >
+                    <button type="submit" class="btn btn-primary">
+                        Subscribe
+                    </button>
+                </form>
+                <p class="newsletter-note">No spam. Unsubscribe anytime.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+<!-- Standard Footer - Use this on all pages -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <span class="logo-text">LayoutCraft</span>
+                </div>
+                <p class="footer-tagline">
+                    AI design tool for the rest of us.
+                </p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <a href="/app/">Create Design</a>
+                    <a href="/blog/">Blog</a>
+                    <a href="/about/">About</a>
+                    <a href="/faq/">FAQ</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="/blog/posts/writing-better-prompts.html">Prompt Guide</a>
+                    <a href="/app/">Templates</a>
+                    <a href="/faq/">Help</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="/legal/terms.html">Terms</a>
+                    <a href="/legal/privacy.html">Privacy</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        function handleNewsletterSubmit(event) {
+            event.preventDefault();
+            const email = document.getElementById('newsletter-email').value;
+            // For now, just show success - you can integrate with your backend later
+            alert('Thanks for subscribing! We\'ll keep you updated.');
+            document.getElementById('newsletter-email').value = '';
+            
+            // Track event
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'newsletter_signup', {
+                    event_category: 'Engagement',
+                    event_label: 'blog_page'
+                });
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/shared/css/navigation.css">
+<script src="/shared/js/navigation.js"></script>
+</body>
+</html>

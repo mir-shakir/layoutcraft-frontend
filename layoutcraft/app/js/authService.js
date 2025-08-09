@@ -102,6 +102,7 @@ class AuthService {
      */
     async makeAuthenticatedRequest(url, options = {}) {
         const token = this.getToken();
+        console.log(token);
         
         const headers = {
             'Content-Type': 'application/json',
@@ -124,12 +125,38 @@ class AuthService {
      * @returns {Promise<object>}
      */
     async handleResponse(response) {
+        // Handle authentication errors specifically
+        if (response.status === 401) {
+            console.warn('Authentication failed, clearing token');
+            this.removeToken();
+            // Trigger UI update in navigation if available
+            if (window.layoutCraftNav) {
+                window.layoutCraftNav.isLoggedIn = false;
+                window.layoutCraftNav.currentUser = null;
+                window.layoutCraftNav.renderNav();
+            }
+            throw new Error('Authentication failed. Please log in again.');
+        }
+        
         if (!response.ok) {
             let errorMessage = `HTTP ${response.status}`;
             
             try {
                 const errorData = await response.json();
                 errorMessage = errorData.detail || errorMessage;
+                
+                // Handle specific backend JWT errors
+                if (errorMessage.includes('JWTError') || errorMessage.includes('PyJWTError')) {
+                    console.warn('JWT error detected, clearing token');
+                    this.removeToken();
+                    // Trigger UI update in navigation if available
+                    if (window.layoutCraftNav) {
+                        window.layoutCraftNav.isLoggedIn = false;
+                        window.layoutCraftNav.currentUser = null;
+                        window.layoutCraftNav.renderNav();
+                    }
+                    errorMessage = 'Session expired. Please log in again.';
+                }
             } catch {
                 // If JSON parsing fails, use status text
                 errorMessage = response.statusText || errorMessage;
@@ -138,7 +165,12 @@ class AuthService {
             throw new Error(errorMessage);
         }
 
-        return response.json();
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            return response.json();
+        } else {
+            return response.blob(); // For image data
+        }
     }
 
     // ===== AUTHENTICATION API METHODS ===== //
