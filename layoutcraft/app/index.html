@@ -107,12 +107,12 @@
                         <button class="quick-chip" data-prompt="Instagram post for summer sale with '50% Off' text" data-style="vibrant_gradient_energy" data-template="social_square">
                             💡 Sale Post
                         </button>
-                        <button class="quick-chip" data-prompt="Professional LinkedIn banner for software developer" data-style="minimal_luxury_space" data-template="blog_header">
+                        <!-- <button class="quick-chip" data-prompt="Professional LinkedIn banner for software developer" data-style="minimal_luxury_space" data-template="blog_header">
                             💡 LinkedIn Banner
                         </button>
                         <button class="quick-chip" data-prompt="YouTube thumbnail for tech review" data-style="bold_geometric_solid" data-template="youtube_thumbnail">
                             💡 YouTube Thumb
-                        </button>
+                        </button> -->
                         <button class="quick-chip" data-prompt="Story post for product launch" data-style="vibrant_gradient_energy" data-template="story">
                             💡 Story Post
                         </button>
@@ -293,25 +293,23 @@
                 <div class="canvas-state result-canvas" id="result-canvas" style="display: none;">
                     <div class="result-wrapper">
                         <img id="result-image" class="result-image" alt="Generated design">
-                        <div class="result-overlay">
-                            <div class="result-actions">
-                                <button class="result-action download" id="download-btn">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                                        <polyline points="7 10 12 15 17 10"/>
-                                        <line x1="12" y1="15" x2="12" y2="3"/>
-                                    </svg>
-                                    Download
-                                </button>
-                                <button class="result-action regenerate" id="regenerate-btn">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="1 4 1 10 7 10"/>
-                                        <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
-                                    </svg>
-                                    Regenerate
-                                </button>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="result-actions">
+                        <button class="result-action download" id="download-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Download
+                        </button>
+                        <button class="result-action regenerate" id="regenerate-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="1 4 1 10 7 10" />
+                                <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
+                            </svg>
+                            Regenerate
+                        </button>
                     </div>
                 </div>
 
@@ -334,7 +332,53 @@
         </main>
     </div>
 
-    <!-- Footer removed for tool page focus -->
+ <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <span class="logo-text">LayoutCraft</span>
+                    </div>
+                    <p class="footer-tagline">
+                        AI design tool for the rest of us.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="#">Create Design</a>
+                        <a href="/blog/">Blog</a>
+                        <a href="/about/">About</a>
+                        <a href="/faq/">FAQ</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="/blog/posts/writing-better-prompts.html">Prompt Guide</a>
+                        <a href="/app/">Templates</a>
+                        <a href="/faq/">Help</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="/legal/terms.html">Terms</a>
+                        <a href="/legal/privacy.html">Privacy</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
     <!-- Help Button -->
     <button class="help-button" onclick="window.open('/faq/', '_blank')">
@@ -345,7 +389,20 @@
         </svg>
     </button>
 
-    <script src="/shared/js/navigation.js"></script>
-    <script src="/app/js/designer.js"></script>
+    <!-- <script src="/shared/js/navigation.js"></script> -->
+     <script type="module" src="/shared/js/authService.js"></script>
+    <script type="module" src="/shared/js/navigation.js"></script>
+    <script type="module">
+  // Import the classes from your scripts
+  import { layoutCraftNav } from '/shared/js/navigation.js';
+  import { authService } from '/shared/js/authService.js';
+
+  // Wait for the DOM to be fully loaded before running
+  document.addEventListener('DOMContentLoaded', () => {
+    // The navigation class is now correctly given the auth service it needs.
+    window.layoutCraftNav = layoutCraftNav;
+  });
+</script>
+   <script type="module" src="/app/js/designer.js"></script>
 </body>
 </html>

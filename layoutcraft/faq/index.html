@@ -17,10 +17,21 @@
     <link rel="stylesheet" href="/shared/css/navigation.css">
     <link rel="stylesheet" href="/css/homepage.css">
     <style>
+
+
+
         .faq-hero {
             background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff);
-            padding: 6rem 0 4rem;
+            padding: 8rem 0 4rem;
             text-align: center;
+            /* Add this */
+        }
+    
+        .faq-hero .hero-title {
+            margin: 0 auto 1rem;
+            /* Add this */
+            max-width: 900px;
+            /* Add this */
         }
         
         .faq-container {
@@ -99,15 +110,19 @@
 </head>
 <body>
     <div id="main-navigation"></div>
-    
-    <section class="faq-hero">
-        <h1 style="font-size: 3rem; font-weight: 800; margin-bottom: 1rem;">
-            Frequently Asked Questions
-        </h1>
-        <p style="font-size: 1.25rem; color: #6b7280;">
-            Everything you need to know about LayoutCraft
-        </p>
+
+
+        <section class="faq-hero">
+        <div class="container">
+            <h1 class="hero-title" style="font-size: 3rem;">
+                Frequently Asked Questions
+            </h1>
+            <p class="hero-subtitle">
+                Everything you need to know about LayoutCraft
+            </p>
+        </div>
     </section>
+
     
     <div class="faq-container">
         <div class="faq-item">
@@ -339,6 +354,18 @@
    </script>
    
    <link rel="stylesheet" href="/shared/css/navigation.css">
-   <script src="/shared/js/navigation.js"></script>
+  <script type="module" src="/shared/js/authService.js"></script>
+        <script type="module" src="/shared/js/navigation.js"></script>
+        <script type="module">
+            // Import the classes from your scripts
+            import { layoutCraftNav } from '/shared/js/navigation.js';
+            import { authService } from '/shared/js/authService.js';
+
+            // Wait for the DOM to be fully loaded before running
+            document.addEventListener('DOMContentLoaded', () => {
+                // The navigation class is now correctly given the auth service it needs.
+                window.layoutCraftNav = layoutCraftNav;
+            });
+        </script>
 </body>
 </html>

@@ -4,17 +4,16 @@
 .designer-body {
     margin: 0;
     padding: 0;
-    padding-top: 64px;
-    overflow: hidden;
+    padding-top: 64px; /* Account for fixed nav */
+    overflow-x: hidden; /* Fix: Allow vertical scroll */
     background: #f8f9fa;
 }
 
 /* Main Layout */
 .designer-app {
     display: flex;
-    height: calc(100vh - 64px);
+    min-height: calc(100vh - 64px); /* Fix: Use min-height to allow growing */
     position: relative;
-    margin-bottom: 2rem;
 }
 
 /* Sidebar */
@@ -125,11 +124,6 @@
     gap: 0.5rem;
 }
 
-/* Mobile Prompt Section - Hidden by default */
-.mobile-prompt-section {
-    display: none;
-}
-
 .style-pill {
     background: #f3f4f6;
     border: 2px solid transparent;
@@ -177,11 +171,6 @@
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-}
-
-.prompt-container {
-    position: relative;
-    width: 100%;
 }
 
 .textarea-wrapper {
@@ -343,20 +332,6 @@
     display: block;
 }
 
-/* Info Icon for Pro toggle */
-.info-icon {
-    margin-left: 0.25rem;
-    font-size: 0.75rem;
-    color: #6b7280;
-    cursor: help;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-}
-
-.info-icon:hover {
-    opacity: 1;
-}
-
 /* Generate Button */
 .generate-button {
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
@@ -416,7 +391,6 @@
     padding: 1rem;
     position: relative;
     overflow: auto;
-    min-height: 400px;
 }
 
 .canvas-state {
@@ -432,10 +406,6 @@
 /* Empty State */
 .empty-content {
     padding: 2rem 1rem;
-    min-height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 }
 
 .empty-icon {
@@ -465,7 +435,6 @@
 
 .empty-steps {
     display: flex;
-    flex-direction: column;
     gap: 1.5rem;
     max-width: 300px;
     margin: 0 auto;
@@ -503,36 +472,9 @@
     line-height: 1.3;
 }
 
-/* Desktop specific empty state */
-@media (min-width: 769px) {
-    .empty-steps {
-        flex-direction: row;
-        justify-content: center;
-        max-width: none;
-        gap: 2rem;
-    }
-    
-    .step-item {
-        flex-direction: column;
-        text-align: center;
-        align-items: center;
-        max-width: 150px;
-    }
-    
-    .step-icon {
-        margin-top: 0;
-        margin-bottom: 0.5rem;
-    }
-}
-
 /* Loading State */
 .loading-content {
    padding: 2rem 1rem;
-   min-height: 300px;
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: center;
 }
 
 .premium-loader {
@@ -612,26 +554,22 @@
    height: auto;
 }
 
-.result-overlay {
+/* .result-overlay {
    position: absolute;
    inset: 0;
    background: linear-gradient(to bottom, transparent 60%, rgba(0, 0, 0, 0.7));
    opacity: 1;
    transition: opacity 0.3s;
-}
+} */
 
-/* Make overlay slightly more visible on hover for desktop */
-.result-wrapper:hover .result-overlay {
+.result-wrapper:hover {
    background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.8));
 }
 
 .result-actions {
-   position: absolute;
-   bottom: 1rem;
-   left: 50%;
-   transform: translateX(-50%);
-   display: flex;
+display: flex;
    gap: 1rem;
+   margin-top: 1.5rem;
 }
 
 .result-action {
@@ -665,11 +603,6 @@
 /* Error State */
 .error-content {
    padding: 2rem 1rem;
-   min-height: 300px;
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: center;
 }
 
 .error-icon {
@@ -741,133 +674,19 @@
 }
 
 /* Mobile Responsive */
-@media (max-width: 1024px) {
-   .designer-sidebar {
-       width: 240px;
-   }
-}
-
-
-
-
-
-
-
-
-
-
-/* Designer Interface - Fixed Version */
-
-/* Reset for designer */
-.designer-body {
-    margin: 0;
-    padding: 0;
-    padding-top: 64px; /* Account for fixed nav */
-    overflow: hidden;
-    background: #f8f9fa;
-}
-
-/* Main Layout */
-.designer-app {
-    display: flex;
-    height: calc(100vh - 64px);
-    position: relative;
-}
-
-/* Sidebar */
-.designer-sidebar {
-    width: 280px;
-    background: white;
-    border-right: 1px solid #e5e7eb;
-    overflow-y: auto;
-    padding: 1.5rem;
-    flex-shrink: 0;
-}
-
-/* Make prompt field larger and more accessible */
-.prompt-field {
-    width: 100%;
-    padding: 1rem 1.25rem;
-    padding-right: 70px;
-    border: 2px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 1rem;
-    line-height: 1.5;
-    min-height: 56px;
-    transition: all 0.2s;
-}
-
-/* Quick Ideas - More prominent */
-.quick-ideas {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-.idea-btn {
-    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-    border: 1px solid #fbbf24;
-    padding: 1rem;
-    border-radius: 8px;
-    text-align: left;
-    font-size: 0.875rem;
-    color: #78350f;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-weight: 500;
-}
-
-.idea-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(251, 191, 36, 0.2);
-}
-
-/* Mobile-specific chip scrolling for desktop toolbar */
 @media (max-width: 768px) {
-    .chip-buttons {
-        display: flex;
-        gap: 0.5rem;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        flex-wrap: nowrap;
-        padding-bottom: 0.5rem;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-    }
-    
-    .chip-buttons::-webkit-scrollbar {
-        display: none;
-    }
-    
-    .quick-chip {
-        flex-shrink: 0;
-        white-space: nowrap;
-    }
-}
-
-/* Mobile Layout - 50/50 Split */
-@media (max-width: 768px) {
-    .designer-body {
-        padding-top: 64px;
-        overflow-x: hidden;
-        overflow-y: auto;
-    }
-
     .designer-app {
         display: block;
-        height: calc(100vh - 64px);
+        min-height: calc(100vh - 64px); /* Fix */
         margin-bottom: 0;
     }
     
     .designer-sidebar {
         width: 100%;
-        height: auto;
-        min-height: 55vh;
-        max-height: 65vh;
+        height: auto; /* Fix */
         border-right: none;
         border-bottom: 1px solid #e5e7eb;
         padding: 0.75rem;
-        background: white;
         position: relative;
         flex: none;
         overflow-y: auto;
@@ -877,16 +696,13 @@
 
     .designer-main {
         width: 100%;
-        height: auto;
-        min-height: 35vh;
-        max-height: 45vh;
+        height: auto; /* Fix */
         flex: none;
         display: flex;
         flex-direction: column;
         overflow: hidden;
     }
     
-    /* Templates in mobile sidebar */
     .sidebar-section {
         margin-bottom: 0.75rem;
         border-bottom: 1px solid #f3f4f6;
@@ -899,7 +715,6 @@
         margin-bottom: 0;
     }
     
-    /* Mobile prompt section - show only on mobile */
     .mobile-prompt-section {
         display: block;
         margin-top: 0.75rem;
@@ -932,7 +747,6 @@
         z-index: 10;
     }
     
-    /* Mobile Try These chips */
     .mobile-prompt-section .quick-start-chips {
         display: flex;
         align-items: flex-start;
@@ -982,7 +796,6 @@
         background: linear-gradient(135deg, #fde68a 0%, #fcd34d 100%);
     }
     
-    /* Mobile generate section */
     .mobile-prompt-section .generate-section {
         display: flex;
         align-items: center;
@@ -1035,7 +848,6 @@
         cursor: not-allowed;
     }
     
-    /* Mobile generate button loading states */
     .mobile-prompt-section .generate-loading {
         display: none;
         align-items: center;
@@ -1068,7 +880,6 @@
         letter-spacing: 0.025em;
     }
     
-    /* Horizontal scroll for templates */
     .template-grid {
         display: flex;
         gap: 0.5rem;
@@ -1103,7 +914,6 @@
         background-color: #eff6ff;
     }
     
-    /* Style pills on mobile - scrollable like templates */
     .style-pills {
         display: flex;
         gap: 0.25rem;
@@ -1134,40 +944,15 @@
         border-color: #6366f1;
     }
     
-    /* Quick ideas on mobile - keep in sidebar */
-    .quick-ideas {
-        display: flex;
-        gap: 0.5rem;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 0.5rem;
-    }
-    
-    .idea-btn {
-        flex-shrink: 0;
-        padding: 0.75rem 1rem;
-        font-size: 0.8rem;
-        white-space: nowrap;
-    }
-    
     /* Hide desktop toolbar on mobile */
     .designer-toolbar {
         display: none;
     }
     
-    
-    /* Canvas for mobile */
     .designer-canvas {
         padding: 0.75rem;
-        width: 100%;
-        box-sizing: border-box;
-        background: #f8f9fa;
-        flex: 1;
-        min-height: 300px;
-        align-items: flex-start;
     }
     
-    /* Mobile image sizing */
     .result-wrapper {
         margin: 1rem 0;
         width: 100%;
@@ -1180,7 +965,6 @@
         object-fit: contain;
     }
     
-    /* Hide help button on mobile to avoid clutter */
     .help-button {
         display: none;
     }
@@ -1188,16 +972,6 @@
 
 /* Landscape mobile adjustments */
 @media (max-width: 768px) and (orientation: landscape) {
-    .designer-sidebar {
-        min-height: 40vh;
-        max-height: 50vh;
-    }
-    
-    .designer-main {
-        min-height: 50vh;
-        max-height: 60vh;
-    }
-    
     .result-image {
         max-height: 45vh;
     }
@@ -1205,22 +979,18 @@
 
 /* Desktop specific adjustments */
 @media (min-width: 769px) {
-    /* Hide mobile prompt section on desktop */
     .mobile-prompt-section {
         display: none !important;
     }
     
-    /* Ensure main content doesn't overflow */
     .designer-main {
         min-height: 0; /* Important for flexbox */
     }
     
     .designer-canvas {
         min-height: 0; /* Allow proper scrolling */
-        padding: 2rem;
     }
     
-    /* Desktop image sizing */
     .result-wrapper {
         margin: 2rem 0;
         max-width: 90%;
@@ -1232,4 +1002,45 @@
         max-width: 100%;
         object-fit: contain;
     }
+}
+
+
+
+
+
+
+/* In designer.css, add these rules */
+
+/* Add margin around the canvas for breathing room */
+.designer-canvas {
+    margin: 1.5rem;
+    border-radius: 12px;
+    border: 1px dashed #d1d5db; /* A subtle border to define the area */
+}
+
+/* Prevent the result image from causing horizontal scroll */
+.result-wrapper {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* Adjust the empty state steps to prevent overflow */
+.empty-steps {
+    display: flex;
+    justify-content: center;
+    gap: 1rem; /* Reduce gap */
+    max-width: 100%;
+}
+
+.step-item {
+    text-align: center;
+    max-width: 130px; /* Constrain width */
+}
+
+.step-content h4 {
+    font-size: 0.875rem; /* Make heading smaller */
+}
+
+.step-content p {
+    font-size: 0.75rem; /* Make paragraph smaller */
 }

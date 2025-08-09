@@ -120,14 +120,13 @@ a:hover {
     box-shadow: var(--glass-shadow);
     padding: var(--spacing-xl);
 }
+/* ++++++++++++++++++++++++++homepage.css  copied footer classes */
 
 
-/* Footer Styles - Ensure consistency */
 .footer {
     background: #111827;
     color: white;
     padding: 3rem 0 1.5rem;
-    margin-top: auto; /* Push to bottom */
 }
 
 .footer-content {
@@ -140,14 +139,6 @@ a:hover {
 .footer-brand .logo {
     color: white;
     margin-bottom: 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    text-decoration: none;
-}
-
-.footer-brand .logo:hover {
-    opacity: 0.8;
 }
 
 .footer-tagline {
@@ -155,13 +146,12 @@ a:hover {
 }
 
 .footer-links {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 2rem;
+    display: flex;
+    gap: 4rem;
 }
 
 .footer-column h4 {
-    font-size: 0.875rem;
+    font-size: var(--font-size-sm);
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-bottom: 1rem;
@@ -172,8 +162,7 @@ a:hover {
     display: block;
     color: #9ca3af;
     margin-bottom: 0.5rem;
-    transition: color 0.2s;
-    text-decoration: none;
+    transition: color var(--transition-fast);
 }
 
 .footer-column a:hover {
@@ -185,8 +174,9 @@ a:hover {
     border-top: 1px solid #374151;
     text-align: center;
     color: #6b7280;
-    font-size: 0.875rem;
-}
+    font-size: var(--font-size-sm);
+} 
+
 
 /* Mobile footer */
 @media (max-width: 768px) {
@@ -197,6 +187,6 @@ a:hover {
     
     .footer-links {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1.5rem;
+        gap: 2rem;
     }
 }   
