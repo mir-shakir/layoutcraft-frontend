@@ -90,6 +90,11 @@ import { authService } from "../../shared/js/authService.js";
             showCanvas('empty');
             updateUI();
         });
+
+        document.addEventListener('authChange', () => {
+            console.log('Auth status changed, updating designer state.');
+            checkAuthStatus(); // Re-run the auth check
+        });
     }
 
     // --- UI HANDLERS ---
@@ -388,7 +393,7 @@ async function generateDesign() {
 
     function downloadImage() {
 
-        if (!authService.isLoggedIn) {
+        if (!state.isLoggedIn) {
         // If not logged in, open the signup modal
         if (window.layoutCraftNav) {
             window.layoutCraftNav.openAuthModal('signup');

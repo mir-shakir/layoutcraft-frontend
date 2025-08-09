@@ -53,6 +53,7 @@ class LayoutCraftNav {
                 this.closeAuthModal();
                 this.renderUI();
                 this.showSuccessMessage(`Welcome back, ${response.user.full_name || response.user.email}!`);
+                document.dispatchEvent(new CustomEvent('authChange'));
 
             } else {
                 // --- CORRECTED SIGNUP LOGIC (INSPIRED BY SCRIPTS.JS) ---
@@ -86,6 +87,7 @@ class LayoutCraftNav {
         this.closeMobileMenu();
         this.renderUI();
         this.showSuccessMessage('You have been logged out successfully.');
+        document.dispatchEvent(new CustomEvent('authChange'));
     }
 
     // --- All other functions (renderUI, renderNav, etc.) remain the same ---
