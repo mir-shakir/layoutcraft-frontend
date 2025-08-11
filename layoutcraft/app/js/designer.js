@@ -55,6 +55,7 @@ import { authService } from "../../shared/js/authService.js";
         checkSessionForPrompt();
         loadDraft();
         updateUI();
+        selectQuality(state.selectedQuality);
         setupKeyboardShortcuts();
         console.log("LayoutCraft Designer Initialized");
     }

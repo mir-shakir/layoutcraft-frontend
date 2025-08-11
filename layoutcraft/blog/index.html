@@ -175,19 +175,59 @@
 </footer>
 
     <script>
-        function handleNewsletterSubmit(event) {
+        async function handleNewsletterSubmit(event) {
+            const baseUrl = "https://layoutcraft-backend.onrender.com";
             event.preventDefault();
-            const email = document.getElementById('newsletter-email').value;
-            // For now, just show success - you can integrate with your backend later
-            alert('Thanks for subscribing! We\'ll keep you updated.');
-            document.getElementById('newsletter-email').value = '';
-            
-            // Track event
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'newsletter_signup', {
-                    event_category: 'Engagement',
-                    event_label: 'blog_page'
+            const emailInput = document.getElementById('newsletter-email');
+            const email = emailInput.value;
+            const submitButton = event.target.querySelector('button[type="submit"]');
+
+            if (!email) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+
+            // Disable the button to prevent multiple submissions
+            submitButton.disabled = true;
+            submitButton.textContent = 'Subscribing...';
+
+            const feedbackData = {
+                email: email,
+                message: "Newsletter Subscription", // As requested
+                source: "blog_newsletter_form",
+                user_agent: navigator.userAgent,
+                timestamp: new Date().toISOString()
+            };
+
+            try {
+                fetch(`${baseUrl}/api/feedback`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(feedbackData)
                 });
+
+
+                // Success
+                alert('Thanks for subscribing! We\'ll keep you updated.');
+                emailInput.value = '';
+
+                // Track GA event
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'newsletter_signup', {
+                        event_category: 'Engagement',
+                        event_label: 'blog_page_api' // Updated label to signify API submission
+                    });
+                }
+
+            } catch (error) {
+                console.error('Newsletter submission failed:', error);
+                alert(`Submission failed: ${error.message}`);
+            } finally {
+                // Re-enable the button
+                submitButton.disabled = false;
+                submitButton.textContent = 'Subscribe';
             }
         }
     </script>

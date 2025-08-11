@@ -106,6 +106,27 @@
             background: #f3f4f6;
             border-radius: 12px;
         }
+        .faq-form {
+        display: flex;
+        flex-direction: column; /* Stack form elements vertically */
+        gap: 1rem; /* Add space between elements */
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .faq-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e5e7eb;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        font-family: inherit; /* Ensure consistent font */
+    }
+
+    .faq-input:focus {
+        outline: none;
+        border-color: var(--indigo-400);
+    }
     </style>
 </head>
 <body>
@@ -287,16 +308,35 @@
            </div>
        </div>
        
-       <div class="faq-cta">
-           <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Still have questions?</h3>
-           <p style="color: #6b7280; margin-bottom: 1.5rem;">
-               We're here to help! Reach out through the feedback form in the app.
-           </p>
-           <a href="/app/" class="btn btn-primary">
-               Start Creating →
-           </a>
-       </div>
+       <div class="faq-cta" id="faq-form-container">
+    <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Still have questions?</h3>
+    <p style="color: #6b7280; margin-bottom: 1.5rem;">
+        We're here to help! Send us your question and we'll get back to you.
+    </p>
+    <form class="faq-form" onsubmit="handleFaqSubmit(event)">
+        <input
+            type="email"
+            id="faq-email"
+            placeholder="your@email.com"
+            required
+            class="faq-input"
+        >
+        <textarea
+            id="faq-message"
+            placeholder="Your question or feedback..."
+            required
+            class="faq-input"
+            style="min-height: 80px; resize: vertical;"
+        ></textarea>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">
+            Send Feedback
+        </button>
+    </form>
+    <p class="newsletter-note" id="faq-form-note" style="margin-top: 1rem;">We'll do our best to respond promptly.</p>
+</div>
    </div>
+
+   
    
 <!-- Standard Footer - Use this on all pages -->
 <footer class="footer">
@@ -346,12 +386,64 @@
     </div>
 </footer>
    
-   <script>
-       function toggleFAQ(element) {
-           const faqItem = element.parentElement;
-           faqItem.classList.toggle('open');
-       }
-   </script>
+<script>
+    async function handleFaqSubmit(event) {
+        const baseUrl = "https://layoutcraft-backend.onrender.com"
+        event.preventDefault();
+        const emailInput = document.getElementById('faq-email');
+        const messageInput = document.getElementById('faq-message');
+        const submitButton = event.target.querySelector('button[type="submit"]');
+        const formNote = document.getElementById('faq-form-note');
+
+        // Disable button
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+
+        const feedbackData = {
+            email: emailInput.value,
+            message: messageInput.value,
+            source: "faq_page_form",
+            user_agent: navigator.userAgent,
+            timestamp: new Date().toISOString()
+        };
+
+        try {
+            fetch( `${baseUrl}/api/feedback`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(feedbackData)
+            });
+
+
+            // Success
+            formNote.textContent = 'Thank you! Your feedback has been sent successfully.';
+            formNote.style.color = '#10b981'; // Green color for success
+            emailInput.value = '';
+            messageInput.value = '';
+            
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'submit_feedback', {
+                    event_category: 'Engagement',
+                    event_label: 'faq_page'
+                });
+            }
+
+        } catch (error) {
+            console.error('FAQ submission failed:', error);
+        } finally {
+            // Re-enable button
+            submitButton.disabled = false;
+            submitButton.textContent = 'Send Feedback';
+        }
+    }
+</script>
+
+<script>
+    function toggleFAQ(element) {
+        const faqItem = element.parentElement;
+        faqItem.classList.toggle('open');
+    }
+</script>
    
    <link rel="stylesheet" href="/shared/css/navigation.css">
   <script type="module" src="/shared/js/authService.js"></script>
