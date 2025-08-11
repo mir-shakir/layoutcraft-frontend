@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Not Found - LayoutCraft</title>
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/shared/css/base.css">
+    <link rel="stylesheet" href="/shared/css/navigation.css">
+    
+    <style>
+        .error-page-body {
+            display: flex;
+            flex-direction: column; /* Allow nav and content to stack */
+            min-height: 100vh;
+            background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff);
+        }
+        .error-content {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+        }
+        .error-card {
+            max-width: 500px;
+            padding: 3rem;
+        }
+        .error-code {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--indigo-500);
+            margin-bottom: 0.5rem;
+        }
+        .error-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: #111827;
+        }
+        .error-message {
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+        .error-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap; /* For smaller screens */
+        }
+    </style>
+</head>
+<body class="error-page-body">
+
+    <div id="main-navigation"></div>
+
+    <main class="error-content">
+        <div class="error-card glass-card">
+            <p class="error-code">404</p>
+            <h1 class="error-title">Page Not Found</h1>
+            <p class="error-message">
+                Oops! The page you're looking for doesn't exist. Let's get you back on track.
+            </p>
+            <div class="error-actions">
+                <a href="/" class="btn btn-secondary">Go to Homepage</a>
+                <a href="/app/" class="btn btn-primary">Launch Designer</a>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/shared/js/authService.js"></script>
+    <script type="module" src="/shared/js/navigation.js"></script>
+    <script type="module">
+        import { layoutCraftNav } from '/shared/js/navigation.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            window.layoutCraftNav = layoutCraftNav;
+        });
+    </script>
+</body>
+</html>
