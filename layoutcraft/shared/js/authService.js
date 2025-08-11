@@ -8,7 +8,8 @@ It includes better error formatting inspired by your scripts.js.
 
 class AuthService {
     constructor() {
-        this.apiBaseUrl = 'https://layoutcraft-backend.onrender.com';
+        // this.apiBaseUrl = 'https://layoutcraft-backend.onrender.com';
+        this.apiBaseUrl = "http://127.0.0.1:8000"
         this.tokenKey = 'layoutcraft_access_token';
         this.userKey = 'layoutcraft_user';
     }

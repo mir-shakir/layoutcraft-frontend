@@ -1044,3 +1044,27 @@ display: flex;
 .step-content p {
     font-size: 0.75rem; /* Make paragraph smaller */
 }
+
+
+
+
+
+/* Add this to your designer.css file */
+.designer-sidebar.editing-mode .sidebar-section:first-child, /* Hides Templates */
+.designer-sidebar.editing-mode .sidebar-section:nth-child(2) { /* Hides Style */
+    display: none;
+}
+
+.secondary-button { /* Example styling for the new button */
+    background: #f3f4f6;
+    color: #374151;
+    padding: 0.875rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.secondary-button:hover {
+    background: #e5e7eb;
+}

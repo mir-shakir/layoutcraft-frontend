@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Designs - LayoutCraft</title>
+    <link rel="stylesheet" href="/shared/css/base.css">
+    <link rel="stylesheet" href="/shared/css/navigation.css">
+    <style>
+        /* Basic styling for the history page */
+        .history-container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .history-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+        .design-card { background: white; border-radius: 8px; box-shadow: var(--shadow-md); overflow: hidden; transition: all 0.2s; }
+        .design-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .design-card img { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; border-bottom: 1px solid #eee; }
+        .design-card-content { padding: 1rem; }
+        .design-card-prompt { font-size: 0.875rem; color: #6b7280; margin-bottom: 1rem; }
+        .design-card-actions { display: flex; gap: 0.5rem; }
+        .edit-button { /* Add your button styles */ }
+        .loading-state, .empty-state { text-align: center; padding: 4rem; color: #6b7280; }
+    </style>
+</head>
+<body>
+    <div id="main-navigation"></div>
+
+    <div class="history-container">
+        <h1>My Designs</h1>
+        <div id="history-grid" class="history-grid">
+            <div id="loading-state" class="loading-state">
+                <p>Loading your designs...</p>
+            </div>
+            <div id="empty-state" class="empty-state" style="display: none;">
+                <p>You haven't created any designs yet. <a href="/app/">Start creating!</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/shared/js/authService.js"></script>
+    <script type="module" src="/shared/js/navigation.js"></script>
+    <script type="module" src="/app/history/history.js"></script>
+</body>
+</html>
