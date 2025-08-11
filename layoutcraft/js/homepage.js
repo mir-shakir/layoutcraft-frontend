@@ -4,7 +4,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const heroInput = document.getElementById('hero-prompt');
     const heroButton = document.getElementById('hero-generate');
     const exampleChips = document.querySelectorAll('.example-chip');
-    
+
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Deactivate all buttons and panes
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+
+            // Activate the clicked button and corresponding pane
+            button.classList.add('active');
+            const tabId = button.dataset.tab;
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        });
+    });
+
     // Handle generate button click
     heroButton?.addEventListener('click', () => {
         const prompt = heroInput.value.trim();
@@ -14,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const promptData = {
                 prompt: prompt,
                 template: "blog_header",
-                style:"auto"
+                style: "auto"
 
             };
             sessionStorage.setItem('layoutcraft_initial_data', JSON.stringify(promptData));
@@ -64,71 +80,71 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-   
-   // Smooth scroll for navigation
-   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-       anchor.addEventListener('click', function (e) {
-           e.preventDefault();
-           const target = document.querySelector(this.getAttribute('href'));
-           if (target) {
-               target.scrollIntoView({
-                   behavior: 'smooth',
-                   block: 'start'
-               });
-           }
-       });
-   });
 
-
-   // Add this to the existing homepage.js
-
-// Handle example "Try This" buttons
-document.querySelectorAll('.example-try').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const promptData = {
-            prompt: btn.dataset.prompt,
-            style: btn.dataset.style,
-            template: btn.dataset.template
-        };
-        sessionStorage.setItem('layoutcraft_initial_data', JSON.stringify(promptData));
-       window.location.href = '/app/';
-        
-        // Track event
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'try_example', {
-                event_category: 'Engagement',
-                event_label: 'homepage_example'
-            });
-        }
+    // Smooth scroll for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
     });
-});
-   
-   // Intersection Observer for animations
-   const observerOptions = {
-       threshold: 0.1,
-       rootMargin: '0px 0px -100px 0px'
-   };
-   
-   const observer = new IntersectionObserver((entries) => {
-       entries.forEach(entry => {
-           if (entry.isIntersecting) {
-               entry.target.classList.add('animate-in');
-               observer.unobserve(entry.target);
-           }
-       });
-   }, observerOptions);
-   
-   // Observe elements for animation
-   document.querySelectorAll('.feature-card, .testimonial, .demo-card').forEach(el => {
-       el.style.opacity = '0';
-       el.style.transform = 'translateY(20px)';
-       observer.observe(el);
-   });
-   
-   // Add CSS for animations
-   const style = document.createElement('style');
-   style.textContent = `
+
+
+    // Add this to the existing homepage.js
+
+    // Handle example "Try This" buttons
+    document.querySelectorAll('.example-try').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const promptData = {
+                prompt: btn.dataset.prompt,
+                style: btn.dataset.style,
+                template: btn.dataset.template
+            };
+            sessionStorage.setItem('layoutcraft_initial_data', JSON.stringify(promptData));
+            window.location.href = '/app/';
+
+            // Track event
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'try_example', {
+                    event_category: 'Engagement',
+                    event_label: 'homepage_example'
+                });
+            }
+        });
+    });
+
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+
+    // Observe elements for animation
+    document.querySelectorAll('.feature-card, .testimonial, .demo-card').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        observer.observe(el);
+    });
+
+    // Add CSS for animations
+    const style = document.createElement('style');
+    style.textContent = `
        .animate-in {
            animation: fadeInUp 0.6s ease-out forwards;
        }
@@ -140,53 +156,53 @@ document.querySelectorAll('.example-try').forEach(btn => {
            }
        }
    `;
-   document.head.appendChild(style);
-   
-   // Navbar scroll effect
-   let lastScroll = 0;
-   const nav = document.querySelector('.nav');
-   
-   window.addEventListener('scroll', () => {
-       const currentScroll = window.pageYOffset;
-       
-       if (currentScroll > 100) {
-           nav.style.background = 'rgba(255, 255, 255, 0.95)';
-           nav.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
-       } else {
-           nav.style.background = 'rgba(255, 255, 255, 0.8)';
-           nav.style.boxShadow = '';
-       }
-       
-       lastScroll = currentScroll;
-   });
-   
-   // Track scroll depth
-   let maxScroll = 0;
-   window.addEventListener('scroll', () => {
-       const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-       if (scrollPercent > maxScroll) {
-           maxScroll = scrollPercent;
-           
-           // Track milestones
-           if (maxScroll > 25 && maxScroll < 30) {
-               trackScrollMilestone(25);
-           } else if (maxScroll > 50 && maxScroll < 55) {
-               trackScrollMilestone(50);
-           } else if (maxScroll > 75 && maxScroll < 80) {
-               trackScrollMilestone(75);
-           } else if (maxScroll > 90) {
-               trackScrollMilestone(100);
-           }
-       }
-   });
-   
-   function trackScrollMilestone(percent) {
-       if (typeof gtag !== 'undefined') {
-           gtag('event', 'scroll_depth', {
-               event_category: 'Engagement',
-               event_label: `${percent}%`,
-               value: percent
-           });
-       }
-   }
+    document.head.appendChild(style);
+
+    // Navbar scroll effect
+    let lastScroll = 0;
+    const nav = document.querySelector('.nav');
+
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll > 100) {
+            nav.style.background = 'rgba(255, 255, 255, 0.95)';
+            nav.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)';
+        } else {
+            nav.style.background = 'rgba(255, 255, 255, 0.8)';
+            nav.style.boxShadow = '';
+        }
+
+        lastScroll = currentScroll;
+    });
+
+    // Track scroll depth
+    let maxScroll = 0;
+    window.addEventListener('scroll', () => {
+        const scrollPercent = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+        if (scrollPercent > maxScroll) {
+            maxScroll = scrollPercent;
+
+            // Track milestones
+            if (maxScroll > 25 && maxScroll < 30) {
+                trackScrollMilestone(25);
+            } else if (maxScroll > 50 && maxScroll < 55) {
+                trackScrollMilestone(50);
+            } else if (maxScroll > 75 && maxScroll < 80) {
+                trackScrollMilestone(75);
+            } else if (maxScroll > 90) {
+                trackScrollMilestone(100);
+            }
+        }
+    });
+
+    function trackScrollMilestone(percent) {
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'scroll_depth', {
+                event_category: 'Engagement',
+                event_label: `${percent}%`,
+                value: percent
+            });
+        }
+    }
 });

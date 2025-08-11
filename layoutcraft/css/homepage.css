@@ -521,3 +521,129 @@
 .examples-cta {
     text-align: center;
 }
+
+
+
+.use-cases {
+    padding: var(--spacing-section) 0;
+    background: #f9fafb; /* Light grey background */
+}
+
+.use-cases-tabs {
+    max-width: 900px;
+    margin: 3rem auto 0;
+}
+
+.tab-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+}
+
+.tab-button {
+    background: white;
+    border: 1px solid #e5e7eb;
+    padding: 0.75rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #4b5563;
+    cursor: pointer;
+    transition: all var(--transition-normal);
+}
+
+.tab-button:hover {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.tab-button.active {
+    background: var(--indigo-600);
+    color: white;
+    border-color: var(--indigo-600);
+    box-shadow: var(--shadow-md);
+}
+
+.tab-pane {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.use-case-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 3rem;
+    background: white;
+    border-radius: var(--border-radius-xl);
+    padding: 3rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.use-case-text h3 {
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
+    color: #111827;
+}
+
+.use-case-text p {
+    font-size: 1.125rem;
+    color: #6b7280;
+    line-height: 1.7;
+}
+
+.use-case-image img {
+    width: 100%;
+    height: auto;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-xl);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive styles for use cases */
+@media (max-width: 768px) {
+    .use-case-card {
+        grid-template-columns: 1fr;
+        padding: 2rem;
+        gap: 2rem;
+    }
+    .use-case-text {
+        order: 2; /* Move text below image on mobile */
+        text-align: center;
+    }
+    .use-case-image {
+        order: 1;
+    }
+    .tab-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+}
+
+/* Styling for "Try This" buttons within the tabs */
+.use-case-text .example-try {
+    background: white;
+    color: var(--indigo-600);
+    border: 1px solid var(--indigo-200);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    margin-top: 1.5rem;
+}
+
+.use-case-text .example-try:hover {
+    background: var(--indigo-50);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
