@@ -126,7 +126,7 @@ class LayoutCraftNav {
         const existingMenu = document.getElementById('mobile-menu');
         if (existingMenu) existingMenu.remove();
         const isAppPage = window.location.pathname.includes('/app');
-        const mobileMenuHTML = `<div class="mobile-menu" id="mobile-menu"><div class="mobile-menu-content"><a href="/" class="mobile-nav-link">Home</a><a href="/about/" class="mobile-nav-link">About</a><a href="/blog/" class="mobile-nav-link">Blog</a><a href="/faq/" class="mobile-nav-link">FAQ</a><div class="mobile-divider"></div>${this.renderMobileAuthSection()}${!isAppPage ? '<a href="/app/" class="mobile-nav-link mobile-cta">Launch App →</a>' : ''}</div></div>`;
+        const mobileMenuHTML = `<div class="mobile-menu" id="mobile-menu"><div class="mobile-menu-content"><a href="/" class="mobile-nav-link">Home</a><a href="/about/" class="mobile-nav-link">About</a><a href="/blog/" class="mobile-nav-link">Blog</a><a href="/faq/" class="mobile-nav-link">FAQ</a><a href="/pricing/" class="mobile-nav-link">Pricing</a><div class="mobile-divider"></div>${this.renderMobileAuthSection()}${!isAppPage ? '<a href="/app/" class="mobile-nav-link mobile-cta">Launch App →</a>' : ''}</div></div>`;
         document.body.insertAdjacentHTML('beforeend', mobileMenuHTML);
     }
 
