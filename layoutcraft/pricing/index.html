@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing Plans - LayoutCraft</title>
+    <meta name="description" content="Simple, transparent pricing for LayoutCraft. Choose a plan to start creating professional AI designs in seconds.">
+    
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/shared/css/base.css">
+    <link rel="stylesheet" href="/shared/css/navigation.css">
+    <link rel="stylesheet" href="/css/homepage.css">
+
+    <style>
+        .pricing-section {
+            padding: 6rem 0;
+            background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff);
+        }
+        .pricing-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 4rem;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            align-items: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        .price-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #e5e7eb;
+            border-radius: var(--border-radius-xl);
+            padding: 2.5rem;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+        .price-card.highlight {
+            transform: scale(1.05);
+            border-color: var(--indigo-500);
+            box-shadow: var(--shadow-xl);
+        }
+        .price-card.highlight::before {
+            content: 'Most Popular';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--indigo-500);
+            color: white;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .price-card-header {
+            text-align: center;
+            margin-top: 1rem; /* Space for "Most Popular" badge */
+        }
+        .price-card:not(.highlight) .price-card-header {
+            margin-top: 0;
+        }
+        .plan-name {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--indigo-600);
+        }
+        .plan-price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 1rem 0 0.5rem;
+        }
+        .plan-price span {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #6b7280;
+        }
+        .plan-desc {
+            color: #6b7280;
+            margin-bottom: 2rem;
+        }
+        .features-list {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        .features-list li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+        .features-list svg {
+            color: var(--indigo-500);
+            flex-shrink: 0;
+            margin-top: 4px;
+        }
+        
+        /* Button enhancements */
+        .btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .btn-success {
+            background-color: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+        .btn-success:hover:not(:disabled) {
+            background-color: #059669;
+            border-color: #059669;
+        }
+        
+        /* Loading state */
+        .btn.loading {
+            pointer-events: none;
+        }
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            top: 50%;
+            left: 50%;
+            margin-left: -8px;
+            margin-top: -8px;
+            border: 2px solid transparent;
+            border-top: 2px solid currentColor;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            .price-card.highlight {
+                transform: none;
+            }
+            .pricing-section {
+                padding: 4rem 0;
+            }
+            .plan-price {
+                font-size: 2.5rem;
+            }
+        }
+        
+        /* Notification styles are handled by JavaScript */
+    </style>
+</head>
+<body>
+    <div id="main-navigation"></div>
+
+    <section class="pricing-section">
+        <div class="container">
+            <div class="pricing-header">
+                <h1 class="section-title">Find the Plan That's Right for You</h1>
+                <p class="section-subtitle">Start for free, then scale as you grow. Simple, transparent pricing for everyone.</p>
+            </div>
+            
+            <div class="pricing-grid">
+                <!-- Free Plan -->
+                <div class="price-card">
+                    <div class="price-card-header">
+                        <h3 class="plan-name">Free</h3>
+                        <div class="plan-price">$0<span>/month</span></div>
+                        <p class="plan-desc">Perfect for trying out the core features of LayoutCraft.</p>
+                    </div>
+                    <ul class="features-list">
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>10 "Fast" Generations / month</li>
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>1 "Pro" Generation Credit</li>
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>1 Edit Credit</li>
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>7-Day Design History</li>
+                    </ul>
+                    <a href="/app/" class="btn btn-secondary" style="width: 100%;">Get Started for Free</a>
+                </div>
+
+                <!-- Pro Plan -->
+                <div class="price-card highlight">
+                    <div class="price-card-header">
+                        <h3 class="plan-name">Pro</h3>
+                        <div class="plan-price">$9<span>/month</span></div>
+                        <p class="plan-desc">For professionals and teams who need to create content at scale.</p>
+                    </div>
+                    <ul class="features-list">
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>500 "Pro" Generations / month</li>
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg><strong>Unlimited Editing</strong></li>
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>Full Design History</li>
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>Advanced Export Formats</li>
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>Priority Support</li>
+                    </ul>
+                    <button class="btn btn-primary" style="width: 100%;" id="upgrade-pro-btn" data-plan="pro">
+                        Upgrade to Pro
+                    </button>
+                </div>
+
+                <!-- Max Plan -->
+                <div class="price-card">
+                    <div class="price-card-header">
+                        <h3 class="plan-name">Max</h3>
+                        <div class="plan-price">$29<span>/month</span></div>
+                        <p class="plan-desc">For power users and agencies with high-volume needs.</p>
+                    </div>
+                    <ul class="features-list">
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg><strong>Unlimited "Pro" Generations</strong></li>
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg><strong>Unlimited Editing</strong></li>
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>Brand Kits (soon)</li>
+                        <li><svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>API Access (soon)</li>
+                    </ul>
+                    <button class="btn btn-secondary" style="width: 100%;" id="upgrade-max-btn" data-plan="max">
+                        Upgrade to Max
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <span class="logo-text">LayoutCraft</span>
+                    </div>
+                    <p class="footer-tagline">
+                        AI design tool for the rest of us.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="/app/">Create Design</a>
+                        <a href="/blog/">Blog</a>
+                        <a href="/about/">About</a>
+                        <a href="/faq/">FAQ</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="/blog/posts/writing-better-prompts.html">Prompt Guide</a>
+                        <a href="/app/">Templates</a>
+                        <a href="/faq/">Help</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="/legal/terms.html">Terms</a>
+                        <a href="/legal/privacy.html">Privacy</a>
+                        <a href="/legal/terms.html#refunds">Refund Policy</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Paddle.js SDK -->
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+
+    <!-- Your existing scripts -->
+    <script type="module" src="/shared/js/authService.js"></script>
+    <script type="module" src="/shared/js/navigation.js"></script>
+    <script type="module">
+        import { layoutCraftNav } from '/shared/js/navigation.js';
+        import { authService } from '/shared/js/authService.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            window.layoutCraftNav = layoutCraftNav;
+        });
+    </script>
+    
+    <!-- Updated pricing script -->
+    <script type="module" src="/pricing/pricing.js"></script>
+</body>
+</html>
