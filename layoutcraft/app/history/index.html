@@ -1,42 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Designs - LayoutCraft</title>
+    <meta name="description"
+        content="Access your saved design library. View, edit, and download all your past creations made with LayoutCraft's AI designer.">
+
+    <link rel="canonical" href="https://www.layoutcraft.tech/app/history/" />
+    <meta name="robots" content="noindex">
+    <meta property="og:title" content="My Designs - LayoutCraft">
+    <meta property="og:description" content="Access your saved design library on LayoutCraft.">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="/shared/css/base.css">
     <link rel="stylesheet" href="/shared/css/navigation.css">
+    <link rel="stylesheet" href="/css/homepage.css">
+
     <style>
-        /* Basic styling for the history page */
-        .history-container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
-        .history-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-        .design-card { background: white; border-radius: 8px; box-shadow: var(--shadow-md); overflow: hidden; transition: all 0.2s; }
-        .design-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-        .design-card img { width: 100%; height: auto; aspect-ratio: 16/9; object-fit: cover; border-bottom: 1px solid #eee; }
-        .design-card-content { padding: 1rem; }
-        .design-card-prompt { font-size: 0.875rem; color: #6b7280; margin-bottom: 1rem; }
-        .design-card-actions { display: flex; gap: 0.5rem; }
-        .edit-button { /* Add your button styles */ }
-        .loading-state, .empty-state { text-align: center; padding: 4rem; color: #6b7280; }
+        .history-hero {
+            background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff);
+            padding: 4rem 1rem;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: #6b7280;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .history-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem 4rem;
+        }
+
+        .history-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .design-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            transition: all 0.2s ease-out;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .design-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .design-card-image {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            background-color: #f3f4f6;
+        }
+
+        .design-card-content {
+            padding: 1rem 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .design-card-prompt {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex-grow: 1;
+        }
+
+        .design-card-meta {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-bottom: 1rem;
+        }
+
+        .state-container {
+            text-align: center;
+            padding: 4rem;
+            color: #6b7280;
+            grid-column: 1 / -1;
+        }
     </style>
 </head>
+
 <body>
     <div id="main-navigation"></div>
 
+    <div class="history-hero">
+        <div class="container">
+            <h1 class="hero-title">Your Design Library</h1>
+            <p class="hero-subtitle">
+                This is your creative hub. Every design you generate and edit is saved here, ready for you to download
+                or continue refining.
+            </p>
+        </div>
+    </div>
+
     <div class="history-container">
-        <h1>My Designs</h1>
         <div id="history-grid" class="history-grid">
-            <div id="loading-state" class="loading-state">
+            <div id="loading-state" class="state-container">
                 <p>Loading your designs...</p>
             </div>
-            <div id="empty-state" class="empty-state" style="display: none;">
-                <p>You haven't created any designs yet. <a href="/app/">Start creating!</a></p>
+            <div id="empty-state" class="state-container" style="display: none;">
+                <h2>No Designs Yet</h2>
+                <p>You haven't created any designs. Let's make something!</p>
+                <a href="/app/" class="btn btn-primary" style="margin-top: 1rem;">Start Creating</a>
             </div>
         </div>
     </div>
 
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <span class="logo-text">LayoutCraft</span>
+                    </div>
+                    <p class="footer-tagline">
+                        AI design tool for the rest of us.
+                    </p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="/app/">Create Design</a>
+                        <a href="/blog/">Blog</a>
+                        <a href="/about/">About</a>
+                        <a href="/faq/">FAQ</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="/blog/posts/writing-better-prompts/">Prompt Guide</a>
+                        <a href="/app/">Templates</a>
+                        <a href="/faq/">Help</a>
+                    </div>
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="/legal/terms/">Terms</a>
+                        <a href="/legal/privacy/">Privacy</a>
+                        <a href="/legal/terms/#refunds">Refund Policy</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
     <script type="module" src="/shared/js/authService.js"></script>
     <script type="module" src="/shared/js/navigation.js"></script>
+    <script type="module">
+        import { layoutCraftNav } from '/shared/js/navigation.js';
+        document.addEventListener('DOMContentLoaded', () => { window.layoutCraftNav = layoutCraftNav; });
+    </script>
     <script type="module" src="/app/history/history.js"></script>
 </body>
+
 </html>

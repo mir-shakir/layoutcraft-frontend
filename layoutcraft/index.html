@@ -106,15 +106,18 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="container">
+            <div class="hero-offer">
+                <p><strong>Limited Time Offer:</strong> All premium features, including Pro generations and unlimited
+                    editing, are now completely free for all users!</p>
+            </div>
             <div class="hero-content">
                 <h1 class="hero-title">
                     Stop Generating AI Art.<br>
                     Start Creating Designs.
                 </h1>
                 <p class="hero-subtitle">
-                    Tired of chaotic AI images with messy layouts and unreadable text?
-                    LayoutCraft creates structured, pixel-perfect visuals ready for your blog,
-                    social media, and marketing.
+                    Go from a simple text prompt to a structured layout in seconds. Then, use our in-place editor to
+                    refine every detail until it's pixel-perfect.
                 </p>
 
                 <div class="hero-action">
@@ -126,25 +129,25 @@
                 </div>
 
                 <div class="hero-examples">
-                    <span class="examples-label">Popular:</span>
+
+
+                    <span class="examples-label">Try These:</span>
                     <button class="example-chip"
                         data-prompt="A modern blog header for 'The Future of AI in Design'. Use clean typography with blue accents."
-                        data-template="blog_header"
-                        data-style="dark_neon_tech">
+                        data-template="blog_header" data-style="dark_neon_tech">
                         Tech Blog Header
                     </button>
                     <button class="example-chip"
-                        data-prompt="Social media post for summer sale. Text: '50% Off'. Vibrant colors."
-                        data-template="social_square"
-                        data-style="vibrant_gradient_energy">
+                        data-prompt="Vibrant orange and yellow gradient. Title in the center: 'ANNUAL SALE'. Add '70% OFF' directly below. Make the percentage huge and bold. Add a subtle sunburst effect behind the text."
+                        data-template="social_square" data-style="vibrant_gradient_energy">
                         Sale Post
                     </button>
-                    <button class="example-chip"
+                    <!-- <button class="example-chip"
                         data-prompt="Professional LinkedIn banner for software developer. Minimal design."
                         data-template="blog_header"
                         data-style="textured_organic_patterns">
                         LinkedIn Banner
-                    </button>
+                    </button> -->
                 </div>
             </div>
         </div>
@@ -173,7 +176,10 @@
                     <div class="demo-card">
                         <div class="demo-step">1. Enter your prompt</div>
                         <div class="demo-visual prompt-visual">
-                            "Modern tech blog header with 'AI Revolution' text"
+                            "Vibrant orange and yellow gradient.
+                            Title in the center: 'ANNUAL SALE'.
+                            Add '70% OFF' directly below. Make the percentage huge and bold.
+                            Add a subtle sunburst effect behind the text."
                         </div>
                     </div>
 
@@ -323,8 +329,7 @@
                         <div class="example-overlay">
                             <button class="example-try"
                                 data-prompt="A modern blog header for 'The Future of AI in Design'. Use clean typography with blue accents."
-                                data-template="blog_header"
-                                data-style="dark_neon_tech">
+                                data-template="blog_header" data-style="dark_neon_tech">
                                 Try This →
                             </button>
                         </div>
@@ -339,8 +344,7 @@
                         <div class="example-overlay">
                             <button class="example-try"
                                 data-prompt="Summer sale social media post. Text: '50% Off Everything'. Vibrant orange and yellow."
-                                data-template="social_square"
-                                data-style="vibrant_gradient_energy">
+                                data-template="social_square" data-style="vibrant_gradient_energy">
                                 Try This →
                             </button>
                         </div>
@@ -355,9 +359,8 @@
                             loading="lazy">
                         <div class="example-overlay">
                             <button class="example-try"
-                                data-prompt="Professional LinkedIn banner for software developer. Minimal design with code elements."
-                                data-template="blog_header"
-                                data-style="textured_organic_patterns">
+                                data-prompt="Professional LinkedIn banner for software developer name John Doe. Minimal design with code elements."
+                                data-template="blog_header" data-style="textured_organic_patterns">
                                 Try This →
                             </button>
                         </div>
@@ -388,7 +391,7 @@
                     Start Creating - It's Free →
                 </a>
                 <p class="cta-note">
-                    No credit card required. One free Pro generation for everyone.
+                    No credit card required. Everything is free for now.
                 </p>
             </div>
         </div>
@@ -425,7 +428,7 @@
 
                     <div class="footer-column">
                         <h4>Resources</h4>
-                        <a href="/blog/posts/writing-better-prompts.html">Prompt Guide</a>
+                        <a href="/blog/posts/writing-better-prompts/">Prompt Guide</a>
                         <a href="/app/">Templates</a>
                         <a href="/faq/">Help</a>
                     </div>
@@ -442,25 +445,25 @@
                 <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
             </div>
         </div>
-        </footer>
-        
-        <!-- Homepage JavaScript -->
-        <!-- <script src="/shared/js/navigation.js"></script> -->
-        <script type="module" src="/shared/js/authService.js"></script>
-        <script type="module" src="/shared/js/navigation.js"></script>
-        <script type="module">
-            // Import the classes from your scripts
-            import { layoutCraftNav } from '/shared/js/navigation.js';
-            import { authService } from '/shared/js/authService.js';
+    </footer>
 
-            // Wait for the DOM to be fully loaded before running
-            document.addEventListener('DOMContentLoaded', () => {
-                // The navigation class is now correctly given the auth service it needs.
-                window.layoutCraftNav = layoutCraftNav;
-            });
-        </script>
-        <script src="/js/homepage.js" defer></script>
-        
-        </body>
-        
-        </html>
+    <!-- Homepage JavaScript -->
+    <!-- <script src="/shared/js/navigation.js"></script> -->
+    <script type="module" src="/shared/js/authService.js"></script>
+    <script type="module" src="/shared/js/navigation.js"></script>
+    <script type="module">
+        // Import the classes from your scripts
+        import { layoutCraftNav } from '/shared/js/navigation.js';
+        import { authService } from '/shared/js/authService.js';
+
+        // Wait for the DOM to be fully loaded before running
+        document.addEventListener('DOMContentLoaded', () => {
+            // The navigation class is now correctly given the auth service it needs.
+            window.layoutCraftNav = layoutCraftNav;
+        });
+    </script>
+    <script src="/js/homepage.js" defer></script>
+
+</body>
+
+</html>

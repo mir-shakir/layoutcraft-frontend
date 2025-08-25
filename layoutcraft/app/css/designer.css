@@ -1055,6 +1055,15 @@ display: flex;
     display: none;
 }
 
+.designer-toolbar.editing-mode .quick-start-chips {
+    display: none;
+}
+
+/* For Mobile Toolbar */
+.mobile-prompt-section.editing-mode .quick-start-chips {
+    display: none;
+}
+
 .secondary-button { /* Example styling for the new button */
     background: #f3f4f6;
     color: #374151;
@@ -1067,4 +1076,33 @@ display: flex;
 }
 .secondary-button:hover {
     background: #e5e7eb;
+}
+
+
+/* Styling for the post-login message overlay */
+.post-login-message {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px; /* Matches the result-wrapper */
+}
+
+.post-login-message h3 {
+    font-size: 1.5rem;
+    color: #111827;
+    margin-bottom: 0.5rem;
+}
+
+.post-login-message p {
+    color: #4b5563;
+    max-width: 400px;
+    margin-bottom: 1.5rem;
 }

@@ -100,14 +100,14 @@ a:hover {
     box-shadow: var(--shadow-lg);
 }
 
-.btn-secondary {
-    background: white;
-    color: var(--indigo-600);
-    border: 2px solid var(--indigo-200);
-}
 
+.btn-secondary {
+    background: #f3f4f6; /* Light gray */
+    color: #374151; /* Dark gray text */
+    border: 1px solid #e5e7eb;
+}
 .btn-secondary:hover {
-    background: var(--indigo-50);
+    background: #e5e7eb; /* Slightly darker on hover */
 }
 
 /* Glass Card */

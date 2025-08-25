@@ -1,45 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Frequently Asked Questions - LayoutCraft</title>
     <meta name="description" content="Common questions about LayoutCraft AI design tool.">
-    
+
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="/shared/css/base.css">
     <link rel="stylesheet" href="/shared/css/navigation.css">
     <link rel="stylesheet" href="/css/homepage.css">
     <style>
-
-
-
         .faq-hero {
             background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff);
             padding: 8rem 0 4rem;
             text-align: center;
             /* Add this */
         }
-    
+
         .faq-hero .hero-title {
             margin: 0 auto 1rem;
             /* Add this */
             max-width: 900px;
             /* Add this */
         }
-        
+
         .faq-container {
             max-width: 800px;
             margin: 0 auto;
             padding: 4rem 1rem;
         }
-        
+
         .faq-item {
             background: white;
             border-radius: 12px;
@@ -47,7 +45,7 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
             overflow: hidden;
         }
-        
+
         .faq-question {
             padding: 1.5rem;
             font-weight: 600;
@@ -58,47 +56,47 @@
             align-items: center;
             transition: background 0.2s;
         }
-        
+
         .faq-question:hover {
             background: #f9fafb;
         }
-        
+
         .faq-arrow {
             transition: transform 0.2s;
             color: #6b7280;
         }
-        
+
         .faq-item.open .faq-arrow {
             transform: rotate(180deg);
         }
-        
+
         .faq-answer {
             padding: 0 1.5rem;
             max-height: 0;
             overflow: hidden;
             transition: all 0.3s ease;
         }
-        
+
         .faq-item.open .faq-answer {
             padding: 0 1.5rem 1.5rem;
             max-height: 500px;
         }
-        
+
         .faq-answer p {
             color: #4b5563;
             line-height: 1.7;
         }
-        
+
         .faq-answer ul {
             margin-top: 0.5rem;
             padding-left: 1.5rem;
             color: #4b5563;
         }
-        
+
         .faq-answer li {
             margin-bottom: 0.5rem;
         }
-        
+
         .faq-cta {
             text-align: center;
             margin-top: 3rem;
@@ -108,11 +106,12 @@
         }
     </style>
 </head>
+
 <body>
     <div id="main-navigation"></div>
 
 
-        <section class="faq-hero">
+    <section class="faq-hero">
         <div class="container">
             <h1 class="hero-title" style="font-size: 3rem;">
                 Frequently Asked Questions
@@ -123,249 +122,261 @@
         </div>
     </section>
 
-    
+
     <div class="faq-container">
         <div class="faq-item">
             <div class="faq-question" onclick="toggleFAQ(this)">
                 <span>How is LayoutCraft different from other AI image tools?</span>
-                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M6 9l6 6 6-6"/>
+                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M6 9l6 6 6-6" />
                 </svg>
             </div>
             <div class="faq-answer">
-                <p>Unlike traditional AI image generators that create artistic interpretations, LayoutCraft is specifically designed for functional design. We focus on:</p>
+                <p>Unlike traditional AI image generators that create artistic interpretations, LayoutCraft is
+                    specifically designed for functional design. We focus on:</p>
                 <ul>
                     <li>Clean, structured layouts that follow design principles</li>
                     <li>Perfect text rendering - no more gibberish</li>
                     <li>Consistent, professional results every time</li>
                     <li>Formats optimized for real-world use (blogs, social media, presentations)</li>
-               </ul>
-               <p>Think of it as the difference between an AI artist and an AI designer.</p>
-           </div>
-       </div>
-       
-       <div class="faq-item">
-           <div class="faq-question" onclick="toggleFAQ(this)">
-               <span>What's included in the free version?</span>
-               <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                   <path d="M6 9l6 6 6-6"/>
-               </svg>
-           </div>
-           <div class="faq-answer">
-               <p>Everyone gets access to:</p>
-               <ul>
-                   <li>Unlimited Fast generations (once you create a free account)</li>
-                   <li>All design templates and sizes</li>
-                   <li>All style options</li>
-                   <li>High-resolution downloads</li>
-                   <li>One free Pro generation to try the premium quality</li>
-               </ul>
-               <p>No credit card required. Just sign up and start creating!</p>
-           </div>
-       </div>
-       
-       <div class="faq-item">
-           <div class="faq-question" onclick="toggleFAQ(this)">
-               <span>What's the difference between Fast and Pro quality?</span>
-               <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                   <path d="M6 9l6 6 6-6"/>
-               </svg>
-           </div>
-           <div class="faq-answer">
-               <p><strong>Fast Mode (⚡)</strong></p>
-               <ul>
-                   <li>Generates in ~30 seconds</li>
-                   <li>Great for quick iterations and brainstorming</li>
-                   <li>Perfect for most use cases</li>
-               </ul>
-               <p><strong>Pro Mode (💎)</strong></p>
-               <ul>
-                   <li>Takes up to 60 seconds</li>
-                   <li>Higher quality with more sophisticated details</li>
-                   <li>Better understanding of complex prompts</li>
-                   <li>Premium finishes and effects</li>
-               </ul>
-           </div>
-       </div>
-       
-       <div class="faq-item">
-           <div class="faq-question" onclick="toggleFAQ(this)">
-               <span>Can I use the designs commercially?</span>
-               <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                   <path d="M6 9l6 6 6-6"/>
-               </svg>
-           </div>
-           <div class="faq-answer">
-               <p>Yes! All designs you create with LayoutCraft are yours to use however you want, including:</p>
-               <ul>
-                   <li>Commercial projects</li>
-                   <li>Client work</li>
-                   <li>Marketing materials</li>
-                   <li>Social media posts</li>
-                   <li>Any business purpose</li>
-               </ul>
-               <p>We don't claim any ownership over your generated designs.</p>
-           </div>
-       </div>
-       
-       <div class="faq-item">
-           <div class="faq-question" onclick="toggleFAQ(this)">
-               <span>How do I write better prompts?</span>
-               <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                   <path d="M6 9l6 6 6-6"/>
-               </svg>
-           </div>
-           <div class="faq-answer">
-               <p>Great prompts include:</p>
-               <ul>
-                   <li><strong>Format:</strong> "Blog header for..." or "Instagram post about..."</li>
-                   <li><strong>Specific text:</strong> "Include the text 'Summer Sale - 50% Off'"</li>
-                   <li><strong>Style/mood:</strong> "Modern, minimalist, professional, vibrant"</li>
-                   <li><strong>Colors:</strong> "Use blue and white" or "warm earth tones"</li>
-                   <li><strong>Elements:</strong> "Include geometric shapes" or "add subtle patterns"</li>
-               </ul>
-               <p>Check out our <a href="/blog/posts/writing-better-prompts.html" style="color: #6366f1;">complete guide to writing prompts</a> for more tips!</p>
-           </div>
-       </div>
-       
-       <div class="faq-item">
-           <div class="faq-question" onclick="toggleFAQ(this)">
-               <span>What file formats are available?</span>
-               <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                   <path d="M6 9l6 6 6-6"/>
-               </svg>
-           </div>
-           <div class="faq-answer">
-               <p>Currently, all designs are exported as high-quality PNG files. PNGs are perfect for:</p>
-               <ul>
-                   <li>Web use (blogs, websites)</li>
-                   <li>Social media posts</li>
-                   <li>Presentations</li>
-                   <li>Print materials</li>
-               </ul>
-               <p>We're working on additional export formats for future updates.</p>
-           </div>
-       </div>
-       
-       <div class="faq-item">
-           <div class="faq-question" onclick="toggleFAQ(this)">
-               <span>Is there a limit to how many designs I can create?</span>
-               <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                   <path d="M6 9l6 6 6-6"/>
-               </svg>
-           </div>
-           <div class="faq-answer">
-               <p>For logged-in users:</p>
-               <ul>
-                   <li><strong>Fast generations:</strong> Unlimited!</li>
-                   <li><strong>Pro generations:</strong> Currently unlimited during our launch period</li>
-               </ul>
-               <p>For anonymous users:</p>
-               <ul>
-                   <li>Limited to a few generations to prevent abuse</li>
-                   <li>Sign up for free to unlock unlimited access</li>
-               </ul>
-           </div>
-       </div>
-       
-       <div class="faq-item">
-           <div class="faq-question" onclick="toggleFAQ(this)">
-               <span>Do you store my designs or prompts?</span>
-               <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                   <path d="M6 9l6 6 6-6"/>
-               </svg>
-           </div>
-           <div class="faq-answer">
-               <p>We prioritize your privacy:</p>
-               <ul>
-                   <li>Designs are generated on-demand and not stored on our servers</li>
-                   <li>Prompts may be temporarily processed but are not permanently stored</li>
-                   <li>You're responsible for saving/downloading your designs</li>
-                   <li>We use standard analytics to improve the service</li>
-               </ul>
-               <p>Read our full <a href="/legal/privacy.html" style="color: #6366f1;">Privacy Policy</a> for more details.</p>
-           </div>
-       </div>
-       
-       <div class="faq-cta">
-           <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Still have questions?</h3>
-           <p style="color: #6b7280; margin-bottom: 1.5rem;">
-               We're here to help! Reach out through the feedback form in the app.
-           </p>
-           <a href="/app/" class="btn btn-primary">
-               Start Creating →
-           </a>
-       </div>
-   </div>
-   
-<!-- Standard Footer - Use this on all pages -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <div class="logo">
-                    <div class="logo-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
-                        </svg>
-                    </div>
-                    <span class="logo-text">LayoutCraft</span>
-                </div>
-                <p class="footer-tagline">
-                    AI design tool for the rest of us.
-                </p>
-            </div>
-            
-            <div class="footer-links">
-                <div class="footer-column">
-                    <h4>Product</h4>
-                    <a href="/app/">Create Design</a>
-                    <a href="/blog/">Blog</a>
-                    <a href="/about/">About</a>
-                    <a href="/faq/">FAQ</a>
-                </div>
-                
-                <div class="footer-column">
-                    <h4>Resources</h4>
-                    <a href="/blog/posts/writing-better-prompts.html">Prompt Guide</a>
-                    <a href="/app/">Templates</a>
-                    <a href="/faq/">Help</a>
-                </div>
-                
-                <div class="footer-column">
-                    <h4>Legal</h4>
-                    <a href="/legal/terms.html">Terms</a>
-                    <a href="/legal/privacy.html">Privacy</a>
-                </div>
+                </ul>
+                <p>Think of it as the difference between an AI artist and an AI designer.</p>
             </div>
         </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>Do I need a subscription to access all features?</span>
+                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M6 9l6 6 6-6" />
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>For a limited time, all features are available for free to all users. This includes:</p>
+                <ul>
+                    <li>Unlimited "Fast" and "Pro" generations</li>
+                    <li>Unlimited edits and design history</li>
+                    <li>All design templates and sizes</li>
+                    <li>... and more!</li>
+                </ul>
+                <p>No credit card required. Just sign up and start creating!</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>What's the difference between Fast and Pro quality?</span>
+                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M6 9l6 6 6-6" />
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p><strong>Fast Mode (⚡)</strong></p>
+                <ul>
+                    <li>Generates in ~30 seconds</li>
+                    <li>Great for quick iterations and brainstorming</li>
+                    <li>Perfect for most use cases</li>
+                </ul>
+                <p><strong>Pro Mode (💎)</strong></p>
+                <ul>
+                    <li>Takes up to 60 seconds</li>
+                    <li>Higher quality with more sophisticated details</li>
+                    <li>Better understanding of complex prompts</li>
+                    <li>Premium finishes and effects</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>Can I use the designs commercially?</span>
+                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M6 9l6 6 6-6" />
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>Yes! All designs you create with LayoutCraft are yours to use however you want, including:</p>
+                <ul>
+                    <li>Commercial projects</li>
+                    <li>Client work</li>
+                    <li>Marketing materials</li>
+                    <li>Social media posts</li>
+                    <li>Any business purpose</li>
+                </ul>
+                <p>We don't claim any ownership over your generated designs.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>How do I write better prompts?</span>
+                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M6 9l6 6 6-6" />
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>Great prompts include:</p>
+                <ul>
+                    <li><strong>Format:</strong> "Blog header for..." or "Instagram post about..."</li>
+                    <li><strong>Specific text:</strong> "Include the text 'Summer Sale - 50% Off'"</li>
+                    <li><strong>Style/mood:</strong> "Modern, minimalist, professional, vibrant"</li>
+                    <li><strong>Colors:</strong> "Use blue and white" or "warm earth tones"</li>
+                    <li><strong>Elements:</strong> "Include geometric shapes" or "add subtle patterns"</li>
+                </ul>
+                <p>Check out our <a href="/blog/posts/writing-better-prompts/" style="color: #6366f1;">complete
+                        guide to writing prompts</a> for more tips!</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>What file formats are available?</span>
+                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M6 9l6 6 6-6" />
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>Currently, all designs are exported as high-quality PNG files. PNGs are perfect for:</p>
+                <ul>
+                    <li>Web use (blogs, websites)</li>
+                    <li>Social media posts</li>
+                    <li>Presentations</li>
+                    <li>Print materials</li>
+                </ul>
+                <p>We're working on additional export formats for future updates.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>Is there a limit to how many designs I can create?</span>
+                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M6 9l6 6 6-6" />
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>For logged-in users:</p>
+                <ul>
+                    <li><strong>Fast generations:</strong> Unlimited!</li>
+                    <li><strong>Pro generations:</strong> Currently unlimited during our launch period</li>
+                </ul>
+                <p>For anonymous users:</p>
+                <ul>
+                    <li>Limited to a few generations to prevent abuse</li>
+                    <li>Sign up for free to unlock unlimited access</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFAQ(this)">
+                <span>Do you store my designs or prompts?</span>
+                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M6 9l6 6 6-6" />
+                </svg>
+            </div>
+            <div class="faq-answer">
+                <p>We prioritize your privacy:</p>
+                <ul>
+                    <li>Designs are generated on-demand and not stored on our servers</li>
+                    <li>Prompts may be temporarily processed but are not permanently stored</li>
+                    <li>You're responsible for saving/downloading your designs</li>
+                    <li>We use standard analytics to improve the service</li>
+                </ul>
+                <p>Read our full <a href="/legal/privacy.html" style="color: #6366f1;">Privacy Policy</a> for more
+                    details.</p>
+            </div>
+        </div>
+
+        <div class="faq-cta">
+            <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Still have questions?</h3>
+            <p style="color: #6b7280; margin-bottom: 1.5rem;">
+                We're here to help! Reach out through the feedback form in the app.
+            </p>
+            <a href="/app/" class="btn btn-primary">
+                Start Creating →
+            </a>
         </div>
     </div>
-</footer>
-   
-   <script>
-       function toggleFAQ(element) {
-           const faqItem = element.parentElement;
-           faqItem.classList.toggle('open');
-       }
-   </script>
-   
-   <link rel="stylesheet" href="/shared/css/navigation.css">
-  <script type="module" src="/shared/js/authService.js"></script>
-        <script type="module" src="/shared/js/navigation.js"></script>
-        <script type="module">
-            // Import the classes from your scripts
-            import { layoutCraftNav } from '/shared/js/navigation.js';
-            import { authService } from '/shared/js/authService.js';
 
-            // Wait for the DOM to be fully loaded before running
-            document.addEventListener('DOMContentLoaded', () => {
-                // The navigation class is now correctly given the auth service it needs.
-                window.layoutCraftNav = layoutCraftNav;
-            });
-        </script>
+    <!-- Standard Footer - Use this on all pages -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <span class="logo-text">LayoutCraft</span>
+                    </div>
+                    <p class="footer-tagline">
+                        AI design tool for the rest of us.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="/app/">Create Design</a>
+                        <a href="/blog/">Blog</a>
+                        <a href="/about/">About</a>
+                        <a href="/faq/">FAQ</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="/blog/posts/writing-better-prompts/">Prompt Guide</a>
+                        <a href="/app/">Templates</a>
+                        <a href="/faq/">Help</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="/legal/terms.html">Terms</a>
+                        <a href="/legal/privacy.html">Privacy</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function toggleFAQ(element) {
+            const faqItem = element.parentElement;
+            faqItem.classList.toggle('open');
+        }
+    </script>
+
+    <link rel="stylesheet" href="/shared/css/navigation.css">
+    <script type="module" src="/shared/js/authService.js"></script>
+    <script type="module" src="/shared/js/navigation.js"></script>
+    <script type="module">
+        // Import the classes from your scripts
+        import { layoutCraftNav } from '/shared/js/navigation.js';
+        import { authService } from '/shared/js/authService.js';
+
+        // Wait for the DOM to be fully loaded before running
+        document.addEventListener('DOMContentLoaded', () => {
+            // The navigation class is now correctly given the auth service it needs.
+            window.layoutCraftNav = layoutCraftNav;
+        });
+    </script>
 </body>
+
 </html>

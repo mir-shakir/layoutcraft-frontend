@@ -2,29 +2,29 @@
 
 import { authService } from "../../shared/js/authService.js";
 
-(function() {
+(function () {
     'use strict';
 
     // --- STATE MANAGEMENT ---
     // A single object to hold the entire state of the application.
     const state = {
-    // --- Core Properties ---
-    appMode: 'generating', // Can be 'generating' or 'editing'
-    currentGeneration: null, // Will hold the full generation object after a successful creation/edit
-    prompt: '',
-    selectedSize: 'blog_header',
-    selectedStyle: 'auto',
-    selectedQuality: 'pro',
-    isGenerating: false, // Tracks if an API call is in progress
-    currentImage: null,
-    anonymousGenerationsRemaining: 3,
+        // --- Core Properties ---
+        appMode: 'generating', // Can be 'generating' or 'editing'
+        currentGeneration: null, // Will hold the full generation object after a successful creation/edit
+        prompt: '',
+        selectedSize: 'blog_header',
+        selectedStyle: 'auto',
+        selectedQuality: 'pro',
+        isGenerating: false, // Tracks if an API call is in progress
+        currentImage: null,
+        anonymousGenerationsRemaining: 3,
 
-    // --- Legacy Properties (can be removed if not used elsewhere) ---
-    isLoggedIn: false,
-    hasUsedFreePro: false,
-    errorMessage: null,
-    failedAttempts: 0,
-};
+        // --- Legacy Properties (can be removed if not used elsewhere) ---
+        isLoggedIn: false,
+        hasUsedFreePro: false,
+        errorMessage: null,
+        failedAttempts: 0,
+    };
     // --- CONFIGURATION ---
     const PROMPT_MAX_LENGTH = 500;
 
@@ -49,6 +49,8 @@ import { authService } from "../../shared/js/authService.js";
         loadingMessageText: document.getElementById('loading-message'),
         loadingTipText: document.getElementById('loading-tip'),
         progressBar: document.getElementById('progress-bar'),
+        postLoginMessage: document.getElementById('post-login-message'),
+        postLoginStartBtn: document.getElementById('post-login-start-btn'),
     };
 
     // --- INITIALIZATION ---
@@ -89,7 +91,7 @@ import { authService } from "../../shared/js/authService.js";
         });
 
         document.getElementById('download-btn').addEventListener('click', downloadImage);
-        document.getElementById('regenerate-btn').addEventListener('click', regenerateDesign);
+        // document.getElementById('regenerate-btn').addEventListener('click', regenerateDesign);
         document.getElementById('retry-btn').addEventListener('click', () => {
             showCanvas('empty');
             renderUI();
@@ -98,70 +100,119 @@ import { authService } from "../../shared/js/authService.js";
         document.addEventListener('authChange', () => {
             console.log('Auth status changed, updating designer state.');
             checkAuthStatus(); // Re-run the auth check
+
+            if (state.isLoggedIn && state.currentImage && state.currentImage.url.startsWith('blob:')) {
+                // Show the "Start Fresh" message
+                elements.postLoginMessage.style.display = 'flex';
+            } else if (elements.canvasStates.error.style.display !== 'none') {
+                // This is our previous logic to clear an error message on login
+                showCanvas('empty');
+                state.failedAttempts = 0;
+            }
         });
+        if (elements.postLoginStartBtn) {
+            elements.postLoginStartBtn.addEventListener('click', () => {
+                elements.postLoginMessage.style.display = 'none'; // Hide the message
+                showCanvas('empty'); // Go back to the empty state
+            });
+        }
     }
 
 
     // --- UI RENDERER ---
-function renderUI() {
-    // Cache elements for this function
-    const generateBtn = elements.generateBtn;
-    const mobileGenerateBtn = elements.mobileGenerateBtn;
-    const promptInput = elements.promptInput;
-    const mobilePromptInput = elements.mobilePromptInput;
-    const sidebar = document.querySelector('.designer-sidebar'); // You may need to add this to your `elements` cache
+    // In designer.js, replace the entire renderUI function
 
-    // Create a "Start New" button if it doesn't exist
-    let startNewBtn = document.getElementById('start-new-btn');
-    if (!startNewBtn && generateBtn) {
-        startNewBtn = document.createElement('button');
-        startNewBtn.id = 'start-new-btn';
-        startNewBtn.className = 'secondary-button'; // Add a suitable class for styling
-        startNewBtn.textContent = 'Start New Design';
-        generateBtn.parentNode.insertBefore(startNewBtn, generateBtn.nextSibling);
-        startNewBtn.onclick = handleStartNew; // We will create this function next
+    function renderUI() {
+        // Cache all necessary elements
+        const generateBtn = elements.generateBtn;
+        const mobileGenerateBtn = elements.mobileGenerateBtn;
+        const promptInput = elements.promptInput;
+        const mobilePromptInput = elements.mobilePromptInput;
+        const sidebar = document.querySelector('.designer-sidebar');
+        const desktopToolbar = document.querySelector('.designer-toolbar');
+        const mobileToolbar = document.querySelector('.mobile-prompt-section');
+
+        // --- NEW: Cache the quality selectors ---
+        const desktopQualitySelector = desktopToolbar?.querySelector('.quality-selector');
+        const mobileQualitySelector = mobileToolbar?.querySelector('.quality-selector');
+
+        // --- Create and manage the Start New button for DESKTOP ---
+        let startNewBtnDesktop = document.getElementById('start-new-btn-desktop');
+        if (!startNewBtnDesktop && generateBtn) {
+            startNewBtnDesktop = document.createElement('button');
+            startNewBtnDesktop.id = 'start-new-btn-desktop';
+            startNewBtnDesktop.className = 'btn btn-secondary';
+            startNewBtnDesktop.textContent = 'Start New';
+            // Place it before the main generate button for better layout
+            generateBtn.parentNode.insertBefore(startNewBtnDesktop, generateBtn);
+            startNewBtnDesktop.onclick = handleStartNew;
+        }
+
+        // --- NEW: Create and manage the Start New button for MOBILE ---
+        let startNewBtnMobile = document.getElementById('start-new-btn-mobile');
+        if (!startNewBtnMobile && mobileGenerateBtn) {
+            startNewBtnMobile = document.createElement('button');
+            startNewBtnMobile.id = 'start-new-btn-mobile';
+            startNewBtnMobile.className = 'btn btn-secondary';
+            startNewBtnMobile.textContent = 'Start New';
+            // Insert it into the mobile generate section
+            mobileGenerateBtn.parentNode.insertBefore(startNewBtnMobile, mobileGenerateBtn);
+            startNewBtnMobile.onclick = handleStartNew;
+        }
+
+        if (state.appMode === 'editing') {
+            // --- UI for Editing Mode ---
+            if (generateBtn) generateBtn.querySelector('.generate-text').textContent = 'Apply Edit';
+            if (mobileGenerateBtn) mobileGenerateBtn.querySelector('.generate-text').textContent = 'Apply Edit';
+            if (promptInput) promptInput.placeholder = "Describe the change you want to make...";
+            if (mobilePromptInput) mobilePromptInput.placeholder = "Describe change...";
+
+            // Show "Start New" buttons and hide irrelevant UI
+            if (sidebar) sidebar.classList.add('editing-mode');
+            if (desktopToolbar) desktopToolbar.classList.add('editing-mode');
+            if (mobileToolbar) mobileToolbar.classList.add('editing-mode');
+            if (startNewBtnDesktop) startNewBtnDesktop.style.display = 'inline-flex';
+            if (startNewBtnMobile) startNewBtnMobile.style.display = 'inline-flex';
+
+            // --- NEW: Hide quality selectors ---
+            if (desktopQualitySelector) desktopQualitySelector.style.display = 'none';
+            if (mobileQualitySelector) mobileQualitySelector.style.display = 'none';
+
+        } else { // 'generating' mode
+            // --- UI for Generating Mode ---
+            if (generateBtn) generateBtn.querySelector('.generate-text').textContent = 'Generate';
+            if (mobileGenerateBtn) mobileGenerateBtn.querySelector('.generate-text').textContent = 'Generate';
+            if (promptInput) promptInput.placeholder = "Describe your design idea...";
+            if (mobilePromptInput) mobilePromptInput.placeholder = "Describe your design idea...";
+
+            // Hide "Start New" buttons and show relevant UI
+            if (sidebar) sidebar.classList.remove('editing-mode');
+            if (desktopToolbar) desktopToolbar.classList.remove('editing-mode');
+            if (mobileToolbar) mobileToolbar.classList.remove('editing-mode');
+            if (startNewBtnDesktop) startNewBtnDesktop.style.display = 'none';
+            if (startNewBtnMobile) startNewBtnMobile.style.display = 'none';
+
+            // --- NEW: Show quality selectors ---
+            if (desktopQualitySelector) desktopQualitySelector.style.display = 'flex';
+            if (mobileQualitySelector) mobileQualitySelector.style.display = 'flex';
+        }
+
+        // --- General UI Logic (validation, etc.) ---
+        const isPromptValid = state.prompt.trim().length > 0;
+        const canGenerate = isPromptValid && !state.isGenerating;
+        if (generateBtn) generateBtn.disabled = !canGenerate;
+        if (mobileGenerateBtn) mobileGenerateBtn.disabled = !canGenerate;
     }
-
-    if (state.appMode === 'editing') {
-        // --- UI for Editing Mode ---
-        if (generateBtn) generateBtn.querySelector('.generate-text').textContent = 'Apply Edit';
-        if (mobileGenerateBtn) mobileGenerateBtn.querySelector('.generate-text').textContent = 'Apply Edit';
-        if (promptInput) promptInput.placeholder = "Describe the change you want to make... (e.g., 'make the text bigger')";
-        if (mobilePromptInput) mobilePromptInput.placeholder = "Describe the change...";
-
-        // Hide irrelevant sidebar sections
-        if (sidebar) sidebar.classList.add('editing-mode'); // Use a CSS class to hide elements
-        if (startNewBtn) startNewBtn.style.display = 'inline-block';
-
-    } else { // 'generating' mode
-        // --- UI for Generating Mode ---
-        if (generateBtn) generateBtn.querySelector('.generate-text').textContent = 'Generate';
-        if (mobileGenerateBtn) mobileGenerateBtn.querySelector('.generate-text').textContent = 'Generate';
-        if (promptInput) promptInput.placeholder = "Describe your design idea...";
-        if (mobilePromptInput) mobilePromptInput.placeholder = "Describe your design...";
-
-        // Show sidebar sections
-        if (sidebar) sidebar.classList.remove('editing-mode');
-        if (startNewBtn) startNewBtn.style.display = 'none';
+    // --- NEW ACTION HANDLER ---
+    function handleStartNew() {
+        state.appMode = 'generating';
+        state.currentGeneration = null;
+        state.prompt = '';
+        elements.promptInput.value = '';
+        elements.mobilePromptInput.value = '';
+        showCanvas('empty'); // Assuming you have this function to show the initial empty state
+        renderUI();
     }
-
-    // --- General UI Logic (validation, etc.) ---
-    const isPromptValid = state.prompt.trim().length > 5; // Simplified validation for example
-    const canGenerate = isPromptValid && !state.isGenerating;
-    if(generateBtn) generateBtn.disabled = !canGenerate;
-    if(mobileGenerateBtn) mobileGenerateBtn.disabled = !canGenerate;
-}
-
-// --- NEW ACTION HANDLER ---
-function handleStartNew() {
-    state.appMode = 'generating';
-    state.currentGeneration = null;
-    state.prompt = '';
-    elements.promptInput.value = '';
-    elements.mobilePromptInput.value = '';
-    showCanvas('empty'); // Assuming you have this function to show the initial empty state
-    renderUI();
-}
     // --- UI HANDLERS ---
 
     function handlePromptInput(e) {
@@ -201,54 +252,54 @@ function handleStartNew() {
         saveDraft();
     }
 
-    
+
     /**
  * Scrolls a container to bring a specific element into the center of the view.
  * @param {HTMLElement} container - The scrollable container element.
  * @param {HTMLElement} element - The child element to scroll to.
  */
-function scrollIntoViewIfNeeded(container, element) {
-    if (container && element) {
-        // The options ensure a smooth scroll and center the item horizontally.
-        element.scrollIntoView({
-            behavior: 'smooth',
-            block: 'nearest',
-            inline: 'center'
-        });
+    function scrollIntoViewIfNeeded(container, element) {
+        if (container && element) {
+            // The options ensure a smooth scroll and center the item horizontally.
+            element.scrollIntoView({
+                behavior: 'smooth',
+                block: 'nearest',
+                inline: 'center'
+            });
+        }
     }
-}
 
     function selectTemplate(size) {
         state.selectedSize = size;
         const container = document.querySelector('.template-grid');
         let activeCard = null;
-         document.querySelectorAll('.template-card').forEach(card => {
-        const isActive = card.dataset.size === size;
-        card.classList.toggle('active', isActive);
-        if (isActive) {
-            activeCard = card; // Find the active card
-        }
-    });
-         scrollIntoViewIfNeeded(container, activeCard);
-    saveDraft();
+        document.querySelectorAll('.template-card').forEach(card => {
+            const isActive = card.dataset.size === size;
+            card.classList.toggle('active', isActive);
+            if (isActive) {
+                activeCard = card; // Find the active card
+            }
+        });
+        scrollIntoViewIfNeeded(container, activeCard);
+        saveDraft();
     }
 
     function selectStyle(style) {
-         state.selectedStyle = style;
-    const container = document.querySelector('.style-pills'); // Get the container
-    let activePill = null;
+        state.selectedStyle = style;
+        const container = document.querySelector('.style-pills'); // Get the container
+        let activePill = null;
 
-    document.querySelectorAll('.style-pill').forEach(pill => {
-        const isActive = pill.dataset.style === style;
-        pill.classList.toggle('active', isActive);
-        if (isActive) {
-            activePill = pill; // Find the active pill
-        }
-    });
+        document.querySelectorAll('.style-pill').forEach(pill => {
+            const isActive = pill.dataset.style === style;
+            pill.classList.toggle('active', isActive);
+            if (isActive) {
+                activePill = pill; // Find the active pill
+            }
+        });
 
-    // Call the new helper function
-    scrollIntoViewIfNeeded(container, activePill);
-    saveDraft();
+        // Call the new helper function
+        scrollIntoViewIfNeeded(container, activePill);
+        saveDraft();
     }
 
     function selectQuality(quality) {
@@ -316,167 +367,167 @@ function scrollIntoViewIfNeeded(container, element) {
     // In /app/js/designer.js, replace the existing generateDesign function
 
     async function generateDesign() {
-    // --- 1. VALIDATION (Combined) ---
-    if (state.isGenerating) return;
+        // --- 1. VALIDATION (Combined) ---
+        if (state.isGenerating) return;
 
-    const promptLength = state.prompt.trim().length;
-    if (state.appMode === 'generating' && promptLength < 10) {
-        showError("Please provide a more detailed description (at least 10 characters).");
-        return;
-    }
-    if (promptLength === 0 && state.appMode === 'editing') {
-        showError("Please provide an instruction for the edit.");
-        return;
-    }
-    if (state.prompt.length > PROMPT_MAX_LENGTH) {
-        showError(`Please shorten your prompt (maximum ${PROMPT_MAX_LENGTH} characters).`);
-        return;
-    }
-
-    // --- 2. PREPARE FOR API CALL (Universal) ---
-    state.isGenerating = true;
-    setButtonsLoading(true);
-    showCanvas('loading');
-    startLoadingAnimation();
-    renderUI();
-
-    try {
-        const isLoggedIn = authService.hasToken();
-
-        if (isLoggedIn) {
-            // --- AUTHENTICATED USER LOGIC ---
-            await handleAuthenticatedGeneration();
-        } else {
-            // --- ANONYMOUS USER LOGIC ---
-            await handleAnonymousGeneration();
+        const promptLength = state.prompt.trim().length;
+        if (state.appMode === 'generating' && promptLength < 10) {
+            showError("Please provide a more detailed description (at least 10 characters).");
+            return;
+        }
+        if (promptLength === 0 && state.appMode === 'editing') {
+            showError("Please provide an instruction for the edit.");
+            return;
+        }
+        if (state.prompt.length > PROMPT_MAX_LENGTH) {
+            showError(`Please shorten your prompt (maximum ${PROMPT_MAX_LENGTH} characters).`);
+            return;
         }
 
-    } catch (error) {
-        console.error('Generation failed:', error);
-        state.failedAttempts++;
-        showError(formatErrorMessage(error));
-    } finally {
-        // --- 6. CLEANUP (Universal) ---
-        state.isGenerating = false;
-        stopLoadingAnimation();
-        setButtonsLoading(false);
+        // --- 2. PREPARE FOR API CALL (Universal) ---
+        state.isGenerating = true;
+        setButtonsLoading(true);
+        showCanvas('loading');
+        startLoadingAnimation();
         renderUI();
-        checkAuthStatus();
+
+        try {
+            const isLoggedIn = authService.hasToken();
+
+            if (isLoggedIn) {
+                // --- AUTHENTICATED USER LOGIC ---
+                await handleAuthenticatedGeneration();
+            } else {
+                // --- ANONYMOUS USER LOGIC ---
+                await handleAnonymousGeneration();
+            }
+
+        } catch (error) {
+            console.error('Generation failed:', error);
+            state.failedAttempts++;
+            showError(formatErrorMessage(error));
+        } finally {
+            // --- 6. CLEANUP (Universal) ---
+            state.isGenerating = false;
+            stopLoadingAnimation();
+            setButtonsLoading(false);
+            renderUI();
+            checkAuthStatus();
+        }
     }
-}
 
-async function handleAuthenticatedGeneration() {
-    let response;
-    const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authService.getToken()}`
-    };
+    async function handleAuthenticatedGeneration() {
+        let response;
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authService.getToken()}`
+        };
 
-    if (state.appMode === 'editing' && state.currentGeneration) {
-        // --- EDITING LOGIC ---
-        if (state.selectedQuality === 'pro' && !state.isLoggedIn && state.hasUsedFreePro) {
+        if (state.appMode === 'editing' && state.currentGeneration) {
+            // --- EDITING LOGIC ---
+            if (state.selectedQuality === 'pro' && !state.isLoggedIn && state.hasUsedFreePro) {
+                if (window.layoutCraftNav) window.layoutCraftNav.openAuthModal('signup');
+                return;
+            }
+            const endpoint = `${authService.apiBaseUrl}/users/history/${state.currentGeneration.id}/edit`;
+            const body = JSON.stringify({ edit_prompt: state.prompt.trim() });
+            response = await fetch(endpoint, { method: 'POST', headers, body });
+        } else {
+            // --- NEW GENERATION LOGIC ---
+            let themeToSend = state.selectedStyle;
+            if (themeToSend === 'auto') {
+                const styles = ['glassmorphism_premium', 'bold_geometric_solid', 'textured_organic_patterns', 'minimal_luxury_space', 'vibrant_gradient_energy', 'dark_neon_tech', 'editorial_magazine_layout'];
+                themeToSend = styles[Math.floor(Math.random() * styles.length)];
+            }
+
+            const endpoint = `${authService.apiBaseUrl}/api/v1/generate`;
+            const body = JSON.stringify({
+                prompt: state.prompt.trim(),
+                model: state.selectedQuality === 'pro' ? 'gemini-2.5-pro' : 'gemini-2.5-flash',
+                theme: themeToSend,
+                size_preset: state.selectedSize
+            });
+            response = await fetch(endpoint, { method: 'POST', headers, body });
+        }
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ detail: 'An unexpected server error occurred.' }));
+            throw new Error(errorData.detail);
+        }
+
+        const resultData = await response.json();
+        state.currentGeneration = resultData;
+        state.appMode = 'editing';
+        state.prompt = '';
+        elements.promptInput.value = '';
+        if (elements.mobilePromptInput) elements.mobilePromptInput.value = '';
+        updateCharCount();
+        elements.resultImage.src = state.currentGeneration.image_url;
+        showResult();
+        state.failedAttempts = 0;
+    }
+    function showResultFromBlob(imageBlob) {
+        if (!imageBlob || imageBlob.size === 0) {
+            throw new Error('Received empty image data from server.');
+        }
+
+        // This logic is from your original function
+        if (state.currentImage && state.currentImage.url) {
+            URL.revokeObjectURL(state.currentImage.url); // Clean up old blob URL
+        }
+
+        state.currentImage = {
+            url: URL.createObjectURL(imageBlob),
+            filename: generateFilename()
+        };
+
+        elements.resultImage.src = state.currentImage.url;
+        showResult(); // Call your existing showResult to handle the canvas visibility
+    }
+
+    async function handleAnonymousGeneration() {
+        if (state.anonymousGenerationsRemaining <= 0) {
+            showError("You need to sign up to generate more designs and unlock all features for free.");
             if (window.layoutCraftNav) window.layoutCraftNav.openAuthModal('signup');
             return;
         }
-        const endpoint = `${authService.apiBaseUrl}/users/history/${state.currentGeneration.id}/edit`;
-        const body = JSON.stringify({ edit_prompt: state.prompt.trim() });
-        response = await fetch(endpoint, { method: 'POST', headers, body });
-    } else {
-        // --- NEW GENERATION LOGIC ---
+
         let themeToSend = state.selectedStyle;
         if (themeToSend === 'auto') {
             const styles = ['glassmorphism_premium', 'bold_geometric_solid', 'textured_organic_patterns', 'minimal_luxury_space', 'vibrant_gradient_energy', 'dark_neon_tech', 'editorial_magazine_layout'];
             themeToSend = styles[Math.floor(Math.random() * styles.length)];
         }
-    
-        const endpoint = `${authService.apiBaseUrl}/api/v1/generate`;
+
+        const endpoint = `${authService.apiBaseUrl}/api/generate`;
         const body = JSON.stringify({
             prompt: state.prompt.trim(),
             model: state.selectedQuality === 'pro' ? 'gemini-2.5-pro' : 'gemini-2.5-flash',
             theme: themeToSend,
             size_preset: state.selectedSize
         });
-        response = await fetch(endpoint, { method: 'POST', headers, body });
+
+        const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
+
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ detail: 'An unexpected server error occurred.' }));
+            throw new Error(errorData.detail);
+        }
+
+        // Anonymous endpoint returns a blob
+        const imageBlob = await response.blob();
+        showResultFromBlob(imageBlob);
+
+        // Update remaining quota from header
+        const remaining = response.headers.get('x-generations-remaining');
+        if (remaining !== null) {
+            state.anonymousGenerationsRemaining = parseInt(remaining, 10);
+        }
+
+        state.failedAttempts = 0;
+
+        // After the first successful anonymous generation, prompt user to sign up to enable editing
+        showError("Sign up for free to save and edit this design.");
     }
-
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ detail: 'An unexpected server error occurred.' }));
-        throw new Error(errorData.detail);
-    }
-
-    const resultData = await response.json();
-    state.currentGeneration = resultData;
-    state.appMode = 'editing';
-    state.prompt = '';
-    elements.promptInput.value = '';
-    if (elements.mobilePromptInput) elements.mobilePromptInput.value = '';
-    updateCharCount();
-    elements.resultImage.src = state.currentGeneration.image_url;
-    showResult();
-    state.failedAttempts = 0;
-}
-function showResultFromBlob(imageBlob) {
-    if (!imageBlob || imageBlob.size === 0) {
-        throw new Error('Received empty image data from server.');
-    }
-    
-    // This logic is from your original function
-    if (state.currentImage && state.currentImage.url) {
-        URL.revokeObjectURL(state.currentImage.url); // Clean up old blob URL
-    }
-
-    state.currentImage = {
-        url: URL.createObjectURL(imageBlob),
-        filename: generateFilename()
-    };
-    
-    elements.resultImage.src = state.currentImage.url;
-    showResult(); // Call your existing showResult to handle the canvas visibility
-}
-
-async function handleAnonymousGeneration() {
-    if (state.anonymousGenerationsRemaining <= 0) {
-        showError("You have used all your free generations. Please sign up to continue creating.");
-        if (window.layoutCraftNav) window.layoutCraftNav.openAuthModal('signup');
-        return;
-    }
-
-    let themeToSend = state.selectedStyle;
-    if (themeToSend === 'auto') {
-        const styles = ['glassmorphism_premium', 'bold_geometric_solid', 'textured_organic_patterns', 'minimal_luxury_space', 'vibrant_gradient_energy', 'dark_neon_tech', 'editorial_magazine_layout'];
-        themeToSend = styles[Math.floor(Math.random() * styles.length)];
-    }
-
-    const endpoint = `${authService.apiBaseUrl}/api/generate`;
-    const body = JSON.stringify({
-        prompt: state.prompt.trim(),
-        model: state.selectedQuality === 'pro' ? 'gemini-2.5-pro' : 'gemini-2.5-flash',
-        theme: themeToSend,
-        size_preset: state.selectedSize
-    });
-
-    const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body });
-
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ detail: 'An unexpected server error occurred.' }));
-        throw new Error(errorData.detail);
-    }
-
-    // Anonymous endpoint returns a blob
-    const imageBlob = await response.blob();
-    showResultFromBlob(imageBlob);
-
-    // Update remaining quota from header
-    const remaining = response.headers.get('X-Generations-Remaining');
-    if (remaining !== null) {
-        state.anonymousGenerationsRemaining = parseInt(remaining, 10);
-    }
-    
-    state.failedAttempts = 0;
-
-    // After the first successful anonymous generation, prompt user to sign up to enable editing
-    showError("Sign up for free to save and edit this design.");
-}
 
     function showResult() {
         // elements.resultImage.src = state.currentImage.url;
@@ -518,37 +569,68 @@ async function handleAnonymousGeneration() {
         return message;
     }
 
-    function regenerateDesign() {
-        const variations = [', with a fresh approach', ', alternative composition', ', different color scheme', ', enhanced visual appeal'];
-        const originalPrompt = state.prompt.split(',')[0].trim();
-        state.prompt = originalPrompt + variations[Math.floor(Math.random() * variations.length)];
-        elements.promptInput.value = state.prompt;
-        elements.mobilePromptInput.value = state.prompt;
-        generateDesign().finally(() => {
-            state.prompt = originalPrompt; // Restore original prompt for user
-            elements.promptInput.value = state.prompt;
-            elements.mobilePromptInput.value = state.prompt;
-        });
-    }
+    // function regenerateDesign() {
+    // const variations = [', with a fresh approach', ', alternative composition', ', different color scheme', ', enhanced visual appeal'];
+    // const originalPrompt = state.prompt.split(',')[0].trim();
+    // state.prompt = originalPrompt + variations[Math.floor(Math.random() * variations.length)];
+    // elements.promptInput.value = state.prompt;
+    // elements.mobilePromptInput.value = state.prompt;
+    // generateDesign().finally(() => {
+    //     state.prompt = originalPrompt; // Restore original prompt for user
+    //     elements.promptInput.value = state.prompt;
+    //     elements.mobilePromptInput.value = state.prompt;
+    // });
+    // }
 
-    function downloadImage() {
-
+    async function downloadImage() {
         if (!state.isLoggedIn) {
-        // If not logged in, open the signup modal
-        if (window.layoutCraftNav) {
-            window.layoutCraftNav.openAuthModal('signup');
+            if (window.layoutCraftNav) {
+                window.layoutCraftNav.openAuthModal('signup');
+            }
+            return;
         }
-        return; // Stop the function here
-    }
-        if (!state.currentImage) return;
-        const a = document.createElement('a');
-        a.href = state.currentImage.url;
-        a.download = state.currentImage.filename;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    }
 
+        // --- THE FIX: Use state.currentGeneration instead of state.currentImage ---
+        if (!state.currentGeneration || !state.currentGeneration.image_url) {
+            console.error("No image URL available to download.");
+            showError("There's no image to download yet.");
+            return;
+        }
+
+        const button = document.getElementById('download-btn');
+        button.textContent = 'Downloading...';
+        button.disabled = true;
+
+        try {
+            // Fetch the image from the remote URL
+            const response = await fetch(state.currentGeneration.image_url);
+            if (!response.ok) {
+                throw new Error('Could not fetch the image for download.');
+            }
+            const imageBlob = await response.blob();
+
+            // Create a temporary URL for the fetched blob
+            const blobUrl = URL.createObjectURL(imageBlob);
+
+            // Trigger the download using the temporary URL
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = generateFilename(); // Your existing function to create a filename
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+
+            // Clean up the temporary URL
+            URL.revokeObjectURL(blobUrl);
+
+        } catch (error) {
+            console.error('Download failed:', error);
+            showError("Download failed. Please try again.");
+        } finally {
+            button.textContent = 'Download';
+            button.disabled = false;
+        }
+    }
     function generateFilename() {
         const timestamp = new Date().toISOString().slice(0, 16).replace(/[:-]/g, '');
         const promptSlug = state.prompt.slice(0, 30).toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, '_');
@@ -593,37 +675,37 @@ async function handleAnonymousGeneration() {
 
     // In /app/js/designer.js, replace the checkSessionForPrompt function
 
-function checkSessionForPrompt() {
-    const dataStr = sessionStorage.getItem('layoutcraft_initial_data');
+    function checkSessionForPrompt() {
+        const dataStr = sessionStorage.getItem('layoutcraft_initial_data');
 
-    if (dataStr) {
-        try {
-            const data = JSON.parse(dataStr);
+        if (dataStr) {
+            try {
+                const data = JSON.parse(dataStr);
 
-            // Set the prompt
-            if (data.prompt) {
-                state.prompt = data.prompt;
-                elements.promptInput.value = state.prompt;
-                elements.mobilePromptInput.value = state.prompt;
-                updateCharCount();
+                // Set the prompt
+                if (data.prompt) {
+                    state.prompt = data.prompt;
+                    elements.promptInput.value = state.prompt;
+                    elements.mobilePromptInput.value = state.prompt;
+                    updateCharCount();
+                }
+
+                // Auto-select the style and template
+                if (data.style) {
+                    selectStyle(data.style);
+                }
+                if (data.template) {
+                    selectTemplate(data.template);
+                }
+
+            } catch (e) {
+                console.error("Failed to parse initial data from session storage:", e);
+            } finally {
+                // ALWAYS remove the item from storage to prevent re-use
+                sessionStorage.removeItem('layoutcraft_initial_data');
             }
-
-            // Auto-select the style and template
-            if (data.style) {
-                selectStyle(data.style);
-            }
-            if (data.template) {
-                selectTemplate(data.template);
-            }
-
-        } catch (e) {
-            console.error("Failed to parse initial data from session storage:", e);
-        } finally {
-            // ALWAYS remove the item from storage to prevent re-use
-            sessionStorage.removeItem('layoutcraft_initial_data');
         }
     }
-}
 
     function setupKeyboardShortcuts() {
         document.addEventListener('keydown', (e) => {
@@ -643,21 +725,21 @@ function checkSessionForPrompt() {
             pro: ['Initializing Pro AI Designer...', 'Deep analysis of requirements...', 'Crafting premium elements...', 'Optimizing visual hierarchy...', 'Applying professional polish...']
         };
         const tips = ['Pro tip: Be specific about colors and text', 'Pro tip: Mention the mood you want to create', 'Pro tip: Include any text that should appear'];
-        
+
         let progress = 0;
         elements.progressBar.style.width = '0%';
-        
+
         const currentMessages = messages[state.selectedQuality];
         let messageIndex = 0;
         elements.loadingMessageText.textContent = currentMessages[0];
         elements.loadingTipText.textContent = tips[Math.floor(Math.random() * tips.length)];
-        
+
         const duration = state.selectedQuality === 'pro' ? 60000 : 30000;
         progressInterval = setInterval(() => {
             progress = Math.min(progress + (100 / (duration / 100)), 95);
             elements.progressBar.style.width = `${progress}%`;
         }, 100);
-        
+
         messageInterval = setInterval(() => {
             messageIndex = (messageIndex + 1) % currentMessages.length;
             elements.loadingMessageText.textContent = currentMessages[messageIndex];
@@ -673,42 +755,42 @@ function checkSessionForPrompt() {
     }
 
     // Add this function to designer.js
-async function checkUrlForEdit() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const editId = urlParams.get('edit');
+    async function checkUrlForEdit() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const editId = urlParams.get('edit');
 
-    if (editId) {
-        // Clear the ?edit=... from the URL to avoid confusion on reloads
-        history.replaceState(null, '', window.location.pathname);
+        if (editId) {
+            // Clear the ?edit=... from the URL to avoid confusion on reloads
+            history.replaceState(null, '', window.location.pathname);
 
-        // Show loading state while we fetch the design
-        showCanvas('loading');
+            // Show loading state while we fetch the design
+            showCanvas('loading');
 
-        try {
-            const response = await fetch(`${authService.apiBaseUrl}/users/history/${editId}`, {
-                headers: { 'Authorization': `Bearer ${authService.getToken()}` }
-            });
-            if (!response.ok) {
-                throw new Error('Could not load the selected design.');
+            try {
+                const response = await fetch(`${authService.apiBaseUrl}/users/history/${editId}`, {
+                    headers: { 'Authorization': `Bearer ${authService.getToken()}` }
+                });
+                if (!response.ok) {
+                    throw new Error('Could not load the selected design.');
+                }
+                const designToEdit = await response.json();
+
+                // Set the state to edit mode with the fetched design
+                state.appMode = 'editing';
+                state.currentGeneration = designToEdit;
+
+                // Update the UI with the design's data
+                elements.resultImage.src = designToEdit.image_url;
+                showResult(); // Display the image to be edited
+                renderUI(); // Set the UI to editing mode
+
+            } catch (error) {
+                showError(error.message);
+                // Fallback to the default generating mode
+                handleStartNew();
             }
-            const designToEdit = await response.json();
-
-            // Set the state to edit mode with the fetched design
-            state.appMode = 'editing';
-            state.currentGeneration = designToEdit;
-
-            // Update the UI with the design's data
-            elements.resultImage.src = designToEdit.image_url;
-            showResult(); // Display the image to be edited
-            renderUI(); // Set the UI to editing mode
-
-        } catch (error) {
-            showError(error.message);
-            // Fallback to the default generating mode
-            handleStartNew();
         }
     }
-}
 
     // --- RUN INITIALIZATION ---
     if (document.readyState === 'loading') {
