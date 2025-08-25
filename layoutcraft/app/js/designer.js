@@ -724,7 +724,7 @@ import { authService } from "../../shared/js/authService.js";
             fast: ['Firing up the AI engine...', 'Analyzing your prompt...', 'Creating visual elements...', 'Finalizing your design...'],
             pro: ['Initializing Pro AI Designer...', 'Deep analysis of requirements...', 'Crafting premium elements...', 'Optimizing visual hierarchy...', 'Applying professional polish...']
         };
-        const tips = ['Pro tip: Be specific about colors and text', 'Pro tip: Mention the mood you want to create', 'Pro tip: Include any text that should appear'];
+        const tips = ['Want changes? Sign in to unlock the edit feature', 'Edit feature is only available to signin users', 'Sign in users can edit there designs for free'];
 
         let progress = 0;
         elements.progressBar.style.width = '0%';
