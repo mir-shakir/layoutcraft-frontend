@@ -46,28 +46,32 @@ class LayoutCraftNav {
         const data = Object.fromEntries(formData);
 
         try {
+            let response;
             if (this.authMode === 'login') {
-                const response = await this.authService.login({ email: data.email, password: data.password });
-                
-                this.checkAuth();
-                this.closeAuthModal();
-                this.renderUI();
-                this.showSuccessMessage(`Welcome back, ${response.user.full_name || response.user.email}!`);
-                document.dispatchEvent(new CustomEvent('authChange'));
-
+                response = await this.authService.login({ email: data.email, password: data.password });
             } else {
                 // --- CORRECTED SIGNUP LOGIC (INSPIRED BY SCRIPTS.JS) ---
                 if (data.password.length < 6) {
                     throw new Error('Password must be at least 6 characters long.');
                 }
-                
-                await this.authService.register({ full_name: data.full_name, email: data.email, password: data.password });
-                
+
+                response = await this.authService.register({ full_name: data.full_name, email: data.email, password: data.password });
+
                 // Show success and switch to login mode instead of auto-logging in.
-                this.showSuccessMessage('Registration successful! Please log in to continue.');
-                this.openAuthModal('login');
+                if (response.access_token && response.user) {
+                    this.authService.saveToken(response.access_token);
+                    this.authService.saveUser(response.user);
+                }
                 // --- END OF FIX ---
             }
+            this.checkAuth();
+            this.closeAuthModal();
+            this.renderUI();
+             const successMessage = this.authMode === 'signup' 
+                ? `Welcome, ${response.user.full_name || response.user.email}!`
+                : `Welcome back, ${response.user.full_name || response.user.email}!`;
+            this.showSuccessMessage(successMessage);
+            document.dispatchEvent(new CustomEvent('authChange'));
         } catch (error) {
             this.showAuthError(error.message);
         } finally {

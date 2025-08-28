@@ -451,6 +451,16 @@ import { authService } from "../../shared/js/authService.js";
         }
 
         if (!response.ok) {
+            if (response.status === 401) {
+                // Use the authService to log the user out and show the modal
+                authService.logout();
+                document.dispatchEvent(new CustomEvent('authChange'));
+                if (window.layoutCraftNav) {
+                    window.layoutCraftNav.openAuthModal('login');
+                }
+                // Throw a specific, user-friendly error
+                throw new Error("Your session has expired. Please log in again.");
+            }
             const errorData = await response.json().catch(() => ({ detail: 'An unexpected server error occurred.' }));
             throw new Error(errorData.detail);
         }
@@ -771,6 +781,16 @@ import { authService } from "../../shared/js/authService.js";
                     headers: { 'Authorization': `Bearer ${authService.getToken()}` }
                 });
                 if (!response.ok) {
+                    if (response.status === 401) {
+                        // Use the authService to log the user out and show the modal
+                        authService.logout();
+                        document.dispatchEvent(new CustomEvent('authChange'));
+                        if (window.layoutCraftNav) {
+                            window.layoutCraftNav.openAuthModal('login');
+                        }
+                        // Throw a specific, user-friendly error
+                        throw new Error("Your session has expired. Please log in again.");
+                    }
                     throw new Error('Could not load the selected design.');
                 }
                 const designToEdit = await response.json();

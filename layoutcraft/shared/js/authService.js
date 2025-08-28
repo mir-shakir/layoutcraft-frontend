@@ -24,6 +24,27 @@ class AuthService {
         return localStorage.getItem(this.tokenKey);
     }
 
+    // Add this new function inside the AuthService class in authService.js
+
+    isTokenExpired() {
+        const token = this.getToken();
+        if (!token) return true;
+
+        try {
+            // Decode the token to get the expiration timestamp
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const expiry = payload.exp;
+            
+            // Get the current time in seconds
+            const now = Math.floor(Date.now() / 1000);
+
+            // Return true if the token is expired, false otherwise
+            return now >= expiry;
+        } catch (e) {
+            // If decoding fails, the token is invalid
+            return true;
+        }
+    }
     saveUser(user) {
         localStorage.setItem(this.userKey, JSON.stringify(user));
     }
@@ -45,6 +66,8 @@ class AuthService {
     logout() {
         localStorage.removeItem(this.tokenKey);
         localStorage.removeItem(this.userKey);
+        // authchange event should be dispatched by the caller
+        document.dispatchEvent(new CustomEvent('authChange'));
     }
 
     // --- API METHODS ---
@@ -73,6 +96,16 @@ class AuthService {
 
     async handleResponse(response) {
         if (!response.ok) {
+            if (response.status === 401) {
+                this.logout();
+                // Dispatch an event so the UI can update
+                document.dispatchEvent(new CustomEvent('authChange'));
+                // Open the login modal
+                if (window.layoutCraftNav) {
+                    window.layoutCraftNav.openAuthModal('login');
+                }
+                throw new Error("Your session has expired. Please log in again.");
+            }
             const errorData = await response.json().catch(() => ({}));
             const rawMessage = errorData.detail || `Error: ${response.status}`;
             // Use the new formatter to create a clean error message
