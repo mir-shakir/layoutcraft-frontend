@@ -1,127 +1,93 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Primary Meta Tags -->
-    <title>LayoutCraft - AI Visual Asset Generator</title>
-    <meta name="title" content="LayoutCraft - AI Visual Asset Generator">
+    <title>LayoutCraft - AI Design Tool That Creates Professional Layouts, Not Chaos</title>
     <meta name="description"
         content="Turn prompts into production-ready designs. Create stunning blog headers, social media posts, and presentations with AI that understands layout and style.">
-    <meta name="keywords"
-        content="AI design generator, visual asset creator, blog header generator, social media design, presentation maker, artificial intelligence design, automated graphic design">
-    <meta name="author" content="LayoutCraft">
-    <meta name="robots" content="index, follow">
 
-    <!-- Open Graph / Facebook -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://layoutcraft.tech">
-    <meta property="og:title" content="LayoutCraft - AI Visual Asset Generator">
+    <meta property="og:title" content="LayoutCraft - AI Design Tool for Non-Designers">
     <meta property="og:description"
-        content="Turn prompts into production-ready designs with AI that understands layout and style.">
+        content="Stop generating AI art. Start creating designs. Professional layouts with readable text, every time.">
     <meta property="og:image" content="https://layoutcraft.tech/assets/images/og-image.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://layoutcraft.tech">
-    <meta property="twitter:title" content="LayoutCraft - AI Visual Asset Generator">
+    <meta property="twitter:title" content="LayoutCraft - AI Design Tool">
     <meta property="twitter:description"
-        content="Turn prompts into production-ready designs with AI that understands layout and style.">
+        content="The AI design tool built for non-designers who need professional, usable visuals.">
     <meta property="twitter:image" content="https://layoutcraft.tech/assets/images/og-image.png">
 
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest.json">
-    <link rel="shortcut icon" href="/favicon.ico">
-    
-    <!-- Preload & Fonts -->
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnected" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
-    
-    <script>
-        (function handleSupabaseRedirect() {
-            const isCallback = window.location.pathname === '/auth/callback';
-            const hash = window.location.hash;
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-            if (!isCallback || !hash) return;
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-            const params = new URLSearchParams(hash.substring(1));
-
-            // 🧨 If Supabase sent an error (e.g., expired link)
-            if (params.has('error')) {
-                const errorDesc = decodeURIComponent(params.get('error_description') || 'Login link is invalid or expired.');
-
-                // Save to localStorage or display via modal later
-                localStorage.setItem('sb-layoutcraft-auth-error', errorDesc);
-
-                // Redirect home with clean URL
-                window.history.replaceState({}, document.title, '/');
-                location.reload();
-                return;
-            }
-
-            // ✅ If valid session is present
-            const access_token = params.get('access_token');
-            const refresh_token = params.get('refresh_token');
-            const expires_at = parseInt(params.get('expires_at'), 10);
-            const token_type = params.get('token_type') || 'bearer';
-
-            if (access_token && refresh_token && expires_at) {
-                const session = {
-                    access_token,
-                    refresh_token,
-                    expires_at,
-                    token_type,
-                    user: null
-                };
-
-                localStorage.setItem('sb-layoutcraft-auth-token', JSON.stringify(session));
-                window.history.replaceState({}, document.title, '/');
-                location.reload();
-            }
-        })();
-    </script>
-    
-    
-    <!-- Styles & Scripts -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
-                    animation: {
-                        'float': 'float 20s ease-in-out infinite',
-                        'float-delayed': 'float-delayed 25s ease-in-out infinite',
-                        'spin-slow': 'spin 3s linear infinite',
-                        'pulse-subtle': 'pulse-subtle 2s ease-in-out infinite',
-                        'fade-in': 'fadeIn 0.6s ease-out',
-                        'scale-in': 'scaleIn 0.3s ease-out',
-                    },
-                    backdropBlur: {
-                        'xs': '2px',
-                    },
-                    keyframes: {
-                        fadeIn: {
-                            '0%': { opacity: '0', transform: 'translateY(10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' }
-                        },
-                        scaleIn: {
-                            '0%': { transform: 'scale(0.95)' },
-                            '100%': { transform: 'scale(1)' }
-                        }
-                    }
-                }
-            }
+    <!-- Critical CSS (inline for performance) -->
+    <style>
+        /* Critical inline styles for above-fold content */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
         }
-    </script>
-    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #1a202c;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff);
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 8vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+
+    <!-- Load remaining CSS -->
+    <link rel="stylesheet" href="/shared/css/base.css">
+    <link rel="stylesheet" href="/css/homepage.css">
+    <link rel="stylesheet" href="/shared/css/navigation.css">
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJ5GEKEX8H"></script>
@@ -131,900 +97,383 @@
         gtag('js', new Date());
         gtag('config', 'G-DJ5GEKEX8H');
     </script>
-    <link rel="stylesheet" href="css/styles.css">
 </head>
 
-<body class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 text-gray-800 antialiased font-sans"
-    x-data="layoutCraftApp" x-cloak>
+<body>
+    <!-- Navigation -->
+    <div id="main-navigation"></div>
 
-    <div x-show="showMvpBanner" x-transition class="mvp-banner">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
-            <p class="text-sm font-medium">
-                <span class="font-bold">Welcome!</span> This is an early MVP version of LayoutCraft. Your feedback is invaluable in helping us improve.
-            </p>
-            <button @click="dismissMvpBanner" class="close-banner-btn" aria-label="Dismiss banner">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
-        </div>
-    </div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-offer">
+                <p><strong>Limited Time Offer:</strong> All premium features, including Pro generations and unlimited
+                    editing, are now completely free for all users!</p>
+            </div>
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Stop Generating AI Art.<br>
+                    Start Creating Designs.
+                </h1>
+                <p class="hero-subtitle">
+                    Go from a simple text prompt to a structured layout in seconds. Then, use our in-place editor to
+                    refine every detail until it's pixel-perfect.
+                </p>
 
-    <!-- Background Animation -->
-    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10" aria-hidden="true">
-        <div
-            class="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-blue-400/10 to-purple-600/10 rounded-full blur-3xl animate-float">
-        </div>
-        <div
-            class="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-pink-400/10 to-indigo-600/10 rounded-full blur-3xl animate-float-delayed">
-        </div>
-    </div>
-
-    <!-- Header Navigation -->
-    <header class="sticky top-0 z-40 bg-white/70 backdrop-blur-lg border-b border-gray-200/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <!-- Logo -->
-                <div class="flex-shrink-0">
-                    <button @click="showSection('generator')"
-                        class="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-                        <div
-                            class="w-10 h-10 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                        </div>
-                        <span class="text-xl font-bold text-gray-800">LayoutCraft</span>
+                <div class="hero-action">
+                    <input type="text" id="hero-prompt" class="hero-input"
+                        placeholder="Try: Modern blog header for 'The Future of AI'..." maxlength="500">
+                    <button id="hero-generate" class="btn btn-primary">
+                        Generate Design →
                     </button>
                 </div>
 
-                <!-- Navigation Links -->
-                <nav class="hidden md:flex md:items-center md:space-x-8">
-                    <button @click="showSection('generator')"
-                        :class="activeSection === 'generator' ? 'text-indigo-600 font-semibold' : 'text-gray-500 hover:text-gray-800'"
-                        class="transition-colors">
-                        Generator
+                <div class="hero-examples">
+
+
+                    <span class="examples-label">Try These:</span>
+                    <button class="example-chip"
+                        data-prompt="A modern blog header for 'The Future of AI in Design'. Use clean typography with blue accents."
+                        data-template="blog_header" data-style="dark_neon_tech">
+                        Tech Blog Header
                     </button>
-                    <button @click="showSection('examples')"
-                        :class="activeSection === 'examples' ? 'text-indigo-600 font-semibold' : 'text-gray-500 hover:text-gray-800'"
-                        class="transition-colors">
-                        Examples
+                    <button class="example-chip"
+                        data-prompt="Vibrant orange and yellow gradient. Title in the center: 'ANNUAL SALE'. Add '70% OFF' directly below. Make the percentage huge and bold. Add a subtle sunburst effect behind the text."
+                        data-template="social_square" data-style="vibrant_gradient_energy">
+                        Sale Post
                     </button>
-                    <button @click="showSection('about')"
-                        :class="activeSection === 'about' ? 'text-indigo-600 font-semibold' : 'text-gray-500 hover:text-gray-800'"
-                        class="transition-colors">
-                        About
-                    </button>
-                    <button @click="showSection('faq')"
-                        :class="activeSection === 'faq' ? 'text-indigo-600 font-semibold' : 'text-gray-500 hover:text-gray-800'"
-                        class="transition-colors">
-                        FAQ
-                    </button>
-                    
-                    <!-- Auth Buttons (for non-logged-in users) -->
-                    <div x-show="!isLoggedIn" class="flex items-center space-x-3 ml-4">
-                        <button @click="openAuthModal('login')" 
-                                class="text-gray-600 hover:text-gray-800 font-medium transition-colors">
-                            Log In
-                        </button>
-                        <button @click="openAuthModal('signup')" 
-                                class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors font-medium">
-                            Sign Up
-                        </button>
+                    <!-- <button class="example-chip"
+                        data-prompt="Professional LinkedIn banner for software developer. Minimal design."
+                        data-template="blog_header"
+                        data-style="textured_organic_patterns">
+                        LinkedIn Banner
+                    </button> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-scroll">
+            <span>See it in action</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- Demo Section -->
+    <section class="demo">
+        <div class="container">
+            <div class="demo-wrapper">
+                <div class="demo-content">
+                    <h2 class="section-title">Watch the Magic Happen</h2>
+                    <p class="section-subtitle">
+                        From prompt to professional design in seconds. No more endless regenerations
+                        hoping for readable text.
+                    </p>
+                </div>
+
+                <div class="demo-showcase">
+                    <div class="demo-card">
+                        <div class="demo-step">1. Enter your prompt</div>
+                        <div class="demo-visual prompt-visual">
+                            "Vibrant orange and yellow gradient.
+                            Title in the center: 'ANNUAL SALE'.
+                            Add '70% OFF' directly below. Make the percentage huge and bold.
+                            Add a subtle sunburst effect behind the text."
+                        </div>
                     </div>
-                    
-                    <!-- User Profile (for logged-in users) -->
-                    <div x-show="isLoggedIn" class="relative ml-4" x-data="{ profileOpen: false }">
-                        <button @click="profileOpen = !profileOpen" 
-                                class="flex items-center space-x-2 text-gray-600 hover:text-gray-800 transition-colors">
-                            <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                                <span class="text-indigo-600 font-semibold text-sm" 
-                                      x-text="currentUser?.full_name?.charAt(0) || currentUser?.email?.charAt(0) || 'U'"></span>
-                            </div>
-                            <span class="font-medium" x-text="currentUser?.full_name || currentUser?.email"></span>
-                            <svg class="w-4 h-4 transition-transform" :class="profileOpen ? 'rotate-180' : ''" 
-                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                            </svg>
-                        </button>
-                        
-                        <!-- Dropdown Menu -->
-                        <div x-show="profileOpen" @click.away="profileOpen = false" x-transition
-                             class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
-                            <button @click="handleLogout(); profileOpen = false" 
-                                    class="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-50 transition-colors">
-                                Logout
+
+                    <div class="demo-arrow">→</div>
+
+                    <div class="demo-card">
+                        <div class="demo-step">2. AI creates structured design</div>
+                        <div class="demo-visual loading-visual">
+                            <div class="loading-spinner"></div>
+                        </div>
+                    </div>
+
+                    <div class="demo-arrow">→</div>
+
+                    <div class="demo-card">
+                        <div class="demo-step">3. Get pixel-perfect result</div>
+                        <div class="demo-visual result-visual">
+                            <img src="/assets/images/demo-result.png" alt="Professional blog header design"
+                                loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="social-proof">
+        <div class="container">
+            <h2 class="section-title quote-title">
+                "Designers hated it. Founders love it."
+            </h2>
+            <p class="section-subtitle">
+                What happens when you build for the people designers ignore?
+            </p>
+
+            <div class="testimonials-grid">
+                <div class="testimonial glass-card">
+                    <p class="testimonial-text">
+                        "This is exactly the kind of tool non-designers actually need.
+                        Finally someone who gets it."
+                    </p>
+                    <div class="testimonial-author">
+                        <span class="author-name">startup_founder92</span>
+                        <span class="author-source">r/SaaS</span>
+                    </div>
+                </div>
+
+                <div class="testimonial glass-card">
+                    <p class="testimonial-text">
+                        "Designers roasting your tool kind of proves it's doing something
+                        disruptive. Keep building!"
+                    </p>
+                    <div class="testimonial-author">
+                        <span class="author-name">indie_dev_life</span>
+                        <span class="author-source">r/indiehackers</span>
+                    </div>
+                </div>
+
+                <div class="testimonial glass-card">
+                    <p class="testimonial-text">
+                        "I've wasted hours on Midjourney trying to get text that doesn't
+                        look like hieroglyphics. This just works."
+                    </p>
+                    <div class="testimonial-author">
+                        <span class="author-name">marketing_maven</span>
+                        <span class="author-source">r/Entrepreneur</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Built Different. On Purpose.</h2>
+            <p class="section-subtitle">
+                We're not trying to create art. We're solving real design problems.
+            </p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                            <line x1="9" y1="9" x2="15" y2="9" />
+                            <line x1="9" y1="13" x2="15" y2="13" />
+                            <line x1="9" y1="17" x2="15" y2="17" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Clean Layouts</h3>
+                    <p class="feature-description">
+                        Structured designs that follow actual design principles.
+                        No more chaotic compositions.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M4 7V4a2 2 0 0 1 2-2h2M4 17v3a2 2 0 0 0 2 2h2M16 4h2a2 2 0 0 1 2 2v2M16 20h2a2 2 0 0 0 2-2v-2" />
+                            <path d="M7 11h10M12 7v10" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Perfect Text</h3>
+                    <p class="feature-description">
+                        Finally, AI that can spell. Get readable, properly formatted
+                        text every single time.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                        </svg>
+                    </div>
+                    <h3 class="feature-title">Lightning Fast</h3>
+                    <p class="feature-description">
+                        Get professional designs in 30-60 seconds. No more waiting
+                        5 minutes for chaos.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Add this after the features section -->
+    <!-- Examples Section -->
+    <section class="examples">
+        <div class="container">
+            <h2 class="section-title">See What's Possible</h2>
+            <p class="section-subtitle">
+                Real designs created with LayoutCraft in under 60 seconds
+            </p>
+
+            <div class="examples-grid">
+                <div class="example-card">
+                    <div class="example-image">
+                        <img src="/assets/images/example-tech-blog.png" alt="Tech blog header example" loading="lazy">
+                        <div class="example-overlay">
+                            <button class="example-try"
+                                data-prompt="A modern blog header for 'The Future of AI in Design'. Use clean typography with blue accents."
+                                data-template="blog_header" data-style="dark_neon_tech">
+                                Try This →
                             </button>
                         </div>
                     </div>
-                </nav>
+                    <h3 class="example-title">Tech Blog Header</h3>
+                    <p class="example-desc">Clean, professional headers with perfect typography</p>
+                </div>
 
-                <!-- Mobile Menu Button -->
-                <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16M4 18h16"></path>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Mobile Menu -->
-            <div x-show="mobileMenuOpen" x-transition class="md:hidden py-4 border-t border-gray-200/50">
-                <div class="flex flex-col space-y-2">
-                    <button @click="showSection('generator'); mobileMenuOpen = false"
-                        :class="activeSection === 'generator' ? 'text-indigo-600 font-semibold' : 'text-gray-500'"
-                        class="text-left py-2">Generator</button>
-                    <button @click="showSection('examples'); mobileMenuOpen = false"
-                        :class="activeSection === 'examples' ? 'text-indigo-600 font-semibold' : 'text-gray-500'"
-                        class="text-left py-2">Examples</button>
-                    <button @click="showSection('about'); mobileMenuOpen = false"
-                        :class="activeSection === 'about' ? 'text-indigo-600 font-semibold' : 'text-gray-500'"
-                        class="text-left py-2">About</button>
-                    <button @click="showSection('faq'); mobileMenuOpen = false"
-                        :class="activeSection === 'faq' ? 'text-indigo-600 font-semibold' : 'text-gray-500'"
-                        class="text-left py-2">FAQ</button>
-                        
-                    <!-- Mobile Auth Buttons -->
-                    <div x-show="!isLoggedIn" class="pt-2 border-t border-gray-200/50 space-y-2">
-                        <button @click="openAuthModal('login'); mobileMenuOpen = false" 
-                                class="block w-full text-left py-2 text-gray-600 font-medium">
-                            Log In
-                        </button>
-                        <button @click="openAuthModal('signup'); mobileMenuOpen = false" 
-                                class="block w-full text-left py-2 bg-indigo-600 text-white rounded-lg text-center font-medium">
-                            Sign Up
-                        </button>
-                    </div>
-                    
-                    <!-- Mobile User Profile -->
-                    <div x-show="isLoggedIn" class="pt-2 border-t border-gray-200/50">
-                        <div class="flex items-center space-x-2 py-2">
-                            <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
-                                <span class="text-indigo-600 font-semibold text-sm" 
-                                      x-text="currentUser?.full_name?.charAt(0) || currentUser?.email?.charAt(0) || 'U'"></span>
-                            </div>
-                            <span class="font-medium text-gray-700" x-text="currentUser?.full_name || currentUser?.email"></span>
+                <div class="example-card">
+                    <div class="example-image">
+                        <img src="/assets/images/example-summer-sale.png" alt="Summer sale post example" loading="lazy">
+                        <div class="example-overlay">
+                            <button class="example-try"
+                                data-prompt="Summer sale social media post. Text: '50% Off Everything'. Vibrant orange and yellow."
+                                data-template="social_square" data-style="vibrant_gradient_energy">
+                                Try This →
+                            </button>
                         </div>
-                        <button @click="handleLogout(); mobileMenuOpen = false" 
-                                class="block w-full text-left py-2 text-red-600 font-medium">
-                            Logout
-                        </button>
                     </div>
+                    <h3 class="example-title">Sale Announcement</h3>
+                    <p class="example-desc">Eye-catching promotional graphics that convert</p>
+                </div>
+
+                <div class="example-card">
+                    <div class="example-image">
+                        <img src="/assets/images/example-linkedin-banner.png" alt="LinkedIn banner example"
+                            loading="lazy">
+                        <div class="example-overlay">
+                            <button class="example-try"
+                                data-prompt="Professional LinkedIn banner for software developer name John Doe. Minimal design with code elements."
+                                data-template="blog_header" data-style="textured_organic_patterns">
+                                Try This →
+                            </button>
+                        </div>
+                    </div>
+                    <h3 class="example-title">LinkedIn Banner</h3>
+                    <p class="example-desc">Professional banners that make you stand out</p>
                 </div>
             </div>
+
+            <div class="examples-cta">
+                <a href="/app/" class="btn btn-primary">
+                    Create Your Own Design →
+                </a>
+            </div>
         </div>
-    </header>
-
-    <main class="relative p-4 md:p-8 pb-20 md:pb-8" x-show="isReady">
-
-        <!-- Hero Section -->
-        <section x-show="activeSection === 'generator'" x-transition class="text-center mb-8 md:mb-16">
-            <div class="max-w-4xl mx-auto">
-                <h1
-                    class="text-3xl md:text-6xl font-extrabold mb-4 md:mb-6 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent !leading-snug">
-                    Stop Generating AI Art. Start Creating Designs.
-                </h1>
-                <p class="text-base md:text-xl text-gray-600 mb-6 md:mb-8 max-w-2xl mx-auto ">
-                    Tired of chaotic AI images with messy layouts and unreadable text? LayoutCraft creates structured,
-                    pixel-perfect visuals ready for your blog, social media, and marketing.
+    </section>
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content">
+                <h2 class="cta-title">
+                    Ready to Create Professional Designs?
+                </h2>
+                <p class="cta-subtitle">
+                    Join hundreds of founders and marketers who've ditched the chaos.
+                </p>
+                <a href="/app/" class="btn btn-primary btn-large">
+                    Start Creating - It's Free →
+                </a>
+                <p class="cta-note">
+                    No credit card required. Everything is free for now.
                 </p>
             </div>
-        </section>
-
-        <!-- Generator Section -->
-        <section x-show="activeSection === 'generator'" x-transition>
-            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-12">
-                <!-- Left Panel: Controls -->
-                <div class="glass-card p-4 md:p-6 lg:p-8 space-y-4 md:space-y-6 transition-all duration-300">
-
-                    <!-- Step 1: Prompt -->
-                    <div>
-                        <label for="prompt" class="block text-lg font-semibold mb-3 text-gray-700">
-                            1. Describe Your Vision
-                        </label>
-                        <div class="relative w-full">
-                            <textarea id="prompt" x-model="prompt" @input="saveDraft" rows="4" maxlength="500"
-                                class="w-full p-4 pb-10 rounded-xl border-2 border-white/30 bg-white/80 backdrop-blur-sm focus:border-indigo-400 focus:bg-white/90 focus:ring-4 focus:ring-indigo-100 transition-all duration-300 resize-none text-gray-700"
-                                placeholder="e.g., A modern blog header for 'The Future of AI in Design'. Use clean typography with blue accents and subtle geometric patterns."
-                                :disabled="isGenerating"></textarea>
-
-                            <span class="absolute bottom-3 right-4 text-xs text-gray-400 pointer-events-none"
-                                :class="{ 'text-red-500 font-medium': prompt.length > 500 }"
-                                x-text="`${prompt.length}/500`">
-                            </span>
-                        </div>
-
-                        <div class="mt-2 text-right h-4">
-                            <div x-show="retryMessage"
-                                class="retry-suggestion inline-block text-xs text-orange-600 font-medium"
-                                x-text="retryMessage"></div>
-                        </div>
-                        <div class="mt-4 flex items-center gap-3">
-                            <span class="text-sm text-gray-600 font-medium flex-shrink-0">Try:</span>
-
-                            <div
-                                class="flex-1 flex items-center gap-2 overflow-x-auto whitespace-nowrap py-1 scrollbar-hide">
-                                <template x-for="quickPrompt in quickPrompts.slice(0, 3)" :key="quickPrompt.id">
-                                    <button @click="useQuickPrompt(quickPrompt)"
-                                        class="prompt-suggestion-btn flex-shrink-0 active:scale-95 transition-transform" :disabled="isGenerating">
-                                        <span x-text="quickPrompt.title"></span>
-                                    </button>
-                                </template>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 2: Size Selection -->
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-3">2. Choose Output Size</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-                            <template x-for="preset in sizePresets" :key="preset.key">
-                                <button @click="selectedSize = preset.key"
-                                    :class="selectedSize === preset.key ? 'bg-blue-100 border-blue-400 text-blue-700 scale-95' : 'bg-white/60 border-white/30 text-gray-600 hover:bg-white/80'"
-                                    class="p-2 rounded-lg text-xs font-medium border-2 transition-all duration-200 hover:scale-105 active:scale-95 text-left"
-                                    :disabled="isGenerating">
-                                    <div class="font-semibold text-xs mb-1" x-text="preset.display_name"></div>
-                                    <div class="text-xs opacity-75" x-text="preset.aspect_ratio"></div>
-                                </button>
-                            </template>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: Style Selection -->
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-3">3. Choose a Style</h3>
-                        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2 md:gap-3">
-                            <button @click="selectedTheme = 'auto'"
-                                :class="selectedTheme === 'auto' ? 'bg-indigo-100 border-indigo-400 text-indigo-700 scale-95' : 'bg-white/60 border-white/30 text-gray-600 hover:bg-white/80'"
-                                class="p-2 md:p-3 rounded-lg text-xs md:text-sm font-medium border-2 transition-all duration-200 hover:scale-105 active:scale-95"
-                                :disabled="isGenerating">
-                                ✨ Auto
-                            </button>
-                            <template x-for="theme in themes" :key="theme.id">
-                                <button @click="selectedTheme = theme.id"
-                                    :class="selectedTheme === theme.id ? 'bg-indigo-100 border-indigo-400 text-indigo-700 scale-95' : 'bg-white/60 border-white/30 text-gray-600 hover:bg-white/80'"
-                                    class="p-2 md:p-3 rounded-lg text-xs md:text-sm font-medium border-2 transition-all duration-200 hover:scale-105 active:scale-95 capitalize"
-                                    :disabled="isGenerating" x-text="theme.name.replace(/_/g, ' ')">
-                                </button>
-                            </template>
-                        </div>
-                    </div>
-
-                    <!-- Step 4: Quality Selection -->
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-700 mb-3">4. Select Quality</h3>
-                        <div class="grid grid-cols-2 gap-3">
-                            <button @click="selectedEngine = 'fast'"
-                                :class="selectedEngine === 'fast' ? 'bg-emerald-100 border-emerald-400 text-emerald-700 scale-95' : 'bg-white/60 border-white/30 text-gray-600 hover:bg-white/80'"
-                                class="p-3 md:p-4 rounded-lg text-sm font-medium border-2 transition-all duration-200 hover:scale-105 active:scale-95"
-                                :disabled="isGenerating">
-                                <div class="text-base">⚡ Fast</div>
-                                <div class="text-xs opacity-75">Quick results (~30s)</div>
-                            </button>
-                            <button @click="canUseProModel() ? selectedEngine = 'pro' : openAuthModal('signup')"
-                                :class="selectedEngine === 'pro' ? 'bg-purple-100 border-purple-400 text-purple-700 scale-95' : 'bg-white/60 border-white/30 text-gray-600 hover:bg-white/80'"
-                                class="p-3 md:p-4 rounded-lg text-sm font-medium border-2 transition-all duration-200 hover:scale-105 active:scale-95 relative"
-                                :disabled="isGenerating">
-                                <div class="text-base">💎 Pro</div>
-                                <div class="text-xs opacity-75">High quality (~60s)</div>
-                                <div x-show="!canUseProModel()" 
-                                     class="absolute inset-0 bg-gray-100/80 rounded-lg flex items-center justify-center">
-                                    <span class="text-xs font-medium text-gray-600">Sign up required</span>
-                                </div>
-                            </button>
-                        </div>
-                        <!-- Pro Model Status -->
-                        <div x-show="!isLoggedIn" class="mt-2 text-center">
-                            <span class="text-xs" 
-                                  :class="canUseProModel() ? 'text-green-600' : 'text-orange-600'"
-                                  x-text="getProModelMessage()"></span>
-                        </div>
-                    </div>
-
-                    <!-- Generate Button - Desktop Only -->
-                    <div class="pt-4 hidden md:block">
-                        <button @click="generateImage"
-                            :disabled="isGenerating || !prompt.trim() || prompt.length < 10 || prompt.length > 500"
-                            class="w-full flex items-center justify-center space-x-3 py-4 px-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:animate-pulse-subtle">
-                            <span x-show="!isGenerating" class="text-lg">Generate Design</span>
-                            <span x-show="isGenerating" class="text-lg loading-dots" x-text="loadingMessage"></span>
-                            <svg x-show="!isGenerating" class="w-6 h-6" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                            </svg>
-                            <div x-show="isGenerating"
-                                class="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin">
-                            </div>
-                        </button>
-                        <div x-show="prompt.length > 0 && (prompt.length < 10 || prompt.length > 500)"
-                            class="text-red-500 text-sm mt-2">
-                            <span x-show="prompt.length < 10">Please provide a more detailed description (at least 10
-                                characters)</span>
-                            <span x-show="prompt.length > 500">Please shorten your prompt (maximum 500
-                                characters)</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Panel: Result -->
-                <div x-ref="resultPanel" class="glass-card p-4 md:p-6 min-h-[400px] md:min-h-[500px] flex flex-col transition-all duration-300">
-                    <!-- Empty State -->
-                    <div x-show="!isGenerating && !generatedImage"
-                        class="flex-1 flex flex-col items-center justify-center text-center">
-                        <div class="empty-state-container relative rounded-lg border-2 border-dashed border-gray-300 bg-gray-50/50 flex flex-col items-center justify-center space-y-4 p-6"
-                             :style="`width: ${getEmptyStateStyle().width}; height: ${getEmptyStateStyle().height}; min-height: 200px;`">
-                            <div
-                                class="w-12 md:w-16 h-12 md:h-16 bg-gradient-to-br from-indigo-100 to-purple-100 rounded-2xl flex items-center justify-center">
-                                <svg class="w-6 md:w-8 h-6 md:h-8 text-indigo-400" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                                    </path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h4 class="text-base md:text-lg font-semibold text-gray-700 mb-2">Your design will appear here</h4>
-                                <p class="text-xs md:text-sm text-gray-500 mb-4">Preview will match the selected dimensions</p>
-                                <button @click="useExamplePrompt()"
-                                    class="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transform hover:scale-105 active:scale-95 transition-all duration-200 text-sm">
-                                    ✨ Try an Example
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Loading State -->
-                    <div x-show="isGenerating"
-                        class="flex-1 flex flex-col items-center justify-center text-center">
-                        <div class="loading-state-container relative rounded-lg border-2 border-indigo-200 bg-indigo-50/50 flex flex-col items-center justify-center space-y-4 p-6"
-                             :style="`width: ${getPreviewStyle().width}; height: ${getPreviewStyle().height}; min-height: 200px;`">
-                            <div class="relative">
-                                <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin">
-                                </div>
-                                <!-- Progress Ring -->
-                                <div class="absolute inset-0 flex items-center justify-center">
-                                    <div class="w-8 h-8 border-2 border-purple-300 border-t-purple-600 rounded-full animate-spin"
-                                         style="animation-duration: 1.5s; animation-direction: reverse;"></div>
-                                </div>
-                            </div>
-                            <div>
-                                <h4 class="text-base md:text-lg font-semibold text-gray-700 loading-dots" x-text="loadingMessage"></h4>
-                                <p class="text-xs md:text-sm text-gray-500 mt-2"
-                                    x-text="selectedEngine === 'pro' ? 'This can take up to 60 seconds for Pro quality.' : 'Fast generation in progress...'">
-                                </p>
-                                <!-- Progress indicator -->
-                                <div class="mt-4 w-32 bg-gray-200 rounded-full h-2 mx-auto">
-                                    <div class="bg-gradient-to-r from-indigo-500 to-purple-600 h-2 rounded-full animate-pulse"
-                                         :style="`width: ${Math.min(generationProgress, 100)}%`"></div>
-                                </div>
-                                <div class="text-xs text-gray-400 mt-1" x-text="`${Math.round(generationProgress)}% complete`"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Generated Image -->
-                    <div x-show="generatedImage" class="flex-1 flex flex-col animate-fade-in">
-                        <div class="flex-1 flex items-center justify-center mb-4">
-                            <div class="preview-container relative rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] animate-fade-in bg-white/10"
-                                 :style="`width: ${getPreviewStyle().width}; height: ${getPreviewStyle().height};`">
-                                <img :src="generatedImage" alt="AI generated design"
-                                    class="w-full h-full"
-                                    @load="imageLoaded = true" @error="imageError = true">
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="flex gap-3">
-                            <a :href="generatedImage" :download="filename" @click="downloadImage"
-                                class="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 active:scale-95 transition-all duration-200">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                                </svg>
-                                Download
-                            </a>
-                            <button @click="regenerateImage" :disabled="isGenerating"
-                                class="p-3 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-lg hover:bg-white hover:shadow-md active:scale-95 transition-all duration-200 disabled:opacity-50"
-                                title="Generate variation">
-                                <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
-                                    </path>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <!-- Sign Up CTA (for non-logged-in users) -->
-                        <div x-show="!isLoggedIn" x-transition
-                            class="mt-4 p-4 border-t border-gray-200/50 text-center">
-                            <h4 class="font-semibold text-gray-700 mb-2">Love the results?</h4>
-                            <p class="text-sm text-gray-500 mb-3">Sign up for unlimited Pro generations and more features.</p>
-                            <button @click="openAuthModal('signup')"
-                                class="bg-indigo-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-indigo-700 active:scale-95 transition-all duration-200">
-                                Sign Up for More Features
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Examples Section -->
-        <section x-show="activeSection === 'examples'" x-transition class="max-w-6xl mx-auto">
-            <div class="glass-card p-6 md:p-8 lg:p-12">
-                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-4">Examples & Inspiration</h2>
-                <p class="text-center text-gray-600 mb-8 md:mb-12 text-base md:text-lg">See what's possible with LayoutCraft. Each design was
-                    generated from a simple text prompt.</p>
-
-                <!-- Example Gallery -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12">
-                    <template x-for="example in examples" :key="example.id">
-                        <div
-                            class="bg-white/50 rounded-xl p-4 md:p-6 border border-white/30 hover:bg-white/70 transition-all duration-300 hover:scale-105 active:scale-95">
-                            <div
-                                class="aspect-video bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
-                                <img :src="example.imagePath" :alt="example.title + ' example'"
-                                    class="w-full h-full object-cover" loading="lazy"
-                                    onerror="this.parentElement.innerHTML='<span class=\'text-gray-500 text-sm\'>Example Image</span>'">
-                            </div>
-                            <h3 class="font-semibold text-gray-800 mb-2" x-text="example.title"></h3>
-                            <p class="text-sm text-gray-600 mb-3" x-text="example.description"></p>
-                            <button @click="useExample(example)"
-                                class="text-indigo-600 text-sm font-medium hover:text-indigo-700 active:scale-95 transition-all duration-200">
-                                Use This Prompt →
-                            </button>
-                        </div>
-                    </template>
-                </div>
-
-                <!-- Prompting Guide -->
-                <div class="border-t border-gray-200/50 pt-6 md:pt-8">
-                    <h3 class="text-xl md:text-2xl font-bold text-center mb-4 md:mb-6">Tips for Better Results</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                        <div class="space-y-3 md:space-y-4">
-                            <div class="flex items-start gap-3">
-                                <div
-                                    class="w-7 h-7 md:w-8 md:h-8 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <span class="text-indigo-600 font-bold text-sm">1</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-800">Be Specific</h4>
-                                    <p class="text-gray-600 text-sm">Instead of "cool header," try "Modern tech company
-                                        header with dark blue background and glowing geometric lines."</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <div
-                                    class="w-7 h-7 md:w-8 md:h-8 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <span class="text-indigo-600 font-bold text-sm">2</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-800">Include Text Content</h4>
-                                    <p class="text-gray-600 text-sm">Specify any text you want: "Header with the text
-                                        'Summer Sale - 50% Off' in bold white letters."</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="space-y-3 md:space-y-4">
-                            <div class="flex items-start gap-3">
-                                <div
-                                    class="w-7 h-7 md:w-8 md:h-8 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <span class="text-indigo-600 font-bold text-sm">3</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-800">Define the Mood</h4>
-                                    <p class="text-gray-600 text-sm">Use descriptive words like "minimalist," "vibrant,"
-                                        "corporate," "playful," or "elegant."</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <div
-                                    class="w-7 h-7 md:w-8 md:h-8 bg-indigo-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <span class="text-indigo-600 font-bold text-sm">4</span>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-gray-800">Mention Colors</h4>
-                                    <p class="text-gray-600 text-sm">Guide the palette: "Use warm earth tones" or
-                                        "bright green and gold accents."</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="mt-6 md:mt-8 p-4 bg-gray-50 rounded-lg border">
-                    <p class="text-sm text-gray-600"><strong>Disclaimer:</strong> Examples shown are for demonstration
-                        purposes. Actual
-                        results may vary based on your specific prompts and selected options. Always review generated
-                        content before
-                        use.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section x-show="activeSection === 'about'" x-transition class="max-w-4xl mx-auto">
-            <div class="glass-card p-6 md:p-8 lg:p-12">
-                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 md:mb-8">A Designer's Superpower, Not a Replacement
-                </h2>
-                <div class="prose prose-lg max-w-none text-gray-700 space-y-4 md:space-y-6">
-                    <p class="text-lg md:text-xl leading-relaxed">In a world flooded with AI image generators that produce
-                        beautiful but
-                        often chaotic and unusable "art," LayoutCraft was built on a different philosophy. We believe
-                        the future
-                        of AI in design isn't about replacing human creativity, but augmenting it.</p>
-
-                    <div class="bg-indigo-50 p-4 md:p-6 rounded-xl border border-indigo-100">
-                        <h3 class="text-lg md:text-xl font-semibold text-indigo-800 mb-3">Built for Real-World Design</h3>
-                        <p class="text-indigo-700">LayoutCraft doesn't just generate pretty pictures—it creates
-                            production-ready visuals
-                            that follow professional design principles. Our AI understands the difference between
-                            artistic expression and
-                            functional design.</p>
-                    </div>
-
-                    <p>This means cleaner layouts, readable typography, and consistent branding—every time. No more
-                        rolling the dice with generic AI art generators.</p>
-
-                    <h3 class="text-xl md:text-2xl font-semibold mt-6 md:mt-8 mb-4">We Solve Real Problems:</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-                        <div class="bg-white/50 p-4 md:p-6 rounded-xl border border-white/30">
-                            <h4 class="font-semibold text-gray-800 mb-2">The "Messy Output" Problem</h4>
-                            <p class="text-gray-600 text-sm">No more fighting with AI to get legible text or balanced
-                                layouts.
-                            </p>
-                        </div>
-                        <div class="bg-white/50 p-4 md:p-6 rounded-xl border border-white/30">
-                            <h4 class="font-semibold text-gray-800 mb-2">The "Endless Rerolling" Problem</h4>
-                            <p class="text-gray-600 text-sm">Get closer to your desired output on the first try with
-                                structural
-                                rules.</p>
-                        </div>
-                        <div class="bg-white/50 p-4 md:p-6 rounded-xl border border-white/30">
-                            <h4 class="font-semibold text-gray-800 mb-2">The "Generic Stock Photo" Problem</h4>
-                            <p class="text-gray-600 text-sm">Get custom designs that match your specific content and
-                                brand, not recycled
-                                templates everyone else is using.</p>
-                        </div>
-                        <div class="bg-white/50 p-4 md:p-6 rounded-xl border border-white/30">
-                            <h4 class="font-semibold text-gray-800 mb-2">The "Brand Consistency" Problem</h4>
-                            <p class="text-gray-600 text-sm">Structured generation means predictable, professional
-                                results that
-                                follow design principles.</p>
-                        </div>
-                    </div>
-
-                    <p class="text-base md:text-lg">LayoutCraft is for developers who need a quick blog header, marketers who need
-                        social media posts
-                        that follow brand guidelines, and designers who want a powerful assistant to accelerate their
-                        workflow. It's about
-                        moving from chaotic AI art to structured, production-ready AI design.</p>
-
-                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200 mt-4 md:mt-6">
-                        <p class="text-sm text-yellow-800"><strong>MVP Notice:</strong> LayoutCraft is currently in MVP
-                            (Minimum Viable
-                            Product) stage. While we strive for high-quality results, please review all generated
-                            designs before using them
-                            in production. We're continuously improving based on user feedback.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- FAQ Section -->
-        <section x-show="activeSection === 'faq'" x-transition class="max-w-4xl mx-auto">
-            <div class="glass-card p-6 md:p-8 lg:p-12">
-                <h2 class="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-6 md:mb-8">Frequently Asked Questions</h2>
-                <div class="space-y-3 md:space-y-4">
-                    <template x-for="faq in faqs" :key="faq.id">
-                        <details
-                            class="group bg-white/50 border border-white/30 rounded-xl p-4 md:p-6 hover:bg-white/70 transition-all duration-200">
-                            <summary
-                                class="font-semibold text-gray-800 cursor-pointer list-none flex items-center justify-between">
-                                <span x-text="faq.question" class="text-sm md:text-base"></span>
-                                <svg class="w-5 h-5 text-gray-500 transform group-open:rotate-180 transition-transform duration-200 flex-shrink-0 ml-2"
-                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 9l-7 7-7-7">
-                                    </path>
-                                </svg>
-                            </summary>
-                            <div class="mt-3 md:mt-4 text-gray-600 space-y-2 md:space-y-3 text-sm md:text-base" x-html="faq.answer"></div>
-                        </details>
-                    </template>
-                </div>
-            </div>
-        </section>
-
-        <!-- Coming Soon & Feedback Section -->
-        <section class="max-w-4xl mx-auto mt-12 md:mt-16 lg:mt-24">
-            <div class="glass-card p-6 md:p-8 lg:p-12">
-                <div class="text-center mb-6 md:mb-8">
-                    <h3 class="text-xl md:text-2xl lg:text-3xl font-bold mb-4">Coming Soon: Even More Features</h3>
-                    <p class="text-gray-600 text-base md:text-lg">We're working on exciting new capabilities to make LayoutCraft the
-                        ultimate AI design companion for professionals.</p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8 md:mb-12">
-                    <div class="text-center p-4 md:p-6 bg-white/30 rounded-xl border border-white/20">
-                        <div
-                            class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg mx-auto mb-3 md:mb-4 flex items-center justify-center">
-                            <svg class="w-5 h-5 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
-                                </path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                        </div>
-                        <h4 class="font-semibold text-gray-800 mb-2 text-sm md:text-base">Custom Brand Kits</h4>
-                        <p class="text-xs md:text-sm text-gray-600">Define your brand colors, fonts, and style guidelines for
-                            consistent designs.</p>
-                    </div>
-
-                    <div class="text-center p-4 md:p-6 bg-white/30 rounded-xl border border-white/20">
-                        <div
-                            class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-green-400 to-green-600 rounded-lg mx-auto mb-3 md:mb-4 flex items-center justify-center">
-                            <svg class="w-5 h-5 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z">
-                                </path>
-                            </svg>
-                        </div>
-                        <h4 class="font-semibold text-gray-800 mb-2 text-sm md:text-base">Multiple Formats</h4>
-                        <p class="text-xs md:text-sm text-gray-600">Generate designs in various sizes for different platforms and
-                            use cases.</p>
-                    </div>
-
-                    <div class="text-center p-4 md:p-6 bg-white/30 rounded-xl border border-white/20">
-                        <div
-                            class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-purple-400 to-purple-600 rounded-lg mx-auto mb-3 md:mb-4 flex items-center justify-center">
-                            <svg class="w-5 h-5 md:w-6 md:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z">
-                                </path>
-                            </svg>
-                        </div>
-                        <h4 class="font-semibold text-gray-800 mb-2 text-sm md:text-base">Iterative Editing</h4>
-                        <p class="text-xs md:text-sm text-gray-600">Don't like something? Easily make adjustments using follow-up
-                            prompts.</p>
-                    </div>
-                </div>
-
-                <!-- Feedback Form -->
-                <div class="border-t border-gray-200/50 pt-6 md:pt-8">
-                    <div x-show="!feedbackSubmitted">
-                        <h4 class="text-lg md:text-xl font-semibold text-center mb-4">Help Shape LayoutCraft's Future</h4>
-                        <p class="text-center text-gray-600 mb-4 md:mb-6 text-sm md:text-base">Your feedback helps us build exactly what you need.
-                            Share your thoughts!</p>
-                        <form @submit.prevent="submitStandaloneFeedback" class="max-w-2xl mx-auto space-y-4">
-                            <div>
-                                <input type="email" x-model="standaloneEmail" placeholder="Your email address" required
-                                    class="w-full p-3 md:p-4 rounded-lg border border-gray-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all duration-200"
-                                    :disabled="isSubmittingStandaloneFeedback">
-                            </div>
-                            <div>
-                                <textarea x-model="standaloneFeedbackMessage"
-                                    placeholder="What features would you like to see? Any issues or suggestions?"
-                                    required rows="4"
-                                    class="w-full p-3 md:p-4 rounded-lg border border-gray-300 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-100 transition-all duration-200 resize-none"
-                                    :disabled="isSubmittingStandaloneFeedback"></textarea>
-                            </div>
-                            <button type="submit"
-                                :disabled="isSubmittingStandaloneFeedback || !standaloneEmail.trim() || !standaloneFeedbackMessage.trim()"
-                                class="w-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold py-3 md:py-4 px-6 rounded-lg hover:shadow-lg transform hover:scale-105 active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-                                <span x-show="!isSubmittingStandaloneFeedback">Send Feedback</span>
-                                <span x-show="isSubmittingStandaloneFeedback">Sending...</span>
-                            </button>
-                        </form>
-                    </div>
-
-                    <div x-show="feedbackSubmitted" x-transition class="text-center">
-                        <div
-                            class="w-12 h-12 md:w-16 md:h-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <svg class="w-6 h-6 md:w-8 md:h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7"></path>
-                            </svg>
-                        </div>
-                        <h4 class="text-lg md:text-xl font-semibold text-gray-800 mb-2">Thank You!</h4>
-                        <p class="text-gray-600 text-sm md:text-base">Your feedback has been received. We'll use it to make LayoutCraft even
-                            better!</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Sticky Generate Button - Mobile Only -->
-    <div class="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white/90 backdrop-blur-lg border-t border-gray-200/80 p-4"
-         x-show="activeSection === 'generator'">
-        <button @click="generateImage"
-            :disabled="isGenerating || !prompt.trim() || prompt.length < 10 || prompt.length > 500"
-            class="w-full flex items-center justify-center space-x-3 py-4 px-6 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-semibold rounded-xl shadow-lg active:scale-95 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none">
-            <span x-show="!isGenerating" class="text-lg">Generate Design</span>
-            <span x-show="isGenerating" class="text-lg loading-dots" x-text="loadingMessage"></span>
-            <svg x-show="!isGenerating" class="w-6 h-6" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-            </svg>
-            <div x-show="isGenerating"
-                class="w-6 h-6 border-2 border-white/30 border-t-white rounded-full animate-spin">
-            </div>
-        </button>
-        <div x-show="prompt.length > 0 && (prompt.length < 10 || prompt.length > 500)"
-            class="text-red-500 text-sm mt-2 text-center">
-            <span x-show="prompt.length < 10">Please provide a more detailed description (at least 10 characters)</span>
-            <span x-show="prompt.length > 500">Please shorten your prompt (maximum 500 characters)</span>
         </div>
-    </div>
-
-    <!-- Loading Spinner (Initial) -->
-    <div x-show="!isReady" class="fixed inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-50">
-        <div class="text-center">
-            <div class="w-12 h-12 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin mb-4"></div>
-            <p class="text-gray-600">Loading LayoutCraft...</p>
-        </div>
-    </div>
-
-    <!-- Error Modal -->
-    <div x-show="errorMessage" x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
-        @click.self="errorMessage = null">
-        <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md mx-4 transform transition-all duration-300"
-            x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-90"
-            x-transition:enter-end="opacity-100 scale-100">
-            <div class="flex items-center gap-3 mb-4">
-                <div class="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
-                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                </div>
-                <h3 class="text-xl font-bold text-gray-800">Generation Failed</h3>
-            </div>
-            <p class="text-gray-600 mb-6" x-text="errorMessage"></p>
-            <div class="flex justify-end gap-3">
-                <button @click="errorMessage = null"
-                    class="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors">
-                    Close
-                </button>
-                <button @click="errorMessage = null; generateImage()"
-                    class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
-                    Try Again
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Success Toast -->
-    <div x-show="showSuccessToast" x-transition:enter="transition ease-out duration-300 transform"
-        x-transition:enter-start="translate-y-full opacity-0" x-transition:enter-end="translate-y-0 opacity-100"
-        x-transition:leave="transition ease-in duration-200 transform"
-        x-transition:leave-start="translate-y-0 opacity-100" x-transition:leave-end="translate-y-full opacity-0"
-        class="fixed bottom-6 right-6 bg-gradient-to-r from-emerald-500 to-teal-600 text-white px-6 py-4 rounded-xl shadow-lg z-[60]">
-        <div class="flex items-center gap-3">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-            </svg>
-            <span class="font-medium" x-text="successMessage"></span>
-        </div>
-    </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="bg-white/30 border-t border-gray-200/50 mt-12 md:mt-16 lg:mt-24">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
-            <div class="text-center space-y-3 md:space-y-4">
-                <div class="flex justify-center space-x-4 md:space-x-6 text-sm text-gray-600">
-                    <button
-                        onclick="alert('Terms: All generated designs are provided as-is. Users are responsible for reviewing content before use. Commercial use permitted.')"
-                        class="hover:text-gray-800">Terms of Use</button>
-                    <button
-                        onclick="alert('Privacy: We don\'t permanently store your prompts or images. Standard web analytics are collected to improve our service.')"
-                        class="hover:text-gray-800">Privacy Policy</button>
+    <!-- Standard Footer - Use this on all pages -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#6366f1;"></stop>
+                                        <stop offset="100%" style="stop-color:#8b5cf6;"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <rect width="48" height="48" rx="8" fill="url(#brandGradient)"></rect>
+                                <path
+                                    d="M12 12V28C12 32.4183 15.5817 36 20 36H36V20C36 15.5817 32.4183 12 28 12H20C20 12 20 20 20 20H28C28 20 28 28 28 28"
+                                    stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+                                </path>
+                                <circle cx="24" cy="24" r="2.5" fill="white" opacity="0.9"></circle>
+                            </svg>
+                        </div>
+                        <span class="logo-text">LayoutCraft</span>
+                    </div>
+                    <p class="footer-tagline">
+                        AI design tool for the rest of us.
+                    </p>
                 </div>
-                <p class="text-sm text-gray-500">&copy; 2025 LayoutCraft. All rights reserved.</p>
-                <p class="text-xs text-gray-400">Turning AI art into production-ready designs. MVP Version.</p>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="/app/">Create Design</a>
+                        <a href="/blog/">Blog</a>
+                        <a href="/about/">About</a>
+                        <a href="/faq/">FAQ</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="/blog/posts/writing-better-prompts/">Prompt Guide</a>
+                        <a href="/app/">Templates</a>
+                        <a href="/faq/">Help</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="/legal/terms.html">Terms</a>
+                        <a href="/legal/privacy.html">Privacy</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Authentication Modal -->
-    <div x-show="isAuthModalOpen" x-transition:enter="transition ease-out duration-300"
-        x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-        x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100"
-        x-transition:leave-end="opacity-0"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
-        @keydown.escape.window="closeAuthModal()" style="display: none;">
+    <!-- Homepage JavaScript -->
+    <!-- <script src="/shared/js/navigation.js"></script> -->
+    <script type="module" src="/shared/js/authService.js"></script>
+    <script type="module" src="/shared/js/navigation.js"></script>
+    <script type="module">
+        // Import the classes from your scripts
+        import { layoutCraftNav } from '/shared/js/navigation.js';
+        import { authService } from '/shared/js/authService.js';
 
-        <div class="relative bg-white w-full max-w-md p-6 md:p-8 rounded-xl shadow-2xl" @click.away="closeAuthModal()"
-            x-show="isAuthModalOpen" x-transition:enter="transition ease-out duration-300"
-            x-transition:enter-start="opacity-0 transform scale-95"
-            x-transition:enter-end="opacity-100 transform scale-100"
-            x-transition:leave="transition ease-in duration-200"
-            x-transition:leave-start="opacity-100 transform scale-100"
-            x-transition:leave-end="opacity-0 transform scale-95">
+        // Wait for the DOM to be fully loaded before running
+        document.addEventListener('DOMContentLoaded', () => {
+            // The navigation class is now correctly given the auth service it needs.
+            window.layoutCraftNav = layoutCraftNav;
+        });
+    </script>
+    <script src="/js/homepage.js" defer></script>
 
-            <!-- Close Button -->
-            <button @click="closeAuthModal()"
-                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
-                    </path>
-                </svg>
-            </button>
-
-            <!-- Modal Header -->
-            <h2 class="text-xl md:text-2xl font-bold text-center text-gray-800 mb-2"
-                x-text="authMode === 'login' ? 'Welcome Back' : 'Create an Account'"></h2>
-            <p class="text-center text-gray-500 mb-4 md:mb-6 text-sm md:text-base"
-                x-text="authMode === 'login' ? 'Log in to continue your work.' : 'Unlock all features by signing up.'">
-            </p>
-
-            <!-- Form -->
-            <form @submit.prevent="authMode === 'login' ? handleLogin() : handleSignup()">
-                <div class="space-y-4">
-                    <!-- Full Name (only for signup) -->
-                    <div x-show="authMode === 'signup'" x-transition>
-                        <label for="full_name" class="text-sm font-medium text-gray-700">Full Name</label>
-                        <input type="text" id="full_name" name="full_name" x-model="authForm.full_name"
-                            placeholder="John Doe"
-                            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                    <!-- Email -->
-                    <div>
-                        <label for="email" class="text-sm font-medium text-gray-700">Email</label>
-                        <input type="email" id="email" name="email" x-model="authForm.email" required
-                            placeholder="you@example.com"
-                            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                    <!-- Password -->
-                    <div>
-                        <label for="password" class="text-sm font-medium text-gray-700">Password</label>
-                        <input type="password" id="password" name="password" x-model="authForm.password" required
-                            minlength="6" placeholder="••••••••"
-                            class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                    </div>
-                </div>
-
-                <!-- Error Message -->
-                <div x-show="authForm.errorMessage" class="mt-4 text-sm text-center text-red-600"
-                    x-text="authForm.errorMessage"></div>
-
-                <!-- Submit Button -->
-                <div class="mt-6">
-                    <button type="submit" :disabled="authForm.isLoading"
-                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:bg-indigo-400 disabled:cursor-not-allowed">
-                        <span x-show="!authForm.isLoading"
-                            x-text="authMode === 'login' ? 'Log In' : 'Create Account'"></span>
-                        <span x-show="authForm.isLoading">Processing...</span>
-                    </button>
-                </div>
-            </form>
-
-            <!-- Mode Toggle -->
-            <div class="mt-6 text-center">
-                <p class="text-sm text-gray-600">
-                    <span x-text="authMode === 'login' ? 'Don\'t have an account?' : 'Already have an account?'"></span>
-                    <button @click="toggleAuthMode()" class="font-medium text-indigo-600 hover:text-indigo-500">
-                        <span x-text="authMode === 'login' ? 'Sign Up' : 'Log In'"></span>
-                    </button>
-                </p>
-            </div>
-        </div>
-    </div>
-    
-    <!-- JavaScript -->
-    <script src="js/authService.js"></script>
-    <script src="js/scripts.js"></script>
-    
 </body>
 
 </html>
