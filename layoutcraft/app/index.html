@@ -218,12 +218,12 @@
     </button>
 
     <!-- <script src="../shared/js/navigation.js"></script> -->
-    <script type="module" src="../shared/js/authService.js"></script>
-    <script type="module" src="../shared/js/navigation.js"></script>
+    <script type="module" src="/shared/js/authService.js"></script>
+    <script type="module" src="/shared/js/navigation.js"></script>
     <script type="module">
         // Import the classes from your scripts
-        import { layoutCraftNav } from '../shared/js/navigation.js';
-        import { authService } from '../shared/js/authService.js';
+        import { layoutCraftNav } from '/shared/js/navigation.js';
+        import { authService } from '/shared/js/authService.js';
 
         // Wait for the DOM to be fully loaded before running
         document.addEventListener('DOMContentLoaded', () => {
@@ -231,7 +231,7 @@
             window.layoutCraftNav = layoutCraftNav;
         });
     </script>
-    <script type="module" src="js/designer.js"></script>
+    <script type="module" src="/app/js/designer.js"></script>
 </body>
 
 </html>

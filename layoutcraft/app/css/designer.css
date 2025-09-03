@@ -591,3 +591,29 @@
     flex: 1;
     cursor: pointer;
 }
+
+
+/* ADD THIS BLOCK TO designer.css */
+
+/* Styles for anonymous user limitations */
+.dimensions-dropdown-menu.anonymous-user .dimension-item {
+    position: relative;
+}
+
+.dimensions-dropdown-menu.anonymous-user .dimension-item.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.dimensions-dropdown-menu.anonymous-user .dimension-item.locked::after {
+    content: '🔒';
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+}
+
+.dimensions-dropdown-menu.anonymous-user .dimension-item.locked label {
+    pointer-events: none; /* Prevent clicks on the label itself */
+}

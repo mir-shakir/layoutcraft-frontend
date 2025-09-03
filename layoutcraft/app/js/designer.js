@@ -1,5 +1,5 @@
 console.log("designer.js script loading...");
-import { authService } from "../shared/js/authService.js";
+import { authService } from "../../shared/js/authService.js";
 
 (function () {
     'use strict';
@@ -215,6 +215,7 @@ import { authService } from "../shared/js/authService.js";
                 state.failedAttempts = 0;
             }
         });
+        
     }
 
     function renderUI() {
