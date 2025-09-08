@@ -460,7 +460,7 @@ import { authService } from "../../shared/js/authService.js";
 
         try {
             // CORRECTED: Use the endpoint and parameter as you specified
-            const endpoint = `${authService.apiBaseUrl}/api/design?generation_id=${editId}`;
+            const endpoint = `${authService.apiBaseUrl}/users/history/design?generation_id=${editId}`;
             const response = await fetch(endpoint, {
                 headers: { 'Authorization': `Bearer ${authService.getToken()}` }
             });
@@ -589,15 +589,6 @@ function removeSpinnersFromSelectedDesigns() {
         }
         return;
     }
-
-    // if (!state.currentGeneration || !state.currentGeneration.image_url) {
-    //     showError("There's no image to download yet.");
-    //     return;
-    // }
-
-    // const button = document.getElementById('download-btn');
-    // button.textContent = 'Downloading...';
-    // button.disabled = true;
 
     const filename = `layoutcraft_${preset}_${Date.now()}.png`;
     try {
