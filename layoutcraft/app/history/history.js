@@ -2,9 +2,9 @@ import { authService } from '../../shared/js/authService.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Check if user is logged in
-    if (!authService.hasToken()) {
-        window.location.href = '/app/';
-        return;
+    if (!authService.hasToken() || authService.isTokenExpired()) {
+        window.location.href = '/?auth=required';
+        return; 
     }
 
     // --- STATE MANAGEMENT ---
@@ -75,7 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const data = await fetchParentPromptsFromBackend(offset);
+            const data = await authService.fetchAuthenticated(`/users/history/parents?offset=${offset}&limit=20`);
+
 
             if (offset === 0) {
                 state.parentPrompts = data.parents || [];
@@ -95,6 +96,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
         } catch (error) {
+            if (error.message === 'SESSION_EXPIRED') {
+                return; // Stop execution, the service is handling the redirect.
+            }
             console.error("Error fetching parent prompts:", error);
             showError("Could not load your designs. Please try again later.");
         } finally {
@@ -109,11 +113,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const data = await fetchEditGroupsFromBackend(threadId);
+            const data = await authService.fetchAuthenticated(`/users/history/edit-groups?thread_id=${threadId}`);
             state.editGroups[threadId] = data.edit_groups || [];
             return state.editGroups[threadId];
 
         } catch (error) {
+            if (error.message === 'SESSION_EXPIRED') {
+                // We re-throw the error here so the calling function knows to stop.
+                throw error;
+            }
             console.error("Error fetching edit groups:", error);
             throw error;
         }
@@ -595,37 +603,6 @@ async function toggleDesktopExpansion(threadId) {
         return div.innerHTML;
     }
 
-    async function fetchParentPromptsFromBackend(offset = 0) {
-        const response = await fetch(
-                `${authService.apiBaseUrl}/users/history/parents?offset=${offset}&limit=20`,
-                {
-                    headers: { 'Authorization': `Bearer ${authService.getToken()}` }
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch design history.');
-            }
-
-            const data = await response.json();
-            return data;
-    }
-
-    async function fetchEditGroupsFromBackend(threadId) {
-        const response = await fetch(
-            `${authService.apiBaseUrl}/users/history/edit-groups?thread_id=${threadId}`,
-            {
-                headers: { 'Authorization': `Bearer ${authService.getToken()}` }
-            }
-        );
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch edit groups.');
-        }
-
-        const data = await response.json();
-        return data;
-    }
 
     // --- GLOBAL FUNCTIONS (for onclick handlers) ---
     window.handleParentExpand = handleParentExpand;

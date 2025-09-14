@@ -8,8 +8,8 @@ It includes better error formatting inspired by your scripts.js.
 
 class AuthService {
     constructor() {
-        this.apiBaseUrl = 'https://layoutcraft-backend.onrender.com';
-        // this.apiBaseUrl = "http://127.0.0.1:8000"
+        // this.apiBaseUrl = 'https://layoutcraft-backend.onrender.com';
+        this.apiBaseUrl = "http://127.0.0.1:8000"
         this.tokenKey = 'layoutcraft_access_token';
         this.userKey = 'layoutcraft_user';
     }
@@ -97,18 +97,14 @@ class AuthService {
     async handleResponse(response) {
         if (!response.ok) {
             if (response.status === 401) {
-                this.logout();
-                // Dispatch an event so the UI can update
-                document.dispatchEvent(new CustomEvent('authChange'));
-                // Open the login modal
-                if (window.layoutCraftNav) {
-                    window.layoutCraftNav.openAuthModal('login');
-                }
-                throw new Error("Your session has expired. Please log in again.");
+                this.logout(); // Clears token from storage
+                // Redirect to the homepage, which will then show the auth modal.
+                window.location.href = '/?auth=required';
+                // Throw a specific error that our app pages can look for.
+                throw new Error('SESSION_EXPIRED');
             }
             const errorData = await response.json().catch(() => ({}));
             const rawMessage = errorData.detail || `Error: ${response.status}`;
-            // Use the new formatter to create a clean error message
             throw new Error(this.formatAuthError(rawMessage));
         }
 
@@ -117,6 +113,32 @@ class AuthService {
             return response.json();
         }
         return response.blob(); // For image generation
+    }
+
+    // ADD THIS NEW FUNCTION TO THE AuthService CLASS
+    /**
+     * Performs an authenticated fetch request.
+     * Automatically adds the Authorization header and uses the centralized response handler.
+     * @param {string} endpoint - The API endpoint to call (e.g., '/api/v1/generate').
+     * @param {object} options - Standard fetch options (method, body, etc.).
+     * @returns {Promise<any>} The parsed JSON response.
+     */
+    async fetchAuthenticated(endpoint, options = {}) {
+        if(!this.hasToken() || this.isTokenExpired()) {
+            this.logout(); // Clean up storage
+            window.location.href = '/?auth=required'; // Redirect
+            // Throw the specific error to stop the calling function (e.g., performAction)
+            throw new Error('SESSION_EXPIRED');
+        }
+        const url = `${this.apiBaseUrl}${endpoint}`;
+        const headers = {
+            ...options.headers,
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.getToken()}`
+        };
+
+        const response = await fetch(url, { ...options, headers });
+        return this.handleResponse(response);
     }
 
     async register(userData) {

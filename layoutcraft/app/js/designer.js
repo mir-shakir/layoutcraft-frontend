@@ -3,6 +3,11 @@ import { authService } from "../../shared/js/authService.js";
 (function () {
     'use strict';
 
+    if (!authService.hasToken() || authService.isTokenExpired()) {
+        // Redirect to the homepage and add a parameter to trigger the auth modal.
+        window.location.href = '/?auth=required';
+        return;
+    }
     // --- STATE MANAGEMENT ---
     const state = {
         appMode: 'generating', // 'generating' or 'editing'
@@ -13,7 +18,6 @@ import { authService } from "../../shared/js/authService.js";
         selectedDimensions: ['blog_header', 'social_square'], // Default to a single item in an array
         selectedStyle: 'auto',
         isGenerating: false,
-        isLoggedIn: false,
     };
 
     // --- DATA ---
@@ -54,12 +58,18 @@ import { authService } from "../../shared/js/authService.js";
         loadingTipText: document.getElementById('loading-tip'),
         progressBar: document.getElementById('progress-bar'),
         retryBtn: document.getElementById('retry-btn'),
+        appContainer: document.querySelector('.designer-app'),
     };
 
     // --- INITIALIZATION ---
     function init() {
+        if (elements.appContainer) {
+            elements.appContainer.style.visibility = 'visible';
+            elements.appContainer.style.opacity = '1';
+        }
         checkAuthStatus();
         setupEventListeners();
+        loadInitialData(); // Load any initial data from sessionStorage
         loadDesignForEditing(); // Check for ?edit=... parameter
         renderUI();
         console.log("LayoutCraft Designer Initialized");
@@ -108,6 +118,34 @@ import { authService } from "../../shared/js/authService.js";
         }
     }
 
+    // ADD THIS NEW FUNCTION
+    function loadInitialData() {
+        const initialDataString = sessionStorage.getItem('layoutcraft_initial_data');
+        if (initialDataString) {
+            try {
+                const data = JSON.parse(initialDataString);
+                // Update the state with the data from the homepage
+                if (data.prompt) {
+                    state.prompt = data.prompt;
+                    elements.promptInput.value = data.prompt;
+                }
+                if (data.template) {
+                    state.selectedDimensions = [data.template];
+                }
+                if (data.style) {
+                    state.selectedStyle = data.style;
+                }
+                // Clean up the sessionStorage so it's not used again on refresh
+                sessionStorage.removeItem('layoutcraft_initial_data');
+
+                handlePromptInput(); // Updates character count
+                renderDropdowns(); // Re-renders dropdowns with new selections
+            } catch (e) {
+                console.error("Failed to parse initial data:", e);
+                sessionStorage.removeItem('layoutcraft_initial_data');
+            }
+        }
+    }
     function renderDropdowns() {
         createDropdown('dimensions', DIMENSIONS_DATA, true);
         createDropdown('style', STYLE_DATA, false);
@@ -118,10 +156,10 @@ import { authService } from "../../shared/js/authService.js";
         container.innerHTML = '';
         const dropdown = document.createElement('div');
         dropdown.className = 'custom-dropdown';
-        
+
         const button = document.createElement('button');
         button.className = 'dropdown-toggle';
-        
+
         const menu = document.createElement('div');
         menu.className = 'dropdown-menu';
 
@@ -138,31 +176,44 @@ import { authService } from "../../shared/js/authService.js";
         options.forEach((option, index) => {
             const item = document.createElement('div');
             item.className = 'dropdown-item';
-            
-            const isLocked = isMultiSelect && !state.isLoggedIn && index > 1;
-            
-            item.innerHTML = `<label class="${isLocked ? 'locked' : ''}">
+            item.innerHTML = `<label>
                 <input type="${isMultiSelect ? 'checkbox' : 'radio'}" 
-                       name="style-option"
-                       value="${option.value}" 
-                       ${isMultiSelect ? (state.selectedDimensions.includes(option.value) ? 'checked' : '') : (state.selectedStyle === option.value ? 'checked' : '')}
-                       ${isLocked ? 'disabled' : ''}>
-                ${option.label} ${isLocked ? '🔒' : ''}
+                    name="${type}-option"
+                    value="${option.value}" 
+                    ${isMultiSelect ? (state.selectedDimensions.includes(option.value) ? 'checked' : '') : (state.selectedStyle === option.value ? 'checked' : '')}>
+                    ${option.label}
             </label>`;
-            
-            if (isLocked) {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    window.layoutCraftNav?.openAuthModal('signup');
-                });
-            } else {
-                item.querySelector('input').addEventListener('change', (e) => {
-                    handleSelectionChange(type, option.value, e.target.checked);
-                    updateButtonLabel();
-                    if (!isMultiSelect) menu.classList.remove('show');
-                });
-            }
+
+            item.querySelector('input').addEventListener('change', (e) => {
+                handleSelectionChange(type, option.value, e.target.checked);
+                updateButtonLabel();
+                if (!isMultiSelect) menu.classList.remove('show');
+            });
+
+            // const isLocked = isMultiSelect && !state.isLoggedIn && index > 1;
+
+            // item.innerHTML = `<label class="${isLocked ? 'locked' : ''}">
+            //     <input type="${isMultiSelect ? 'checkbox' : 'radio'}" 
+            //            name="style-option"
+            //            value="${option.value}" 
+            //            ${isMultiSelect ? (state.selectedDimensions.includes(option.value) ? 'checked' : '') : (state.selectedStyle === option.value ? 'checked' : '')}
+            //            ${isLocked ? 'disabled' : ''}>
+            //     ${option.label} ${isLocked ? '🔒' : ''}
+            // </label>`;
+
+            // if (isLocked) {
+            //     item.addEventListener('click', (e) => {
+            //         e.preventDefault();
+            //         e.stopPropagation();
+            //         window.layoutCraftNav?.openAuthModal('signup');
+            //     });
+            // } else {
+            //     item.querySelector('input').addEventListener('change', (e) => {
+            //         handleSelectionChange(type, option.value, e.target.checked);
+            //         updateButtonLabel();
+            //         if (!isMultiSelect) menu.classList.remove('show');
+            //     });
+            // }
             menu.appendChild(item);
         });
 
@@ -174,7 +225,7 @@ import { authService } from "../../shared/js/authService.js";
             });
             menu.classList.toggle('show');
         });
-        
+
         dropdown.appendChild(button);
         dropdown.appendChild(menu);
         container.appendChild(dropdown);
@@ -185,7 +236,7 @@ import { authService } from "../../shared/js/authService.js";
         const downloadAllBtn = document.createElement('button');
         downloadAllBtn.className = 'header-action-btn secondary';
         downloadAllBtn.textContent = 'Download All';
-        downloadAllBtn.onclick = downloadAllImages; 
+        downloadAllBtn.onclick = downloadAllImages;
 
         const startNewBtn = document.createElement('button');
         startNewBtn.className = 'header-action-btn primary';
@@ -266,17 +317,17 @@ import { authService } from "../../shared/js/authService.js";
     function handleResultSelection(sizePreset) {
         if (state.appMode !== 'editing') return;
         const index = state.selectedForEditing.indexOf(sizePreset);
-        
+
         if (index > -1) {
             state.selectedForEditing = state.selectedForEditing.filter(preset => preset !== sizePreset);
         } else {
             state.selectedForEditing.push(sizePreset);
         }
 
-        
+
         const card = elements.resultsContainer.querySelector(`.result-card[data-size-preset="${sizePreset}"]`);
         if (card) card.classList.toggle('selected');
-        
+
         updateActionButtonState();
     }
 
@@ -285,7 +336,7 @@ import { authService } from "../../shared/js/authService.js";
         elements.charIndicator.textContent = `${state.prompt.length}/${PROMPT_MAX_LENGTH}`;
         updateActionButtonState();
     }
-    
+
     function handleStartNew() {
         state.appMode = 'generating';
         state.generatedDesigns = [];
@@ -296,21 +347,6 @@ import { authService } from "../../shared/js/authService.js";
         renderUI();
     }
 
-    // function updateActionButtonState() {
-    //     const btnText = elements.generateBtn.querySelector('.generate-text');
-    //     const hasText = state.prompt.trim().length > 0;
-
-    //     setButtonsLoading(state.isGenerating);
-
-    //     if (state.appMode === 'editing') {
-    //         const selectionCount = state.selectedForEditing.length;
-    //         btnText.textContent = selectionCount > 0 ? `Refine ${selectionCount} Design(s)` : 'Refine';
-    //         elements.generateBtn.disabled = !(hasText && selectionCount > 0) || state.isGenerating;
-    //     } else {
-    //         btnText.textContent = 'Generate';
-    //         elements.generateBtn.disabled = !(hasText && state.selectedDimensions.length > 0) || state.isGenerating;
-    //     }
-    // }
 
     function updateActionButtonState() {
         const btnText = elements.generateBtn.querySelector('.generate-text');
@@ -352,7 +388,7 @@ import { authService } from "../../shared/js/authService.js";
     // --- CORE LOGIC & API ---
     async function performAction() {
         if (elements.generateBtn.disabled) return;
-        
+
         state.isGenerating = true;
         updateActionButtonState();
         showCanvas('loading');
@@ -360,56 +396,34 @@ import { authService } from "../../shared/js/authService.js";
 
         try {
             if (state.appMode === 'generating') {
-                const endpoint = state.isLoggedIn ? `${authService.apiBaseUrl}/api/v1/generate` : `${authService.apiBaseUrl}/api/generate`;
-                const headers = { 'Content-Type': 'application/json' };
-                if (state.isLoggedIn) headers['Authorization'] = `Bearer ${authService.getToken()}`;
-                
-                const presetsToSend = state.isLoggedIn ? state.selectedDimensions : state.selectedDimensions.slice(0, 2);
                 const body = {
                     prompt: state.prompt,
                     theme: state.selectedStyle,
-                    size_presets: presetsToSend
+                    size_presets: state.selectedDimensions
                 };
+                const generationGroup = await authService.fetchAuthenticated('/api/v1/generate', {
+                    method: 'POST',
+                    body: JSON.stringify(body)
+                });
 
-                const response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(body) });
-
-                if (!response.ok) {
-                    if (response.status === 429 && !state.isLoggedIn) {
-                        window.layoutCraftNav?.openAuthModal('signup');
-                        throw new Error("You've reached your free generation limit. Please sign up to continue.");
-                    }
-                    throw new Error((await response.json()).detail || 'Failed to generate designs.');
-                }
-
-                const generationGroup = await response.json();
                 state.generation_id = generationGroup.id;
                 state.generatedDesigns = generationGroup.images_json;
                 // state.generatedDesigns = await response.json();
-                
+
                 state.appMode = 'editing';
                 state.selectedForEditing = state.generatedDesigns.map(d => d.size_preset); // Select all by default
 
             } else { // Editing
-                if (!state.isLoggedIn) {
-                    window.layoutCraftNav?.openAuthModal('signup');
-                    throw new Error("Please sign up to edit designs.");
-                }
                 addSpinnersToSelectedDesigns();
-                const endpoint = `${authService.apiBaseUrl}/api/refine`;
-                const headers = {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${authService.getToken()}`
-                };
                 const body = {
                     edit_prompt: state.prompt,
-                    generation_id: state.generation_id, // <-- Use the stored generation ID
-                    size_presets: state.selectedForEditing    // <-- Send the selected preset strings
+                    generation_id: state.generation_id,
+                    size_presets: state.selectedForEditing
                 };
-                console.log('Refine request body:', body);
-                const response = await fetch(endpoint, { method: 'POST', headers, body: JSON.stringify(body) });
-                if (!response.ok) throw new Error((await response.json()).detail || 'Failed to refine designs.');
-
-                const updatedGenerationGroup = await response.json();
+                const updatedGenerationGroup = await authService.fetchAuthenticated('/api/refine', {
+                    method: 'POST',
+                    body: JSON.stringify(body)
+                });
                 updatedGenerationGroup.images_json.forEach(updatedImage => {
                     const index = state.generatedDesigns.findIndex(d => d.size_preset === updatedImage.size_preset);
                     if (index !== -1) {
@@ -426,13 +440,14 @@ import { authService } from "../../shared/js/authService.js";
             elements.promptInput.value = '';
             elements.charIndicator.textContent = `0/${PROMPT_MAX_LENGTH}`;
         } catch (error) {
+            if (error.message === 'SESSION_EXPIRED') {
+                return;
+            }
+            // For any other error, show the user a message.
             console.error('Generation/Refinement error:', error);
-
-            // Remove spinners if in editing mode
             if (state.appMode === 'editing') {
                 removeSpinnersFromSelectedDesigns();
             }
-
             showError(error.message);
         } finally {
             state.isGenerating = false;
@@ -460,14 +475,8 @@ import { authService } from "../../shared/js/authService.js";
 
         try {
             // CORRECTED: Use the endpoint and parameter as you specified
-            const endpoint = `${authService.apiBaseUrl}/users/history/design?generation_id=${editId}`;
-            const response = await fetch(endpoint, {
-                headers: { 'Authorization': `Bearer ${authService.getToken()}` }
-            });
-            if (!response.ok) throw new Error('Could not load the selected design group.');
-
-            // The response is the same as the generate endpoint
-            const generationGroup = await response.json();
+            const endpoint = `/users/history/design?generation_id=${editId}`;
+            const generationGroup = await authService.fetchAuthenticated(endpoint, { method: 'GET' });
 
             state.appMode = 'editing';
             state.generation_id = generationGroup.id;
@@ -479,6 +488,9 @@ import { authService } from "../../shared/js/authService.js";
             state.selectedForEditing = state.generatedDesigns.map(d => d.size_preset);
 
         } catch (error) {
+            if (error.message === 'SESSION_EXPIRED') {
+                return;
+            }
             showError(error.message);
             handleStartNew(); // Fallback to a clean state if loading fails
         } finally {
@@ -494,17 +506,17 @@ import { authService } from "../../shared/js/authService.js";
     }
 
     // --- ANIMATION & UTILITY HELPERS ---
-    
+
     function addSpinnersToSelectedDesigns() {
-    state.selectedForEditing.forEach(preset => {
-        const card = elements.resultsContainer.querySelector(`.result-card[data-size-preset="${preset}"]`);
-        if (card) {
-            card.classList.add('refining');
-            
-            // Create overlay with spinner
-            const overlay = document.createElement('div');
-            overlay.className = 'refining-overlay';
-            overlay.innerHTML = `
+        state.selectedForEditing.forEach(preset => {
+            const card = elements.resultsContainer.querySelector(`.result-card[data-size-preset="${preset}"]`);
+            if (card) {
+                card.classList.add('refining');
+
+                // Create overlay with spinner
+                const overlay = document.createElement('div');
+                overlay.className = 'refining-overlay';
+                overlay.innerHTML = `
                 <div class="refining-spinner">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"/>
@@ -513,23 +525,23 @@ import { authService } from "../../shared/js/authService.js";
                     <span>Refining...</span>
                 </div>
             `;
-            card.appendChild(overlay);
-        }
-    });
-}
-
-function removeSpinnersFromSelectedDesigns() {
-    state.selectedForEditing.forEach(preset => {
-        const card = elements.resultsContainer.querySelector(`.result-card[data-size-preset="${preset}"]`);
-        if (card) {
-            card.classList.remove('refining');
-            const overlay = card.querySelector('.refining-overlay');
-            if (overlay) {
-                overlay.remove();
+                card.appendChild(overlay);
             }
-        }
-    });
-}
+        });
+    }
+
+    function removeSpinnersFromSelectedDesigns() {
+        state.selectedForEditing.forEach(preset => {
+            const card = elements.resultsContainer.querySelector(`.result-card[data-size-preset="${preset}"]`);
+            if (card) {
+                card.classList.remove('refining');
+                const overlay = card.querySelector('.refining-overlay');
+                if (overlay) {
+                    overlay.remove();
+                }
+            }
+        });
+    }
     function setButtonsLoading(isLoading) {
         elements.generateBtn.classList.toggle('loading', isLoading);
     }
@@ -541,11 +553,11 @@ function removeSpinnersFromSelectedDesigns() {
 
         let progress = 0;
         if (elements.progressBar) elements.progressBar.style.width = '0%';
-        
+
         let messageIndex = 0;
         elements.loadingMessageText.textContent = messages[0];
         elements.loadingTipText.textContent = `Tip: ${tips[Math.floor(Math.random() * tips.length)]}`;
-        
+
         const duration = 30000; // Average duration
         progressInterval = setInterval(() => {
             progress = Math.min(progress + (100 / (duration / 100)), 95);
@@ -567,76 +579,76 @@ function removeSpinnersFromSelectedDesigns() {
     }
 
     function openImagePreview(imageUrl) {
-    const modal = document.createElement('div');
-    modal.style.cssText = `
+        const modal = document.createElement('div');
+        modal.style.cssText = `
         position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
         background: rgba(0,0,0,0.9); display: flex; align-items: center; 
         justify-content: center; z-index: 1000; cursor: pointer;
     `;
-    
-    const img = document.createElement('img');
-    img.src = imageUrl;
-    img.style.cssText = 'max-width: 90%; max-height: 90%; border-radius: 8px;';
-    
-    modal.appendChild(img);
-    modal.addEventListener('click', () => document.body.removeChild(modal));
-    document.body.appendChild(modal);
-}
+
+        const img = document.createElement('img');
+        img.src = imageUrl;
+        img.style.cssText = 'max-width: 90%; max-height: 90%; border-radius: 8px;';
+
+        modal.appendChild(img);
+        modal.addEventListener('click', () => document.body.removeChild(modal));
+        document.body.appendChild(modal);
+    }
     async function downloadImage(imageUrl, preset) {
-    if (!state.isLoggedIn) {
-        if (window.layoutCraftNav) {
-            window.layoutCraftNav.openAuthModal('signup');
-        }
-        return;
-    }
-
-    const filename = `layoutcraft_${preset}_${Date.now()}.png`;
-    try {
-        await downloadFromUrl(imageUrl, filename);
-    } catch (error) {
-        console.error('Download failed:', error);
-        showError("Download failed. Please try again.");
-    } finally {
-        button.textContent = 'Download';
-        button.disabled = false;
-    }
-}
-
-async function downloadAllImages() {
-    if (!state.generatedDesigns || state.generatedDesigns.length === 0) {
-        showError("No images to download.");
-        return;
-    }
-
-    const button = document.querySelector('.header-action-btn.secondary');
-    if (button) {
-        button.textContent = 'Downloading...';
-        button.disabled = true;
-    }
-
-    try {
-        for (let i = 0; i < state.generatedDesigns.length; i++) {
-            const design = state.generatedDesigns[i];
-            const filename = `layoutcraft_${design.size_preset}_${Date.now()}_${i + 1}.png`;
-            await downloadFromUrl(design.image_url, filename);
-            
-            // Small delay between downloads to be nice to the browser
-            if (i < state.generatedDesigns.length - 1) {
-                await new Promise(resolve => setTimeout(resolve, 200));
+        if (!state.isLoggedIn) {
+            if (window.layoutCraftNav) {
+                window.layoutCraftNav.openAuthModal('signup');
             }
+            return;
         }
-    } catch (error) {
-        showError("Download failed. Please try again.");
-    } finally {
-        if (button) {
-            button.textContent = 'Download All';
+
+        const filename = `layoutcraft_${preset}_${Date.now()}.png`;
+        try {
+            await downloadFromUrl(imageUrl, filename);
+        } catch (error) {
+            console.error('Download failed:', error);
+            showError("Download failed. Please try again.");
+        } finally {
+            button.textContent = 'Download';
             button.disabled = false;
         }
     }
-}
 
-// Unified download helper function
-async function downloadFromUrl(imageUrl, filename) {
+    async function downloadAllImages() {
+        if (!state.generatedDesigns || state.generatedDesigns.length === 0) {
+            showError("No images to download.");
+            return;
+        }
+
+        const button = document.querySelector('.header-action-btn.secondary');
+        if (button) {
+            button.textContent = 'Downloading...';
+            button.disabled = true;
+        }
+
+        try {
+            for (let i = 0; i < state.generatedDesigns.length; i++) {
+                const design = state.generatedDesigns[i];
+                const filename = `layoutcraft_${design.size_preset}_${Date.now()}_${i + 1}.png`;
+                await downloadFromUrl(design.image_url, filename);
+
+                // Small delay between downloads to be nice to the browser
+                if (i < state.generatedDesigns.length - 1) {
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                }
+            }
+        } catch (error) {
+            showError("Download failed. Please try again.");
+        } finally {
+            if (button) {
+                button.textContent = 'Download All';
+                button.disabled = false;
+            }
+        }
+    }
+
+    // Unified download helper function
+    async function downloadFromUrl(imageUrl, filename) {
 
         const response = await fetch(imageUrl);
         if (!response.ok) {
@@ -644,16 +656,16 @@ async function downloadFromUrl(imageUrl, filename) {
         }
         const imageBlob = await response.blob();
         const blobUrl = URL.createObjectURL(imageBlob);
-        
+
         const a = document.createElement('a');
         a.href = blobUrl;
         a.download = filename;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-        
+
         URL.revokeObjectURL(blobUrl);
-    
+
     }
 
     // --- RUN INITIALIZATION ---

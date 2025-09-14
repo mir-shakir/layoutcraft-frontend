@@ -27,208 +27,268 @@
         gtag('js', new Date());
         gtag('config', 'G-DJ5GEKEX8H');
     </script>
+
+    <style>
+        /* Styles for the loading state before the app initializes */
+        .app-loading-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: #f8f9fa;
+            /* Matches the designer body background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .app-loading-spinner {
+            width: 48px;
+            height: 48px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #6366f1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
 </head>
 
 <body class="designer-body">
-    <!-- Navigation -->
-    <div id="main-navigation"></div>
 
-    <!-- Designer Interface -->
-    <div class="designer-app">
-        <!-- REPLACE the entire content of <div class="designer-app"> with this -->
-<main class="designer-main">
-    <!-- 1. The Updated Toolbar -->
-    <div class="designer-toolbar">
-        <div class="prompt-section">
-            <div class="textarea-wrapper">
-                <textarea id="prompt-input" class="prompt-field" placeholder="Describe your design idea..." maxlength="500" rows="4"></textarea>
-                <span class="char-indicator">0/500</span>
-            </div>
-            <div class="generate-section">
-                <div class="controls-wrapper">
-                    <!-- JS will populate these empty divs -->
-                    <div id="dimensions-dropdown-container"></div>
-                    <div id="style-dropdown-container"></div>
-                </div>
-                <button class="generate-button" id="generate-btn" disabled>
-                    <span class="generate-text">Generate</span>
-                    <span class="generate-loading">
-                        <span class="mini-spinner"></span>
-                        Creating...
-                    </span>
-                </button>
-            </div>
+    <body class="designer-body">
+        <div id="app-loader" class="app-loading-overlay">
+            <div class="app-loading-spinner"></div>
         </div>
-    </div>
+        <!-- Navigation -->
+        <div id="main-navigation"></div>
 
-    <!-- 2. The Updated Canvas Area -->
-    <div class="designer-canvas">
-        <!-- The static states remain -->
-        <div class="canvas-state empty-canvas" id="empty-canvas">
-                    <div class="empty-content">
-                        <div class="empty-icon">
-                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="1">
-                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                                <circle cx="8.5" cy="8.5" r="1.5" />
-                                <polyline points="21 15 16 10 5 21" />
-                            </svg>
+        <!-- Designer Interface -->
+        <div class="designer-app" style="visibility: hidden; opacity: 0; transition: opacity 0.3s ease-in-out;">
+            <main class="designer-main">
+                <div class="designer-toolbar">
+                    <div class="prompt-section">
+                        <div class="textarea-wrapper">
+                            <textarea id="prompt-input" class="prompt-field" placeholder="Describe your design idea..."
+                                maxlength="500" rows="4"></textarea>
+                            <span class="char-indicator">0/500</span>
                         </div>
-                        <h2>Ready to Create?</h2>
-                        <p class="empty-description">Your design will appear here once generated</p>
-                        <div class="empty-steps">
-                            <div class="step-item">
-                                <div class="step-icon">🎯</div>
-                                <div class="step-content">
-                                    <h4>Choose Template</h4>
-                                    <p>Select your preferred size</p>
-                                </div>
+                        <div class="generate-section">
+                            <div class="controls-wrapper">
+                                <!-- JS will populate these empty divs -->
+                                <div id="dimensions-dropdown-container"></div>
+                                <div id="style-dropdown-container"></div>
                             </div>
-                            <div class="step-item">
-                                <div class="step-icon">✨</div>
-                                <div class="step-content">
-                                    <h4>Describe Vision</h4>
-                                    <p>Tell us what you want</p>
-                                </div>
+                            <button class="generate-button" id="generate-btn" disabled>
+                                <span class="generate-text">Generate</span>
+                                <span class="generate-loading">
+                                    <span class="mini-spinner"></span>
+                                    Creating...
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. The Updated Canvas Area -->
+                <div class="designer-canvas">
+                    <!-- The static states remain -->
+                    <div class="canvas-state empty-canvas" id="empty-canvas">
+                        <div class="empty-content">
+                            <div class="empty-icon">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1">
+                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                    <circle cx="8.5" cy="8.5" r="1.5" />
+                                    <polyline points="21 15 16 10 5 21" />
+                                </svg>
                             </div>
-                            <div class="step-item">
-                                <div class="step-icon">🚀</div>
-                                <div class="step-content">
-                                    <h4>Generate</h4>
-                                    <p>Watch magic happen</p>
+                            <h2>Ready to Create?</h2>
+                            <p class="empty-description">Your design will appear here once generated</p>
+                            <div class="empty-steps">
+                                <div class="step-item">
+                                    <div class="step-icon">🎯</div>
+                                    <div class="step-content">
+                                        <h4>Choose Template</h4>
+                                        <p>Select your preferred size</p>
+                                    </div>
+                                </div>
+                                <div class="step-item">
+                                    <div class="step-icon">✨</div>
+                                    <div class="step-content">
+                                        <h4>Describe Vision</h4>
+                                        <p>Tell us what you want</p>
+                                    </div>
+                                </div>
+                                <div class="step-item">
+                                    <div class="step-icon">🚀</div>
+                                    <div class="step-content">
+                                        <h4>Generate</h4>
+                                        <p>Watch magic happen</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="canvas-state loading-canvas" id="loading-canvas" style="display: none;">
+                        <div class="loading-content">
+                            <div class="premium-loader">
+                                <div class="loader-ring"></div>
+                                <div class="loader-ring"></div>
+                                <div class="loader-ring"></div>
+                            </div>
+                            <h3 id="loading-message">Initializing AI Designer...</h3>
+                            <div class="progress-track">
+                                <div class="progress-bar" id="progress-bar"></div>
+                            </div>
+                            <p class="loading-tip" id="loading-tip">Pro tip: Be specific about colors and text</p>
+                        </div>
+                    </div>
+
+                    <!-- NEW: Results Header (for Start New / Download All buttons) -->
+                    <div id="results-header" style="display: none; width: 100%;">
+                        <!-- This will be populated by JS when results appear -->
+                    </div>
+
+                    <!-- NEW: Horizontally Scrollable Gallery -->
+                    <div id="results-container-wrapper" class="custom-scrollbar" style="display: none;">
+                        <div id="results-container">
+                            <!-- JS will populate this with result cards -->
+                        </div>
+                    </div>
+
+                    <!-- The error state remains -->
+                    <div class="canvas-state error-canvas" id="error-canvas" style="display: none;">
+                        <div class="error-content">
+                            <div class="error-icon">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="1.5">
+                                    <circle cx="12" cy="12" r="10" />
+                                    <line x1="12" y1="8" x2="12" y2="12" />
+                                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                                </svg>
+                            </div>
+                            <h3>Oops! Something went wrong</h3>
+                            <p id="error-message">Unable to generate your design. Please try again.</p>
+                            <button class="retry-button" id="retry-btn">Try Again</button>
+                        </div>
+                    </div>
                 </div>
-        <div class="canvas-state loading-canvas" id="loading-canvas" style="display: none;">
-                    <div class="loading-content">
-                        <div class="premium-loader">
-                            <div class="loader-ring"></div>
-                            <div class="loader-ring"></div>
-                            <div class="loader-ring"></div>
+            </main>
+        </div>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-brand">
+                        <div class="logo">
+                            <div class="logo-icon">
+                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <defs>
+                                        <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                            <stop offset="0%" style="stop-color:#6366f1;"></stop>
+                                            <stop offset="100%" style="stop-color:#8b5cf6;"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                    <rect width="48" height="48" rx="8" fill="url(#brandGradient)"></rect>
+                                    <path
+                                        d="M12 12V28C12 32.4183 15.5817 36 20 36H36V20C36 15.5817 32.4183 12 28 12H20C20 12 20 20 20 20H28C28 20 28 28 28 28"
+                                        stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                                        opacity="0.95">
+                                    </path>
+                                    <circle cx="24" cy="24" r="2.5" fill="white" opacity="0.9"></circle>
+                                </svg>
+                            </div>
+                            <span class="logo-text">LayoutCraft</span>
                         </div>
-                        <h3 id="loading-message">Initializing AI Designer...</h3>
-                        <div class="progress-track">
-                            <div class="progress-bar" id="progress-bar"></div>
+                        <p class="footer-tagline">
+                            AI design tool for the rest of us.
+                        </p>
+                    </div>
+
+                    <div class="footer-links">
+                        <div class="footer-column">
+                            <h4>Product</h4>
+                            <a href="#">Create Design</a>
+                            <a href="/blog/">Blog</a>
+                            <a href="/about/">About</a>
+                            <a href="/faq/">FAQ</a>
                         </div>
-                        <p class="loading-tip" id="loading-tip">Pro tip: Be specific about colors and text</p>
+
+                        <div class="footer-column">
+                            <h4>Resources</h4>
+                            <a href="/blog/posts/writing-better-prompts/">Prompt Guide</a>
+                            <a href="/app/">Templates</a>
+                            <a href="/faq/">Help</a>
+                        </div>
+
+                        <div class="footer-column">
+                            <h4>Legal</h4>
+                            <a href="/legal/terms.html">Terms</a>
+                            <a href="/legal/privacy.html">Privacy</a>
+                        </div>
                     </div>
                 </div>
 
-        <!-- NEW: Results Header (for Start New / Download All buttons) -->
-        <div id="results-header" style="display: none; width: 100%;">
-            <!-- This will be populated by JS when results appear -->
-        </div>
-
-        <!-- NEW: Horizontally Scrollable Gallery -->
-        <div id="results-container-wrapper" class="custom-scrollbar" style="display: none;">
-            <div id="results-container">
-                <!-- JS will populate this with result cards -->
+                <div class="footer-bottom">
+                    <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
+                </div>
             </div>
-        </div>
+        </footer>
 
-        <!-- The error state remains -->
-        <div class="canvas-state error-canvas" id="error-canvas" style="display: none;">
-    <div class="error-content">
-        <div class="error-icon">
-            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <!-- Help Button -->
+        <button class="help-button" onclick="window.open('/faq/', '_blank')">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" y1="16" x2="12.01" y2="16" />
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                <line x1="12" y1="17" x2="12.01" y2="17" />
             </svg>
-        </div>
-        <h3>Oops! Something went wrong</h3>
-        <p id="error-message">Unable to generate your design. Please try again.</p>
-        <button class="retry-button" id="retry-btn">Try Again</button>
-    </div>
-</div>
-    </div>
-</main>
-    </div>
+        </button>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <div class="logo">
-                        <div class="logo-icon">
-                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <defs>
-                                    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" style="stop-color:#6366f1;"></stop>
-                                        <stop offset="100%" style="stop-color:#8b5cf6;"></stop>
-                                    </linearGradient>
-                                </defs>
-                                <rect width="48" height="48" rx="8" fill="url(#brandGradient)"></rect>
-                                <path
-                                    d="M12 12V28C12 32.4183 15.5817 36 20 36H36V20C36 15.5817 32.4183 12 28 12H20C20 12 20 20 20 20H28C28 20 28 28 28 28"
-                                    stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
-                                </path>
-                                <circle cx="24" cy="24" r="2.5" fill="white" opacity="0.9"></circle>
-                            </svg>
-                        </div>
-                        <span class="logo-text">LayoutCraft</span>
-                    </div>
-                    <p class="footer-tagline">
-                        AI design tool for the rest of us.
-                    </p>
-                </div>
+        <!-- <script src="/shared/js/navigation.js"></script> -->
+        <script type="module">
+            // This script runs before the main app script to handle the loader
+            import { authService } from '/shared/js/authService.js';
 
-                <div class="footer-links">
-                    <div class="footer-column">
-                        <h4>Product</h4>
-                        <a href="#">Create Design</a>
-                        <a href="/blog/">Blog</a>
-                        <a href="/about/">About</a>
-                        <a href="/faq/">FAQ</a>
-                    </div>
+            const loader = document.getElementById('app-loader');
 
-                    <div class="footer-column">
-                        <h4>Resources</h4>
-                        <a href="/blog/posts/writing-better-prompts/">Prompt Guide</a>
-                        <a href="/app/">Templates</a>
-                        <a href="/faq/">Help</a>
-                    </div>
+            if (!authService.hasToken() || authService.isTokenExpired()) {
+                // The main auth gate in designer.js will handle the redirect.
+                // This script just ensures the loader stays visible during that process.
+            } else {
+                // If authenticated, hide the loader once the window is fully loaded.
+                window.onload = () => {
+                    if (loader) {
+                        loader.style.opacity = '0';
+                        // The main designer.js script will handle showing the app content.
+                        // We use a timeout to remove it from the DOM after the transition.
+                        setTimeout(() => {
+                            loader.style.display = 'none';
+                        }, 300);
+                    }
+                };
+            }
+        </script>
+        <script type="module" src="/shared/js/authService.js"></script>
+        <script type="module" src="/shared/js/navigation.js"></script>
+        <script type="module">
+            // Import the classes from your scripts
+            import { layoutCraftNav } from '/shared/js/navigation.js';
+            import { authService } from '/shared/js/authService.js';
 
-                    <div class="footer-column">
-                        <h4>Legal</h4>
-                        <a href="/legal/terms.html">Terms</a>
-                        <a href="/legal/privacy.html">Privacy</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Help Button -->
-    <button class="help-button" onclick="window.open('/faq/', '_blank')">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10" />
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-            <line x1="12" y1="17" x2="12.01" y2="17" />
-        </svg>
-    </button>
-
-    <!-- <script src="/shared/js/navigation.js"></script> -->
-    <script type="module" src="/shared/js/authService.js"></script>
-    <script type="module" src="/shared/js/navigation.js"></script>
-    <script type="module">
-        // Import the classes from your scripts
-        import { layoutCraftNav } from '/shared/js/navigation.js';
-        import { authService } from '/shared/js/authService.js';
-
-        // Wait for the DOM to be fully loaded before running
-        document.addEventListener('DOMContentLoaded', () => {
-            // The navigation class is now correctly given the auth service it needs.
-            window.layoutCraftNav = layoutCraftNav;
-        });
-    </script>
-    <script type="module" src="/app/js/designer.js"></script>
-</body>
+            // Wait for the DOM to be fully loaded before running
+            document.addEventListener('DOMContentLoaded', () => {
+                // The navigation class is now correctly given the auth service it needs.
+                window.layoutCraftNav = layoutCraftNav;
+            });
+        </script>
+        <script type="module" src="/app/js/designer.js"></script>
+    </body>
 
 </html>
