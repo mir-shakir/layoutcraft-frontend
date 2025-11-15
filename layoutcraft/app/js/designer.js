@@ -164,7 +164,7 @@ function showUpgradeModal(message) {
                     elements.promptInput.value = data.prompt;
                 }
                 if (data.template) {
-                     if (!subscriptionService.isPro()) {
+                     if (!subscriptionService.isOnTrialOrPro()) {
                         state.selectedDimensions = [data.template];
                     } else {
                         // If they are pro, we can allow multiple if we decide to later
@@ -214,7 +214,7 @@ function showUpgradeModal(message) {
 
         options.forEach((option, index) => {
             const item = document.createElement('div');
-            const isLocked = isMultiSelect && !subscriptionService.isPro() && index > 0;
+            const isLocked = isMultiSelect && !subscriptionService.isOnTrialOrPro() && index > 0;
 
 
             item.className = 'dropdown-item';
@@ -366,7 +366,7 @@ function showUpgradeModal(message) {
     // --- UI HANDLERS & STATE UPDATES ---
 
     function handleSelectionChange(type, value, isSelected) {
-        if (type === 'dimensions' && isSelected && !subscriptionService.isPro() && state.selectedDimensions.length > 0) {
+        if (type === 'dimensions' && isSelected && !subscriptionService.isOnTrialOrPro() && state.selectedDimensions.length > 0) {
             // Prevent the checkbox from being checked
             event.target.checked = false;
             showUpgradeModal('Selecting multiple dimensions is a Pro feature. Upgrade to generate designs in multiple sizes at once!');
@@ -434,9 +434,9 @@ function showUpgradeModal(message) {
             }
             elements.generateBtn.disabled = !(hasText && selectionCount > 0) || state.isGenerating;
             const lockIcon = ' 🔒';
-            if (!subscriptionService.isPro() && !btnText.textContent.includes(lockIcon)) {
+            if (!subscriptionService.isOnTrialOrPro() && !btnText.textContent.includes(lockIcon)) {
                 btnText.textContent += lockIcon;
-            } else if (subscriptionService.isPro()) {
+            } else if (subscriptionService.isOnTrialOrPro()) {
                 btnText.textContent = btnText.textContent.replace(lockIcon, '');
             }
         } else {
@@ -464,7 +464,7 @@ function showUpgradeModal(message) {
 
     // --- CORE LOGIC & API ---
     async function performAction() {
-        if (state.appMode === 'editing' && !subscriptionService.isPro()) {
+        if (state.appMode === 'editing' && !subscriptionService.isOnTrialOrPro()) {
             showUpgradeModal('The ability to refine and edit designs with prompts is a Pro feature. Upgrade to unlock this powerful workflow!');
         return; 
     }

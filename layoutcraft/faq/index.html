@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frequently Asked Questions - LayoutCraft</title>
-    <meta name="description" content="Common questions about LayoutCraft AI design tool.">
+    <title>FAQ - LayoutCraft | AI Design Tool Questions & Answers</title>
+    <meta name="description" content="Get answers to common questions about LayoutCraft's AI design tool. Learn about our Pro plan, 7-day free trial, multi-dimension generation, commercial usage rights, and secure payment processing.">
+    <meta name="keywords" content="LayoutCraft FAQ, AI design tool help, design software questions, multi-dimension generation, design refinements, commercial usage rights, Dodo Payments security">
 
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -17,33 +17,190 @@
     <link rel="stylesheet" href="/shared/css/base.css">
     <link rel="stylesheet" href="/shared/css/navigation.css">
     <link rel="stylesheet" href="/css/homepage.css">
+    
+    <!-- Schema Markup for FAQ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How is LayoutCraft different from other AI image tools?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "LayoutCraft is a functional design tool focused on readable text, structured layouts, and business use cases. Unlike artistic AI generators, we create usable assets like blog headers, social media posts, and ad creatives for marketers, founders, and creators."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use the designs I create commercially?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, absolutely. You have full commercial rights to all designs you generate on any plan, including the free plan and during your trial. Use them for business, marketing, client work, or any commercial purpose."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does the 7-day free trial work?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Every new user gets a 7-day free trial of all Pro features with no credit card required. If you upgrade during the trial, your paid subscription begins after the 7-day trial ends. You get the full trial period regardless."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is Multi-Dimension Generation?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Multi-Dimension Generation is a Pro feature that lets you create multiple design formats from a single prompt. For example, generate a blog header, Instagram post, and Twitter banner all at once, saving hours of manual resizing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is my payment information secure?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. We use Dodo Payments, a certified global payment processor. Your credit card details are sent directly to Dodo Payments' secure servers using bank-level encryption and are never stored on our servers."
+          }
+        }
+      ]
+    }
+    </script>
+    
     <style>
+        body { background-color: #f9fafb; }
+        
+        /* Hero Section */
         .faq-hero {
-            background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff);
-            padding: 8rem 0 4rem;
+            background: linear-gradient(135deg, #eef2ff 0%, #ffffff 50%, #faf5ff 100%);
+            padding: 6rem 0 4rem;
             text-align: center;
-            /* Add this */
+            position: relative;
+            overflow: hidden;
         }
-
+        .faq-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .faq-hero-content {
+            position: relative;
+            z-index: 1;
+        }
         .faq-hero .hero-title {
-            margin: 0 auto 1rem;
-            /* Add this */
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #111827;
+            margin: 0 auto 1.25rem;
             max-width: 900px;
-            /* Add this */
+            line-height: 1.1;
+        }
+        .faq-hero .hero-subtitle {
+            font-size: 1.25rem;
+            color: #4b5563;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
 
+        /* Quick Links Navigation */
+        .quick-links {
+            background: white;
+            padding: 2rem 0;
+            border-bottom: 1px solid #e5e7eb;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .quick-links-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .quick-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.625rem 1.25rem;
+            background: #f9fafb;
+            color: #374151;
+            border-radius: 99px;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: 1px solid #e5e7eb;
+        }
+        .quick-link:hover {
+            background: #eef2ff;
+            color: #6366f1;
+            border-color: #6366f1;
+        }
+        .quick-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Main Container */
         .faq-container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 4rem 1rem;
         }
 
+        /* Section Titles */
+        .faq-section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #111827;
+            margin-top: 3.5rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            scroll-margin-top: 100px;
+        }
+        .faq-section-title:first-of-type {
+            margin-top: 0;
+        }
+        .faq-section-title svg {
+            width: 28px;
+            height: 28px;
+            color: #6366f1;
+        }
+        .section-description {
+            color: #6b7280;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* FAQ Items */
         .faq-item {
             background: white;
             border-radius: 12px;
             margin-bottom: 1rem;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             overflow: hidden;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        .faq-item:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         }
 
         .faq-question {
@@ -55,54 +212,200 @@
             justify-content: space-between;
             align-items: center;
             transition: background 0.2s;
+            font-size: 1.0625rem;
         }
-
         .faq-question:hover {
             background: #f9fafb;
         }
 
         .faq-arrow {
-            transition: transform 0.2s;
+            transition: transform 0.3s ease;
             color: #6b7280;
+            flex-shrink: 0;
+            margin-left: 1rem;
+            width: 20px;
+            height: 20px;
         }
-
         .faq-item.open .faq-arrow {
             transform: rotate(180deg);
+            color: #6366f1;
         }
 
         .faq-answer {
             padding: 0 1.5rem;
             max-height: 0;
             overflow: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
         }
-
         .faq-item.open .faq-answer {
             padding: 0 1.5rem 1.5rem;
-            max-height: 500px;
+            max-height: 1000px;
         }
 
         .faq-answer p {
             color: #4b5563;
-            line-height: 1.7;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            font-size: 0.9375rem;
+        }
+        .faq-answer p:last-child {
+            margin-bottom: 0;
         }
 
-        .faq-answer ul {
-            margin-top: 0.5rem;
+        .faq-answer ul, .faq-answer ol {
+            margin-top: 0.75rem;
+            margin-bottom: 1rem;
             padding-left: 1.5rem;
             color: #4b5563;
         }
-
         .faq-answer li {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.625rem;
+            line-height: 1.7;
+            font-size: 0.9375rem;
         }
 
+        .faq-answer a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .faq-answer a:hover {
+            color: #4f46e5;
+            text-decoration: underline;
+        }
+
+        /* Helpful Tips Box */
+        .tip-box {
+            background: linear-gradient(135deg, #eef2ff 0%, #faf5ff 100%);
+            border-left: 4px solid #6366f1;
+            padding: 1.25rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .tip-box-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.5rem;
+            font-size: 0.9375rem;
+        }
+        .tip-box-title svg {
+            width: 18px;
+            height: 18px;
+            color: #6366f1;
+        }
+        .tip-box p {
+            margin: 0;
+            font-size: 0.9375rem;
+        }
+
+        /* Contact CTA */
         .faq-cta {
             text-align: center;
-            margin-top: 3rem;
-            padding: 2rem;
-            background: #f3f4f6;
-            border-radius: 12px;
+            margin-top: 4rem;
+            padding: 3rem 2rem;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            border-radius: 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .faq-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .faq-cta-content {
+            position: relative;
+            z-index: 1;
+        }
+        .faq-cta h3 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        .faq-cta p {
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 2rem;
+            font-size: 1.125rem;
+            line-height: 1.6;
+        }
+        .faq-cta a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            border-bottom: 2px solid white;
+            transition: opacity 0.2s ease;
+        }
+        .faq-cta a:hover {
+            opacity: 0.8;
+        }
+        .faq-cta .btn {
+            background: white;
+            color: #6366f1;
+            margin-top: 1rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        .faq-cta .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+        }
+
+        /* Popular Questions Badge */
+        .popular-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            color: #92400e;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.625rem;
+            border-radius: 99px;
+            margin-left: 0.5rem;
+        }
+        .popular-badge svg {
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .faq-hero .hero-title {
+                font-size: 2.5rem;
+            }
+            .faq-hero .hero-subtitle {
+                font-size: 1.0625rem;
+            }
+            .quick-links-container {
+                gap: 0.75rem;
+            }
+            .quick-link {
+                font-size: 0.875rem;
+                padding: 0.5rem 1rem;
+            }
+            .faq-section-title {
+                font-size: 1.5rem;
+            }
+            .faq-question {
+                font-size: 1rem;
+                padding: 1.25rem;
+            }
+            .faq-item.open .faq-answer {
+                padding: 0 1.25rem 1.25rem;
+            }
+            .faq-cta h3 {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
@@ -110,184 +413,621 @@
 <body>
     <div id="main-navigation"></div>
 
-
     <section class="faq-hero">
-        <div class="container">
-            <h1 class="hero-title" style="font-size: 3rem;">
-                Frequently Asked Questions
-            </h1>
-            <p class="hero-subtitle">
-                Everything you need to know about LayoutCraft
-            </p>
+        <div class="faq-hero-content">
+            <div class="container">
+                <h1 class="hero-title">How Can We Help You?</h1>
+                <p class="hero-subtitle">
+                    Find quick answers to common questions about LayoutCraft, our features, pricing, and more.
+                </p>
+            </div>
         </div>
     </section>
 
+    <nav class="quick-links">
+        <div class="quick-links-container">
+            <a href="#general" class="quick-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                    <circle cx="12" cy="17" r=".5" fill="currentColor"/>
+                </svg>
+                General
+            </a>
+            <a href="#plans" class="quick-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                Plans & Pricing
+            </a>
+            <a href="#features" class="quick-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                </svg>
+                Features
+            </a>
+            <a href="#billing" class="quick-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="4" width="22" height="16" rx="2"/>
+                    <path d="M1 10h22"/>
+                </svg>
+                Billing & Security
+            </a>
+        </div>
+    </nav>
 
     <div class="faq-container">
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFAQ(this)">
-                <span>How is LayoutCraft different from other AI image tools?</span>
-                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <path d="M6 9l6 6 6-6" />
+        <section id="general">
+            <h2 class="faq-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                    <circle cx="12" cy="17" r=".5" fill="currentColor"/>
                 </svg>
+                General Questions
+            </h2>
+            <p class="section-description">Learn about LayoutCraft and how it works.</p>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How is LayoutCraft different from other AI image tools?
+                        <span class="popular-badge">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                            Popular
+                        </span>
+                    </span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p>Unlike traditional AI image generators (like Midjourney or DALL-E) that focus on artistic interpretation, <strong>LayoutCraft is a functional design tool</strong> built specifically for business needs. Here's what makes us different:</p>
+                    <ul>
+                        <li><strong>Readable, Accurate Text:</strong> Our AI generates clean, properly placed text—not artistic gibberish. Perfect for headlines, captions, and CTAs.</li>
+                        <li><strong>Structured, Professional Layouts:</strong> We follow real-world design principles with proper hierarchy, spacing, and balance.</li>
+                        <li><strong>Business-Focused Output:</strong> Create usable assets like blog headers, social media posts, ad creatives, and email banners—not abstract art.</li>
+                        <li><strong>Multiple Format Generation:</strong> Pro users can generate multiple dimensions at once, optimized for different platforms.</li>
+                    </ul>
+                    <div class="tip-box">
+                        <div class="tip-box-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 16v-4M12 8h.01"/>
+                            </svg>
+                            Think of it this way
+                        </div>
+                        <p>Other AI tools are like hiring an artist. LayoutCraft is like hiring a graphic designer who understands marketing.</p>
+                    </div>
+                </div>
             </div>
-            <div class="faq-answer">
-                <p>Unlike traditional AI image generators that create artistic interpretations, LayoutCraft is
-                    specifically designed for functional design. We focus on:</p>
-                <ul>
-                    <li>Clean, structured layouts that follow design principles</li>
-                    <li>Perfect text rendering - no more gibberish</li>
-                    <li>Consistent, professional results every time</li>
-                    <li>Formats optimized for real-world use (blogs, social media, presentations)</li>
-                </ul>
-                <p>Think of it as the difference between an AI artist and an AI designer.</p>
-            </div>
-        </div>
 
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFAQ(this)">
-                <span>Do I need a subscription to access all features?</span>
-                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <path d="M6 9l6 6 6-6" />
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Can I use the designs I create commercially?
+                        <span class="popular-badge">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                            Popular
+                        </span>
+                    </span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Yes, absolutely!</strong> You have full commercial rights to all designs you generate with LayoutCraft. This applies to:</p>
+                    <ul>
+                        <li>Free plan users</li>
+                        <li>Pro plan subscribers</li>
+                        <li>Designs created during your 7-day free trial</li>
+                    </ul>
+                    <p>You can use your designs for business marketing, social media campaigns, client projects, paid advertisements, print materials, websites, or any other commercial purpose. No attribution required, no additional licensing fees—ever.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I write a good prompt for LayoutCraft?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p>Great prompts are <strong>clear, specific, and descriptive</strong>. The more detail you provide, the better your results. Here's what to include:</p>
+                    <ul>
+                        <li><strong>Format/Purpose:</strong> "A blog header for..." or "An Instagram post announcing..."</li>
+                        <li><strong>Specific Text Content:</strong> "Include the title 'The Future of AI' and subtitle 'How it will transform marketing in 2025'"</li>
+                        <li><strong>Visual Style:</strong> "Modern and minimalist" or "Bold, vibrant, and energetic with geometric patterns"</li>
+                        <li><strong>Color Preferences:</strong> "Use a professional blue and white palette" or "Warm autumn colors with gold accents"</li>
+                        <li><strong>Mood/Tone:</strong> "Professional and trustworthy" or "Fun and playful for a young audience"</li>
+                    </ul>
+                    <div class="tip-box">
+                        <div class="tip-box-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 16v-4M12 8h.01"/>
+                            </svg>
+                            Pro Tip
+                        </div>
+                        <p>Check out our comprehensive <a href="/blog/posts/writing-better-prompts/">guide to writing better prompts</a> with 20+ real examples and before/after comparisons!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What design formats and sizes does LayoutCraft support?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p>LayoutCraft supports all major social media and marketing formats, including:</p>
+                    <ul>
+                        <li><strong>Social Media:</strong> Instagram posts (1080×1080), Stories (1080×1920), Facebook posts, Twitter/X banners (1500×500), LinkedIn posts</li>
+                        <li><strong>Web & Blog:</strong> Blog headers (1200×628), featured images, website banners</li>
+                        <li><strong>Marketing:</strong> Email headers, ad creatives, presentation slides</li>
+                        <li><strong>Print:</strong> Flyers, posters, and print-ready formats</li>
+                    </ul>
+                    <p>Free users can export in standard quality <strong>PNG and JPG</strong> formats. Pro users get high-quality exports for perfect scalability and larger file size limits (up to 10MB vs 2MB on Free).</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="plans">
+            <h2 class="faq-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
                 </svg>
+                Plans & Pricing
+            </h2>
+            <p class="section-description">Understand our Free and Pro plans, pricing, and trial period.</p>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What's the difference between the Free and Pro plans?
+                        <span class="popular-badge">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                            Popular
+                        </span>
+                    </span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p>The <strong>Free plan</strong> is perfect for exploring LayoutCraft and creating occasional designs. It includes:</p>
+                    <ul>
+                        <li>Single dimension design generation</li>
+                        <li>1 design refinement per project</li>
+                        <li>1 month of view-only design history</li>
+                        <li>Standard quality exports (Up to 2MB)</li>
+                    </ul>
+                    <p>The <strong>Pro plan ($11.99/month)</strong> is built for professionals who need speed, flexibility, and premium features:</p>
+                    <ul>
+                        <li><strong>Multi-Dimension Generation:</strong> Create designs for blog, Instagram, Twitter, and more—all from one prompt</li>
+                        <li><strong>Unlimited Design Refinements:</strong> Make as many edits and tweaks as you need to get designs pixel-perfect</li>
+                        <li><strong>6 Months of Editable History:</strong> Access and edit any design from the past 6 months</li>
+                        <li><strong>High-Quality Exports:</strong> (Up to 10MB)</li>
+                        <li><strong>Priority Support:</strong> Get help faster when you need it</li>
+                        <li><strong>Early Access:</strong> Try new features before everyone else</li>
+                    </ul>
+                    <p><a href="/pricing/">View detailed plan comparison →</a></p>
+                </div>
             </div>
-            <div class="faq-answer">
-                <p>For a limited time, all features are available for free to all users. This includes:</p>
-                <ul>
-                    <li>Unlimited "Fast" and "Pro" generations</li>
-                    <li>Unlimited edits and design history</li>
-                    <li>All design templates and sizes</li>
-                    <li>... and more!</li>
-                </ul>
-                <p>No credit card required. Just sign up and start creating!</p>
-            </div>
-        </div>
 
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFAQ(this)">
-                <span>What's the difference between Fast and Pro quality?</span>
-                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <path d="M6 9l6 6 6-6" />
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How does the 7-day free trial work?
+                        <span class="popular-badge">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                            Popular
+                        </span>
+                    </span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Every new user automatically gets 7 days of Pro access—completely free, no credit card required.</strong></p>
+                    <p>Here's how it works:</p>
+                    <ul>
+                        <li><strong>Sign up:</strong> Create your free account and instantly get Pro features</li>
+                        <li><strong>Explore everything:</strong> Test Multi-Dimension Generation, unlimited refinements, and all Pro features for 7 full days</li>
+                        <li><strong>Decide later:</strong> If you upgrade by adding payment during your trial, your paid subscription only begins after the 7 days end</li>
+                        <li><strong>No automatic charges:</strong> Your trial never converts to paid without you explicitly upgrading</li>
+                    </ul>
+                    <div class="tip-box">
+                        <div class="tip-box-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 16v-4M12 8h.01"/>
+                            </svg>
+                            Important
+                        </div>
+                        <p>You get the full 7-day trial period regardless of when you add payment details. We want you to truly experience Pro before making any financial commitment.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What happens if I cancel my Pro plan?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p>You can cancel your subscription anytime from your Account page—no hoops to jump through, no support tickets required.</p>
+                    <p><strong>What happens when you cancel:</strong></p>
+                    <ul>
+                        <li>You keep full Pro access until the end of your current billing period (you always get what you paid for)</li>
+                        <li>After your period ends, your account automatically reverts to the Free plan</li>
+                        <li>All your designs remain safe and accessible</li>
+                        <li>You can still view your 6 months of history, but editing will be limited to Free plan features</li>
+                        <li>You can re-upgrade anytime to regain full Pro access</li>
+                    </ul>
+                    <p><strong>No penalties, no data loss, no surprises.</strong> We believe in making it as easy to leave as it is to join.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How much does Pro cost? Do you offer annual plans?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p>LayoutCraft Pro costs <strong>$11.99 per month</strong>, billed monthly. This gives you unlimited access to all Pro features.</p>
+                    <p>We currently offer monthly billing only. Annual plans with discounted pricing may be introduced in the future—Pro users will be notified first when they become available.</p>
+                    <p>Remember: All new users get a <strong>7-day free trial</strong> to test Pro before paying anything.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Can I switch between plans?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Yes, absolutely!</strong> You have complete flexibility to change your plan at any time.</p>
+                    <ul>
+                        <li><strong>Upgrading from Free to Pro:</strong> Takes effect immediately—you get instant access to all Pro features</li>
+                        <li><strong>Downgrading from Pro to Free:</strong> Your account remains Pro until the end of your current billing period, then automatically switches to Free</li>
+                    </ul>
+                    <p>This ensures you always get the full value of what you've paid for. No prorated charges, no complicated calculations—just simple, fair billing.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2 class="faq-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
                 </svg>
+                Feature Questions
+            </h2>
+            <p class="section-description">Deep dive into LayoutCraft's powerful features and capabilities.</p>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What is "Multi-Dimension Generation"?
+                        <span class="popular-badge">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                            Popular
+                        </span>
+                    </span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p>This is LayoutCraft's most powerful Pro feature—it <strong>saves you hours of repetitive work</strong>.</p>
+                    <p>Instead of creating designs one at a time and manually resizing them for different platforms, you can generate multiple perfectly formatted versions from a single prompt.</p>
+                    <p><strong>Real-world example:</strong></p>
+                    <p>Write one prompt: <em>"A product launch announcement for our new AI-powered calendar app, modern and professional style with blue accents"</em></p>
+                    <p>Select dimensions: Blog Header (1200×628), Instagram Post (1080×1080), Twitter Banner (1500×500)</p>
+                    <p>Click Generate → You instantly get three professionally designed, consistently styled assets, each optimized for its platform.</p>
+                    <div class="tip-box">
+                        <div class="tip-box-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 16v-4M12 8h.01"/>
+                            </svg>
+                            Time Saver
+                        </div>
+                        <p>What typically takes 1-2 hours of resizing and reformatting now happens in seconds. Perfect for marketers managing multiple platforms.</p>
+                    </div>
+                </div>
             </div>
-            <div class="faq-answer">
-                <p><strong>Fast Mode (⚡)</strong></p>
-                <ul>
-                    <li>Generates in ~30 seconds</li>
-                    <li>Great for quick iterations and brainstorming</li>
-                    <li>Perfect for most use cases</li>
-                </ul>
-                <p><strong>Pro Mode (💎)</strong></p>
-                <ul>
-                    <li>Takes up to 60 seconds</li>
-                    <li>Higher quality with more sophisticated details</li>
-                    <li>Better understanding of complex prompts</li>
-                    <li>Premium finishes and effects</li>
-                </ul>
-            </div>
-        </div>
 
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFAQ(this)">
-                <span>Can I use the designs commercially?</span>
-                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <path d="M6 9l6 6 6-6" />
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What does "Unlimited Design Refinements" mean?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p>This is the heart of the Pro workflow—it gives you <strong>complete creative control</strong>.</p>
+                    <p>After generating a design, you can use the same prompt bar to request changes as many times as you need. The AI understands your refinement requests and updates the design accordingly.</p>
+                    <p><strong>Example refinement requests:</strong></p>
+                    <ul>
+                        <li>"Make the title text larger and bolder"</li>
+                        <li>"Change the background to a deep navy blue"</li>
+                        <li>"Add a subtle geometric pattern behind the text"</li>
+                        <li>"Move the logo to the top right corner"</li>
+                        <li>"Use a more playful, rounded font"</li>
+                    </ul>
+                    <p>Pro users can iterate infinitely until the design is pixel-perfect. Free users get 1 refinement attempt to try the feature.</p>
+                    <p><strong>Pro tip:</strong> Make one change at a time for best results. The AI handles incremental adjustments better than wholesale redesigns.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How does "Full History Access & Editing" work?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p>Both plans automatically save your design history, but with different levels of access:</p>
+                    <p><strong>Free Plan (1 month, view-only):</strong></p>
+                    <ul>
+                        <li>See thumbnails of all designs from the past month</li>
+                        <li>Download any design you created</li>
+                        <li>Cannot load designs back into the editor for changes</li>
+                    </ul>
+                    <p><strong>Pro Plan (6 months, full editing):</strong></p>
+                    <ul>
+                        <li>Access all designs from the past 6 months</li>
+                        <li>Click "Edit" on any design to load it back into the designer</li>
+                        <li>Make unlimited refinements to old designs</li>
+                        <li>Generate new dimensions from existing designs</li>
+                        <li>Re-export in different formats</li>
+                    </ul>
+                    <div class="tip-box">
+                        <div class="tip-box-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 16v-4M12 8h.01"/>
+                            </svg>
+                            Use Case
+                        </div>
+                        <p>Created a blog header 3 months ago? As a Pro user, you can instantly load it, tweak the text for a new post, and generate matching social media versions—all without starting from scratch.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What's the difference between Standard and High-Quality exports?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Free Plan (Standard Quality):</strong></p>
+                    <ul>
+                        <li>Up to 2MB file size</li>
+                        <li>Optimized for web and social media</li>
+                        <li>Good quality for most online uses</li>
+                    </ul>
+                    <p><strong>Pro Plan (High-Quality):</strong></p>
+                    <ul>
+                        <li>Up to 10MB file size</li>
+                        <li>Higher resolution and color depth</li>
+                        <li>Print-ready quality</li>
+                        <li>Better for large displays and professional use</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What are Premium Templates and Brand Kit?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p>These are exciting Pro features we're actively developing:</p>
+                    <p><strong>Premium Templates (Coming Soon):</strong></p>
+                    <ul>
+                        <li>Professionally designed starting templates</li>
+                        <li>Category-specific layouts (e-commerce, tech, lifestyle, etc.)</li>
+                        <li>One-click customization with your content</li>
+                        <li>Industry-specific design patterns</li>
+                    </ul>
+                    <p><strong>Brand Kit (Coming Soon):</strong></p>
+                    <ul>
+                        <li>Save your brand colors, fonts, and logos</li>
+                        <li>Automatically apply brand elements to all designs</li>
+                        <li>Maintain consistent visual identity across all assets</li>
+                        <li>Perfect for agencies and businesses with established brands</li>
+                    </ul>
+                    <p>Pro users will get early access to these features as soon as they launch. Want to be notified? Make sure you're on the Pro plan and we'll email you first!</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="billing">
+            <h2 class="faq-section-title">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="4" width="22" height="16" rx="2"/>
+                    <path d="M1 10h22"/>
                 </svg>
+                Billing & Security
+            </h2>
+            <p class="section-description">Learn about payment security, cancellation, and refunds.</p>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Is my payment information secure?
+                        <span class="popular-badge">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                            </svg>
+                            Popular
+                        </span>
+                    </span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Yes, 100%.</strong> Your payment security is our top priority.</p>
+                    <p>We use <strong>Dodo Payments</strong>, a globally certified and trusted payment processor that handles billions of dollars in transactions securely. Here's how your data is protected:</p>
+                    <ul>
+                        <li><strong>Direct Processing:</strong> Your credit card details are sent directly to Dodo Payments' secure servers—they never touch or pass through our servers</li>
+                        <li><strong>Bank-Level Encryption:</strong> All payment data is encrypted using industry-standard 256-bit SSL/TLS encryption during transmission</li>
+                        <li><strong>PCI-DSS Compliant:</strong> Dodo Payments meets the highest Payment Card Industry Data Security Standards</li>
+                        <li><strong>Zero Storage:</strong> We never see, store, or have access to your complete card information</li>
+                        <li><strong>Secure Infrastructure:</strong> Protected by enterprise-grade firewalls and security monitoring</li>
+                    </ul>
+                    <div class="tip-box">
+                        <div class="tip-box-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                            Your Security Matters
+                        </div>
+                        <p>Dodo Payments processes payments for thousands of businesses worldwide and maintains the same security standards used by major financial institutions.</p>
+                    </div>
+                </div>
             </div>
-            <div class="faq-answer">
-                <p>Yes! All designs you create with LayoutCraft are yours to use however you want, including:</p>
-                <ul>
-                    <li>Commercial projects</li>
-                    <li>Client work</li>
-                    <li>Marketing materials</li>
-                    <li>Social media posts</li>
-                    <li>Any business purpose</li>
-                </ul>
-                <p>We don't claim any ownership over your generated designs.</p>
-            </div>
-        </div>
 
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFAQ(this)">
-                <span>How do I write better prompts?</span>
-                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <path d="M6 9l6 6 6-6" />
-                </svg>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>How do I cancel my subscription?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>Cancellation is simple and hassle-free</strong>—no support tickets, no phone calls, no retention tactics.</p>
+                    <p><strong>Here's how:</strong></p>
+                    <ol>
+                        <li>Log into your LayoutCraft account</li>
+                        <li>Click your profile icon and go to <strong>Account</strong></li>
+                        <li>Click the <strong>"Manage Subscription"</strong> button</li>
+                        <li>You'll be taken to your secure Dodo Payments portal</li>
+                        <li>Click <strong>"Cancel Subscription"</strong> and confirm</li>
+                    </ol>
+                    <p>That's it! No questions asked, no forms to fill out. Your cancellation takes effect at the end of your current billing period, so you keep Pro access for the time you've paid for.</p>
+                    <p><strong>Changed your mind?</strong> You can easily reactivate your Pro subscription anytime from the same Account page.</p>
+                </div>
             </div>
-            <div class="faq-answer">
-                <p>Great prompts include:</p>
-                <ul>
-                    <li><strong>Format:</strong> "Blog header for..." or "Instagram post about..."</li>
-                    <li><strong>Specific text:</strong> "Include the text 'Summer Sale - 50% Off'"</li>
-                    <li><strong>Style/mood:</strong> "Modern, minimalist, professional, vibrant"</li>
-                    <li><strong>Colors:</strong> "Use blue and white" or "warm earth tones"</li>
-                    <li><strong>Elements:</strong> "Include geometric shapes" or "add subtle patterns"</li>
-                </ul>
-                <p>Check out our <a href="/blog/posts/writing-better-prompts/" style="color: #6366f1;">complete
-                        guide to writing prompts</a> for more tips!</p>
-            </div>
-        </div>
 
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFAQ(this)">
-                <span>What file formats are available?</span>
-                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <path d="M6 9l6 6 6-6" />
-                </svg>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What is your refund policy?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p>Due to the immediate, compute-intensive nature of AI generation, <strong>we generally do not offer refunds once a payment has been processed</strong>.</p>
+                    <p><strong>Why we have this policy:</strong></p>
+                    <ul>
+                        <li>AI generation costs are incurred immediately when you create designs</li>
+                        <li>We provide a full <strong>7-day free trial</strong> so you can thoroughly test Pro features before any payment</li>
+                        <li>You have complete flexibility to cancel anytime</li>
+                    </ul>
+                    <p><strong>Exceptional circumstances:</strong></p>
+                    <p>If you believe you've been charged in error, experienced technical issues that prevented you from using the service, or have another exceptional circumstance, please contact us at <a href="mailto:support@layoutcraft.tech">support@layoutcraft.tech</a>. We review each case individually and will work with you to find a fair solution.</p>
+                    <div class="tip-box">
+                        <div class="tip-box-title">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <path d="M12 16v-4M12 8h.01"/>
+                            </svg>
+                            Try Before You Buy
+                        </div>
+                        <p>Take full advantage of the 7-day free trial to ensure Pro is right for you. Test all features, create real designs, and make an informed decision—completely risk-free.</p>
+                    </div>
+                </div>
             </div>
-            <div class="faq-answer">
-                <p>Currently, all designs are exported as high-quality PNG files. PNGs are perfect for:</p>
-                <ul>
-                    <li>Web use (blogs, websites)</li>
-                    <li>Social media posts</li>
-                    <li>Presentations</li>
-                    <li>Print materials</li>
-                </ul>
-                <p>We're working on additional export formats for future updates.</p>
-            </div>
-        </div>
 
-        <div class="faq-item">
-            <div class="faq-question" onclick="toggleFAQ(this)">
-                <span>Is there a limit to how many designs I can create?</span>
-                <svg class="faq-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2">
-                    <path d="M6 9l6 6 6-6" />
-                </svg>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>When will I be charged?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p><strong>During your 7-day free trial:</strong></p>
+                    <ul>
+                        <li>You are <strong>not charged</strong> during your trial period</li>
+                        <li>If you add payment information during the trial, you're still not charged until after the trial ends</li>
+                        <li>You can cancel anytime during the trial with zero charges</li>
+                    </ul>
+                    <p><strong>After upgrading to Pro:</strong></p>
+                    <ul>
+                        <li>Your first charge occurs on the day your trial ends (if you upgraded during trial)</li>
+                        <li>Or immediately when you upgrade (if upgrading after your trial has ended)</li>
+                        <li>Subsequent charges occur monthly on the same date</li>
+                        <li>You'll receive an email receipt for every payment</li>
+                    </ul>
+                    <p>You can always view your billing history and next payment date in your Account settings.</p>
+                </div>
             </div>
-            <div class="faq-answer">
-                <p>For logged-in users:</p>
-                <ul>
-                    <li><strong>Fast generations:</strong> Unlimited!</li>
-                    <li><strong>Pro generations:</strong> Currently unlimited during our launch period</li>
-                </ul>
-                <p>For anonymous users:</p>
-                <ul>
-                    <li>Limited to a few generations to prevent abuse</li>
-                    <li>Sign up for free to unlock unlimited access</li>
-                </ul>
-            </div>
-        </div>
 
-       <div class="faq-cta">
-            <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">Still have questions?</h3>
-            <p style="color: #6b7280; margin-bottom: 1.5rem;">
-                We're here to help! Reach out through the feedback form in the app,<br>
-                or email us at <a href="mailto:hello@layoutcraft.tech">hello@layoutcraft.tech</a>.
-            </p>
-            <button data-auth-signup class="btn btn-primary">
-                Start Creating →
-            </button>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFAQ(this)">
+                    <span>What payment methods do you accept?</span>
+                    <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    <p>We accept all major credit and debit cards through Dodo Payments, including:</p>
+                    <ul>
+                        <li>Visa</li>
+                        <li>Mastercard</li>
+                        <li>American Express</li>
+                        <li>Discover</li>
+                        <li>Diners Club</li>
+                        <li>JCB</li>
+                    </ul>
+                    <p>All payments are processed in USD. Your bank may apply currency conversion fees if you're paying from outside the United States.</p>
+                    <p>We currently do not accept PayPal, cryptocurrency, or bank transfers. All subscriptions must be paid via credit or debit card through our secure payment processor.</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="faq-cta">
+            <div class="faq-cta-content">
+                <h3>Still have questions?</h3>
+                <p>
+                    Can't find what you're looking for? We're here to help!<br>
+                    Email us at <a href="mailto:support@layoutcraft.tech">support@layoutcraft.tech</a> and we'll get back to you within 24 hours.
+                </p>
+                <a href="/pricing/" class="btn btn-primary">View Pricing & Start Free Trial →</a>
+            </div>
         </div>
     </div>
 
-    <!-- Standard Footer - Use this on all pages -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -320,22 +1060,22 @@
                     <div class="footer-column">
                         <h4>Product</h4>
                         <a href="/app/">Create Design</a>
+                        <a href="/pricing/">Pricing</a>
                         <a href="/blog/">Blog</a>
                         <a href="/about/">About</a>
-                        <a href="/faq/">FAQ</a>
                     </div>
 
                     <div class="footer-column">
                         <h4>Resources</h4>
                         <a href="/blog/posts/writing-better-prompts/">Prompt Guide</a>
                         <a href="/app/">Templates</a>
-                        <a href="/faq/">Help</a>
+                        <a href="/faq/">Help Center</a>
                     </div>
 
                     <div class="footer-column">
                         <h4>Legal</h4>
-                        <a href="/legal/terms.html">Terms</a>
-                        <a href="/legal/privacy.html">Privacy</a>
+                        <a href="/legal/terms.html">Terms of Service</a>
+                        <a href="/legal/privacy.html">Privacy Policy</a>
                     </div>
                 </div>
             </div>
@@ -348,25 +1088,66 @@
 
     <script>
         function toggleFAQ(element) {
-            const faqItem = element.parentElement;
+            const faqItem = element.closest('.faq-item');
+            const wasOpen = faqItem.classList.contains('open');
+            
+            // Optional: Close other open items (accordion behavior)
+            // document.querySelectorAll('.faq-item.open').forEach(item => {
+            //     if (item !== faqItem) item.classList.remove('open');
+            // });
+            
             faqItem.classList.toggle('open');
+            
+            // Scroll into view if opening and near bottom of viewport
+            if (!wasOpen) {
+                setTimeout(() => {
+                    const rect = faqItem.getBoundingClientRect();
+                    if (rect.bottom > window.innerHeight - 100) {
+                        faqItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                }, 300);
+            }
         }
+
+    
+        // Smooth scroll for quick links
+        document.querySelectorAll('.quick-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                
+                if (targetSection) {
+                    const yOffset = -100; // Account for sticky header
+                    const y = targetSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Auto-open FAQ from URL hash
+        window.addEventListener('DOMContentLoaded', () => {
+            const hash = window.location.hash;
+            if (hash) {
+                const targetSection = document.querySelector(hash);
+                if (targetSection) {
+                    setTimeout(() => {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+            }
+        });
     </script>
 
-    <link rel="stylesheet" href="/shared/css/navigation.css">
     <script type="module" src="/shared/js/authService.js"></script>
     <script type="module" src="/shared/js/navigation.js"></script>
     <script type="module">
-        // Import the classes from your scripts
         import { layoutCraftNav } from '/shared/js/navigation.js';
         import { authService } from '/shared/js/authService.js';
 
-        // Wait for the DOM to be fully loaded before running
         document.addEventListener('DOMContentLoaded', () => {
-            // The navigation class is now correctly given the auth service it needs.
             window.layoutCraftNav = layoutCraftNav;
         });
     </script>
 </body>
-
 </html>

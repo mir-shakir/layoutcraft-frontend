@@ -391,7 +391,7 @@ async function toggleDesktopExpansion(threadId) {
                 <div class="group-actions">
                     <button class="group-action-btn edit-group-btn" 
                             onclick="editEditGroup('${group.generation_id}')">
-                        Edit Group ${!subscriptionService.isPro() ? '🔒' : ''}
+                        Edit Group ${!subscriptionService.isOnTrialOrPro() ? '🔒' : ''}
                     </button>
                     <button class="group-action-btn download-all-btn" 
                             onclick="downloadEditGroup('${group.generation_id}')">
@@ -418,7 +418,7 @@ async function toggleDesktopExpansion(threadId) {
 
     // --- NAVIGATION FUNCTIONS ---
     function editEditGroup(generationId) {
-         if (!subscriptionService.isPro()) {
+         if (!subscriptionService.isOnTrialOrPro()) {
             showUpgradeModal('Loading past designs for editing is a Pro feature. Upgrade to regain full access to your creative history!');
             return; 
         }

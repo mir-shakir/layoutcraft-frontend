@@ -46,13 +46,38 @@ class SubscriptionService {
         this.hasFetched = false;
     }
 
-    isPro() {
+    isOnTrialOrPro() {
         // if(1===1) return true; // TEMPORARY OVERRIDE TO ALWAYS ENABLE PRO FEATURES
         if (!this.subscription) return false;
         return this.subscription.status === 'active' && ((this.subscription.plan === 'pro') || (this.subscription.plan === 'pro-trial' && new Date(this.subscription.trial_ends_at) > new Date()));
         // const isTrialing = this.subscription.plan === 'pro-trial' && new Date(this.subscription.trial_ends_at) > new Date();
         // const isActive = this.subscription.status === 'active';
         // return this.subscription.plan === 'pro' && (isTrialing || isActive);
+    }
+    isPro() {
+        if (!this.subscription) return false;
+        return this.subscription.status === 'active' && this.subscription.plan === 'pro';
+    }
+
+    isOnTrial() {
+        if (!this.subscription) return false;
+        return this.subscription.plan === 'pro-trial' && new Date(this.subscription.trial_ends_at) > new Date();
+    }
+    fetchAndCheckIfTrialing() {
+        //this method fetches the subscription and checks if the user is on a pro trial
+        return new Promise(async (resolve, reject) => {
+            try {
+                await this.fetchSubscription();
+                if (!this.subscription) {
+                    resolve(false);
+                    return;
+                }
+                const isTrialing = this.subscription.plan === 'pro-trial' && new Date(this.subscription.trial_ends_at) > new Date();
+                resolve(isTrialing);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 }
 
