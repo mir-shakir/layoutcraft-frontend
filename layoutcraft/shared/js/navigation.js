@@ -7,6 +7,7 @@ the authService and then switching the UI to login mode.
 */
 
 import { authService } from './authService.js';
+import { subscriptionService } from './subscriptionService.js';
 
 class LayoutCraftNav {
     constructor() {
@@ -24,9 +25,12 @@ class LayoutCraftNav {
     }
 
     checkAuth() {
-        this.isLoggedIn = this.authService.hasToken();
+        this.isLoggedIn = this.authService.hasToken() && !this.authService.isTokenExpired();
         if (this.isLoggedIn) {
             this.currentUser = this.authService.getCurrentUser();
+        } else if (this.authService.hasToken() && this.authService.isTokenExpired()) {
+            // Token exists but is expired - clean up
+            this.authService.logout();
         }
     }
 
@@ -65,6 +69,7 @@ class LayoutCraftNav {
                 // --- END OF FIX ---
             }
             this.checkAuth();
+            await subscriptionService.fetchSubscription();
             this.closeAuthModal();
             this.renderUI();
              const successMessage = this.authMode === 'signup' 
@@ -135,7 +140,7 @@ class LayoutCraftNav {
         const navElement = document.getElementById('main-navigation');
         if (!navElement) return;
         const isAppPage = window.location.pathname.includes('/app');
-        navElement.innerHTML = `<nav class="nav"><div class="container"><div class="nav-wrapper"><a href="/" class="logo"><div class="logo-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6366f1;"/><stop offset="100%" style="stop-color:#8b5cf6;"/></linearGradient></defs><rect width="48" height="48" rx="8" fill="url(#brandGradient)"/><path d="M12 12V28C12 32.4183 15.5817 36 20 36H36V20C36 15.5817 32.4183 12 28 12H20C20 12 20 20 20 20H28C28 20 28 28 28 28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/><circle cx="24" cy="24" r="2.5" fill="white" opacity="0.9"/></svg></div><span class="logo-text">LayoutCraft</span></a><div class="nav-links desktop-nav"><a href="/about/" class="nav-link">About</a><a href="/blog/" class="nav-link">Blog</a><a href="/faq/" class="nav-link">FAQ</a>${this.isLoggedIn ? '<a href="/app/history/" class="nav-link">My Designs</a>' : ''}${this.renderAuthSection()}${!isAppPage ? '<a href="/app/" id="nav-launch-app" class="nav-link nav-cta">Launch App →</a>' : ''}</div><button class="mobile-menu-btn" id="mobile-menu-btn" type="button"><svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg><svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg></button></div></div></nav>`;
+        navElement.innerHTML = `<nav class="nav"><div class="container"><div class="nav-wrapper"><a href="/" class="logo"><div class="logo-icon"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#6366f1;"/><stop offset="100%" style="stop-color:#8b5cf6;"/></linearGradient></defs><rect width="48" height="48" rx="8" fill="url(#brandGradient)"/><path d="M12 12V28C12 32.4183 15.5817 36 20 36H36V20C36 15.5817 32.4183 12 28 12H20C20 12 20 20 20 20H28C28 20 28 28 28 28" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.95"/><circle cx="24" cy="24" r="2.5" fill="white" opacity="0.9"/></svg></div><span class="logo-text">LayoutCraft</span></a><div class="nav-links desktop-nav"><a href="/about/" class="nav-link">About</a><a href="/blog/" class="nav-link">Blog</a><a href="/faq/" class="nav-link">FAQ</a><a href="/pricing/" class="nav-link">Pricing</a>${this.isLoggedIn ? '<a href="/app/history/" class="nav-link">My Designs</a>' : ''}${this.renderAuthSection()}${!isAppPage ? '<a href="/app/" id="nav-launch-app" class="nav-link nav-cta">Launch App →</a>' : ''}</div><button class="mobile-menu-btn" id="mobile-menu-btn" type="button"><svg class="menu-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg><svg class="close-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg></button></div></div></nav>`;
     
     }
 
@@ -143,7 +148,7 @@ class LayoutCraftNav {
         const existingMenu = document.getElementById('mobile-menu');
         if (existingMenu) existingMenu.remove();
         const isAppPage = window.location.pathname.includes('/app');
-        const mobileMenuHTML = `<div class="mobile-menu" id="mobile-menu"><div class="mobile-menu-content"><a href="/" class="mobile-nav-link">Home</a><a href="/about/" class="mobile-nav-link">About</a><a href="/blog/" class="mobile-nav-link">Blog</a><a href="/faq/" class="mobile-nav-link">FAQ</a><div class="mobile-divider"></div>${ this.isLoggedIn ? '<a href="/app/history/" class="mobile-nav-link">My Designs</a>' : ''}${this.renderMobileAuthSection()}${!isAppPage ? '<a href="/app/" id="mobile-launch-app" class="mobile-nav-link mobile-cta">Launch App →</a>' : ''}</div></div>`;
+        const mobileMenuHTML = `<div class="mobile-menu" id="mobile-menu"><div class="mobile-menu-content"><a href="/" class="mobile-nav-link">Home</a><a href="/about/" class="mobile-nav-link">About</a><a href="/blog/" class="mobile-nav-link">Blog</a><a href="/faq/" class="mobile-nav-link">FAQ</a> <a href="/pricing/" class="mobile-nav-link">Pricing</a> <div class="mobile-divider"></div>${ this.isLoggedIn ? '<a href="/app/history/" class="mobile-nav-link">My Designs</a>' : ''}${this.renderMobileAuthSection()}${!isAppPage ? '<a href="/app/" id="mobile-launch-app" class="mobile-nav-link mobile-cta">Launch App →</a>' : ''}</div></div>`;
         document.body.insertAdjacentHTML('beforeend', mobileMenuHTML);
     }
 
@@ -181,7 +186,7 @@ class LayoutCraftNav {
     
     renderAuthSection() {
         if (this.isLoggedIn) {
-            return `<div class="profile-dropdown-container"><button class="profile-btn" type="button"><div class="profile-avatar">${this.currentUser?.full_name?.charAt(0) || this.currentUser?.email?.charAt(0) || 'U'}</div><span class="profile-name">${this.currentUser?.full_name || this.currentUser?.email || 'User'}</span><svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="profile-dropdown" id="profile-dropdown"><button class="dropdown-item" type="button" data-auth-logout>Logout</button></div></div>`;
+            return `<div class="profile-dropdown-container"><button class="profile-btn" type="button"><div class="profile-avatar">${this.currentUser?.full_name?.charAt(0) || this.currentUser?.email?.charAt(0) || 'U'}</div><span class="profile-name">${this.currentUser?.full_name || this.currentUser?.email || 'User'}</span><svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="profile-dropdown" id="profile-dropdown"><a href="/account/" class="dropdown-item">My Account</a> <button class="dropdown-item" type="button" data-auth-logout>Logout</button></div></div>`;
         } else {
             return `<button class="nav-link nav-link-btn" type="button" data-auth-login>Log In</button><button class="nav-link nav-signup-btn" type="button" data-auth-signup>Sign Up</button>`;
         }
@@ -189,7 +194,7 @@ class LayoutCraftNav {
     
     renderMobileAuthSection() {
         if (this.isLoggedIn) {
-            return `<div class="mobile-profile-section"><div class="mobile-profile-info"><div class="profile-avatar">${this.currentUser?.full_name?.charAt(0) || this.currentUser?.email?.charAt(0) || 'U'}</div><span>${this.currentUser?.full_name || this.currentUser?.email || 'User'}</span></div><button class="mobile-nav-link logout-link" type="button" data-auth-logout>Logout</button></div>`;
+            return `<div class="mobile-profile-section"><div class="mobile-profile-info"><div class="profile-avatar">${this.currentUser?.full_name?.charAt(0) || this.currentUser?.email?.charAt(0) || 'U'}</div><span>${this.currentUser?.full_name || this.currentUser?.email || 'User'}</span></div> <a href="/account/" class="mobile-nav-link">My Account</a> <button class="mobile-nav-link logout-link" type="button" data-auth-logout>Logout</button></div>`;
         } else {
             return `<button class="mobile-nav-link" type="button" data-auth-login>Log In</button><button class="mobile-nav-link mobile-signup" type="button" data-auth-signup>Sign Up</button>`;
         }

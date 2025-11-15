@@ -1,9 +1,21 @@
 import { authService } from '../../shared/js/authService.js';
+import { subscriptionService } from '../../shared/js/subscriptionService.js'; 
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // Check if user is logged in
     if (!authService.hasToken() || authService.isTokenExpired()) {
-        window.location.href = '/?auth=required';
+        if (authService.hasToken() && authService.isTokenExpired()) {
+            authService.logout();
+            document.dispatchEvent(new CustomEvent('authChange'));
+        }
+        // Show auth modal with custom message
+        if (window.layoutCraftNav) {
+            window.layoutCraftNav.openAuthModal('login', 'Your session has expired. Please log in again to access your designs.');
+        } else {
+            // Fallback: redirect if navigation isn't loaded yet
+            window.location.href = '/?auth=required';
+        }
         return; 
     }
 
@@ -39,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- INITIALIZATION ---
     async function init() {
         setupEventListeners();
+        await subscriptionService.fetchSubscription(); 
         await fetchParentPrompts();
     }
 
@@ -378,7 +391,7 @@ async function toggleDesktopExpansion(threadId) {
                 <div class="group-actions">
                     <button class="group-action-btn edit-group-btn" 
                             onclick="editEditGroup('${group.generation_id}')">
-                        Edit Group
+                        Edit Group ${!subscriptionService.isPro() ? '🔒' : ''}
                     </button>
                     <button class="group-action-btn download-all-btn" 
                             onclick="downloadEditGroup('${group.generation_id}')">
@@ -405,6 +418,10 @@ async function toggleDesktopExpansion(threadId) {
 
     // --- NAVIGATION FUNCTIONS ---
     function editEditGroup(generationId) {
+         if (!subscriptionService.isPro()) {
+            showUpgradeModal('Loading past designs for editing is a Pro feature. Upgrade to regain full access to your creative history!');
+            return; 
+        }
         window.location.href = `/app/?edit=${generationId}`;
     }
 
@@ -611,6 +628,30 @@ async function toggleDesktopExpansion(threadId) {
     window.openImagePreview = openImagePreview;
     window.closeModal = closeModal;
     window.downloadSingleImage = downloadSingleImage;
+
+
+    function showUpgradeModal(message) {
+        const existingModal = document.getElementById('upgrade-modal');
+        if (existingModal) existingModal.remove();
+
+        const modalHTML = `
+        <div class="auth-modal-overlay active" id="upgrade-modal" style="z-index: 10001; /* Higher than history modal */">
+            <div class="auth-modal-content">
+                <button class="auth-modal-close" type="button">×</button>
+                <h2 class="auth-modal-title">Upgrade to Pro</h2>
+                <p class="auth-modal-subtitle">${message}</p>
+                <a href="/pricing/" class="btn btn-primary" style="width: 100%; text-align: center; margin-top: 1rem;">View Pro Features</a>
+            </div>
+        </div>
+    `;
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+        const modal = document.getElementById('upgrade-modal');
+        modal.querySelector('.auth-modal-close').addEventListener('click', () => modal.remove());
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) modal.remove();
+        });
+    }
 
     init();
 });

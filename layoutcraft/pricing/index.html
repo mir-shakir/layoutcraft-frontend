@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - LayoutCraft</title>
+    <meta name="description" content="Choose the right LayoutCraft plan for your needs.">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/css/base.css">
+    <link rel="stylesheet" href="/shared/css/navigation.css">
+    <style>
+        body { background-color: #f9fafb; }
+        .pricing-header { text-align: center; padding: 6rem 1rem 4rem; background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff); }
+        .pricing-header h1 { font-size: 3rem; font-weight: 800; color: #111827; }
+        .pricing-header p { font-size: 1.25rem; color: #6b7280; max-width: 600px; margin: 1rem auto 0; }
+        .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 900px; margin: -2rem auto 4rem; padding: 0 1rem; }
+        .plan-card { background: white; border-radius: 16px; padding: 2.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; }
+        .plan-card.pro { border-color: #6366f1; box-shadow: 0 8px 30px rgba(99,102,241,0.15); }
+        .plan-name { font-size: 1.25rem; font-weight: 600; color: #111827; }
+        .plan-price { font-size: 2.5rem; font-weight: 800; color: #111827; margin: 1rem 0; }
+        .plan-price span { font-size: 1rem; font-weight: 500; color: #6b7280; }
+        .plan-description { color: #6b7280; margin-bottom: 2rem; min-height: 40px; }
+        .plan-features { list-style: none; margin: 0 0 2.5rem; }
+        .plan-features li { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; color: #374151; }
+        .plan-features svg { color: #10b981; flex-shrink: 0; }
+        .plan-cta { width: 100%; font-size: 1rem; padding: 0.875rem; }
+        @media (max-width: 768px) { .pricing-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div id="main-navigation"></div>
+
+    <header class="pricing-header">
+        <h1>Find the Plan That's Right for You</h1>
+        <p>Start for free, and unlock powerful features by upgrading to Pro. Simple and transparent.</p>
+    </header>
+
+    <main>
+        <div class="pricing-grid">
+            <div class="plan-card">
+                <h2 class="plan-name">Free</h2>
+                <div class="plan-price">$0</div>
+                <p class="plan-description">For individuals starting out and exploring LayoutCraft.</p>
+                <a href="/app/" class="btn btn-secondary plan-cta">Continue with Free</a>
+                <ul class="plan-features" style="margin-top: 2.5rem;">
+                    <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>Single Dimension Generations</li>
+                    <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>View Project History</li>
+                    <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>Standard Quality Exports</li>
+                </ul>
+            </div>
+
+            <div class="plan-card pro">
+                <h2 class="plan-name">Pro</h2>
+                <div class="plan-price">$10 <span>/ month</span></div>
+                <p class="plan-description">For professionals who need a faster and more powerful workflow.</p>
+                <button class="btn btn-primary plan-cta" id="upgrade-btn">Upgrade to Pro</button>
+                <ul class="plan-features" style="margin-top: 2.5rem;">
+                    <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>Multi-Dimension Generation</li>
+                    <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>Unlimited Design Refinements</li>
+                    <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>Full History Access & Editing</li>
+                    <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>High-Quality Exports</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <script type="module" src="/shared/js/authService.js"></script>
+    <script type="module" src="/shared/js/navigation.js"></script>
+    <script type="module">
+        import { layoutCraftNav } from '/shared/js/navigation.js';
+        import { authService } from '/shared/js/authService.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            window.layoutCraftNav = layoutCraftNav;
+
+            const upgradeBtn = document.getElementById('upgrade-btn');
+            upgradeBtn.addEventListener('click', async () => {
+                // If the user isn't logged in, open the signup modal first.
+                if (!authService.hasToken()) {
+                    layoutCraftNav.openAuthModal('signup');
+                    return;
+                }
+
+                // Handle the checkout process for logged-in users.
+                upgradeBtn.disabled = true;
+                upgradeBtn.textContent = 'Redirecting to payment...';
+
+                try {
+                    const response = await authService.fetchAuthenticated('/dodo/create-checkout', {
+                        method: 'POST'
+                    });
+
+                    if (response.checkout_url) {
+                        window.location.href = response.checkout_url;
+                    } else {
+                        throw new Error('Checkout URL not found in response.');
+                    }
+                } catch (error) {
+                    console.error('Failed to create checkout session:', error);
+                    alert('Could not initiate the payment process. Please try again later.');
+                    upgradeBtn.disabled = false;
+                    upgradeBtn.textContent = 'Upgrade to Pro';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

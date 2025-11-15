@@ -6,10 +6,13 @@ This is the single source of truth for all authentication logic.
 It includes better error formatting inspired by your scripts.js.
 */
 
+import { subscriptionService } from './subscriptionService.js';
+
 class AuthService {
     constructor() {
         // this.apiBaseUrl = 'https://layoutcraft-backend.onrender.com';
         this.apiBaseUrl = "http://127.0.0.1:8000"
+        // this.apiBaseUrl = "https://e0726f05943e.ngrok-free.app"
         this.tokenKey = 'layoutcraft_access_token';
         this.userKey = 'layoutcraft_user';
     }
@@ -45,6 +48,16 @@ class AuthService {
             return true;
         }
     }
+
+
+    refreshUserProfile() {
+        return this.loadUserProfile().then(userProfile => {
+            if (userProfile && userProfile.id) {
+                this.saveUser(userProfile);
+            }
+            return userProfile;
+        });
+    }
     saveUser(user) {
         localStorage.setItem(this.userKey, JSON.stringify(user));
     }
@@ -66,6 +79,8 @@ class AuthService {
     logout() {
         localStorage.removeItem(this.tokenKey);
         localStorage.removeItem(this.userKey);
+        subscriptionService.clearSubscription();
+        console.log("User logged out.");
         // authchange event should be dispatched by the caller
         document.dispatchEvent(new CustomEvent('authChange'));
     }
@@ -162,6 +177,56 @@ class AuthService {
             this.saveUser(data.user);
         }
         return data;
+    }
+
+    // Add this new function inside the AuthService class
+
+/**
+ * Clears local user/subscription cache and fetches the latest user profile.
+ * This is used after a payment to get the new subscription status.
+ */
+async forceRefreshUserData() {
+    if (!this.hasToken()) {
+        return; // Not logged in, nothing to refresh
+    }
+
+    // 1. Clear the stale local data
+    localStorage.removeItem(this.userKey);
+
+    // We also need to clear the subscription service. Let's add a function for that.
+    // (We will add this in the next step, for now, we just clear its variable)
+    if (subscriptionService) {
+        subscriptionService.clearSubscription();
+    }
+
+    try {
+        // 2. Fetch the fresh user profile from the backend
+        const userProfile = await this.loadUserProfile();
+
+        // 3. Save the new, fresh data
+        if (userProfile && userProfile.id) {
+            this.saveUser(userProfile);
+
+            // 4. Re-populate the subscription service with the new data
+            if (subscriptionService) {
+                await subscriptionService.fetchSubscription();
+            }
+            return userProfile;
+        } else {
+            throw new Error("Failed to fetch a valid user profile.");
+        }
+    } catch (error) {
+        console.error("forceRefreshUserData failed:", error);
+        // If fetching fails, log the user out as a safety measure
+        this.logout();
+        window.location.href = '/?auth=required';
+    }
+}
+
+    async loadUserProfile() {
+        return await this.fetchAuthenticated('/auth/profile', {
+            method: 'GET'
+        });
     }
 }
 

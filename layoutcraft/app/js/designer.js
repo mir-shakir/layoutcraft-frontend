@@ -1,4 +1,5 @@
 import { authService } from "../../shared/js/authService.js";
+import { subscriptionService } from "../../shared/js/subscriptionService.js";
 
 (function () {
     'use strict';
@@ -15,7 +16,7 @@ import { authService } from "../../shared/js/authService.js";
         generation_id: null, // <-- ADD THIS: To store the ID for the whole group
         selectedForEditing: [], // <-- This will now store size_preset strings, e.g., ['blog_header']
         prompt: '',
-        selectedDimensions: ['blog_header', 'social_square'], // Default to a single item in an array
+        selectedDimensions: ['blog_header'], // Default to a single item in an array
         selectedStyle: 'auto',
         isGenerating: false,
     };
@@ -61,14 +62,47 @@ import { authService } from "../../shared/js/authService.js";
         appContainer: document.querySelector('.designer-app'),
     };
 
+    // ... after the elements object
+
+function showUpgradeModal(message) {
+    // First, remove any existing modal to prevent duplicates
+    const existingModal = document.getElementById('upgrade-modal');
+    if (existingModal) {
+        existingModal.remove();
+    }
+
+    const modalHTML = `
+        <div class="auth-modal-overlay active" id="upgrade-modal" style="z-index: 10001;">
+            <div class="auth-modal-content">
+                <button class="auth-modal-close" type="button">×</button>
+                <h2 class="auth-modal-title">Upgrade to Pro</h2>
+                <p class="auth-modal-subtitle">${message}</p>
+                <a href="/pricing/" class="btn btn-primary" style="width: 100%; text-align: center; margin-top: 1rem;">View Pro Features</a>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+    const modal = document.getElementById('upgrade-modal');
+    modal.querySelector('.auth-modal-close').addEventListener('click', () => {
+        modal.remove();
+    });
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.remove();
+        }
+    });
+}
+
     // --- INITIALIZATION ---
-    function init() {
+    async function init() {
         if (elements.appContainer) {
             elements.appContainer.style.visibility = 'visible';
             elements.appContainer.style.opacity = '1';
         }
         checkAuthStatus();
         setupEventListeners();
+        await subscriptionService.fetchSubscription();
         loadInitialData(); // Load any initial data from sessionStorage
         loadDesignForEditing(); // Check for ?edit=... parameter
         renderUI();
@@ -130,7 +164,12 @@ import { authService } from "../../shared/js/authService.js";
                     elements.promptInput.value = data.prompt;
                 }
                 if (data.template) {
-                    state.selectedDimensions = [data.template];
+                     if (!subscriptionService.isPro()) {
+                        state.selectedDimensions = [data.template];
+                    } else {
+                        // If they are pro, we can allow multiple if we decide to later
+                        state.selectedDimensions = [data.template]; 
+                    }
                 }
                 if (data.style) {
                     state.selectedStyle = data.style;
@@ -175,20 +214,46 @@ import { authService } from "../../shared/js/authService.js";
 
         options.forEach((option, index) => {
             const item = document.createElement('div');
+            const isLocked = isMultiSelect && !subscriptionService.isPro() && index > 0;
+
+
             item.className = 'dropdown-item';
-            item.innerHTML = `<label>
+            // item.innerHTML = `<label>
+            //     <input type="${isMultiSelect ? 'checkbox' : 'radio'}" 
+            //         name="${type}-option"
+            //         value="${option.value}" 
+            //         ${isMultiSelect ? (state.selectedDimensions.includes(option.value) ? 'checked' : '') : (state.selectedStyle === option.value ? 'checked' : '')}>
+            //         ${option.label}
+            // </label>`;
+
+            item.innerHTML = `<label class="${isLocked ? 'locked' : ''}" style="${isLocked ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
                 <input type="${isMultiSelect ? 'checkbox' : 'radio'}" 
-                    name="${type}-option"
-                    value="${option.value}" 
-                    ${isMultiSelect ? (state.selectedDimensions.includes(option.value) ? 'checked' : '') : (state.selectedStyle === option.value ? 'checked' : '')}>
-                    ${option.label}
+                name="${type}-option"
+                value="${option.value}" 
+                ${isMultiSelect ? (state.selectedDimensions.includes(option.value) ? 'checked' : '') : (state.selectedStyle === option.value ? 'checked' : '')}
+                ${isLocked ? 'disabled' : ''}>
+                ${option.label} ${isLocked ? '🔒' : ''}
             </label>`;
 
-            item.querySelector('input').addEventListener('change', (e) => {
-                handleSelectionChange(type, option.value, e.target.checked);
-                updateButtonLabel();
-                if (!isMultiSelect) menu.classList.remove('show');
-            });
+            if (isLocked) {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showUpgradeModal('Selecting multiple dimensions is a Pro feature. Upgrade to generate designs in multiple sizes at once!');
+                });
+            } else {
+                item.querySelector('input').addEventListener('change', (e) => {
+                    handleSelectionChange(type, option.value, e.target.checked);
+                    updateButtonLabel();
+                    if (!isMultiSelect) menu.classList.remove('show');
+                });
+            }
+
+            // item.querySelector('input').addEventListener('change', (e) => {
+            //     handleSelectionChange(type, option.value, e.target.checked);
+            //     updateButtonLabel();
+            //     if (!isMultiSelect) menu.classList.remove('show');
+            // });
 
             // const isLocked = isMultiSelect && !state.isLoggedIn && index > 1;
 
@@ -301,6 +366,12 @@ import { authService } from "../../shared/js/authService.js";
     // --- UI HANDLERS & STATE UPDATES ---
 
     function handleSelectionChange(type, value, isSelected) {
+        if (type === 'dimensions' && isSelected && !subscriptionService.isPro() && state.selectedDimensions.length > 0) {
+            // Prevent the checkbox from being checked
+            event.target.checked = false;
+            showUpgradeModal('Selecting multiple dimensions is a Pro feature. Upgrade to generate designs in multiple sizes at once!');
+            return; // Stop the function here
+        }
         if (type === 'dimensions') {
             if (isSelected) {
                 if (!state.selectedDimensions.includes(value)) state.selectedDimensions.push(value);
@@ -362,6 +433,12 @@ import { authService } from "../../shared/js/authService.js";
                 btnText.textContent = selectionCount > 0 ? `Refine ${selectionCount} Design(s)` : 'Select designs to refine';
             }
             elements.generateBtn.disabled = !(hasText && selectionCount > 0) || state.isGenerating;
+            const lockIcon = ' 🔒';
+            if (!subscriptionService.isPro() && !btnText.textContent.includes(lockIcon)) {
+                btnText.textContent += lockIcon;
+            } else if (subscriptionService.isPro()) {
+                btnText.textContent = btnText.textContent.replace(lockIcon, '');
+            }
         } else {
             if (state.isGenerating) {
                 btnText.textContent = 'Generating...';
@@ -387,6 +464,11 @@ import { authService } from "../../shared/js/authService.js";
 
     // --- CORE LOGIC & API ---
     async function performAction() {
+        if (state.appMode === 'editing' && !subscriptionService.isPro()) {
+            showUpgradeModal('The ability to refine and edit designs with prompts is a Pro feature. Upgrade to unlock this powerful workflow!');
+        return; 
+    }
+
         if (elements.generateBtn.disabled) return;
 
         state.isGenerating = true;
