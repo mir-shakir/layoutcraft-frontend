@@ -545,3 +545,68 @@
     margin-bottom: 0;
     font-weight: 500;
 }
+
+/* Trust & Recognition */
+.trust-badges {
+    padding: var(--spacing-xl) 0;
+    background: white;
+    border-top: 1px solid #f3f4f6;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.trust-content {
+    text-align: center;
+}
+
+.trust-title {
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badges-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    flex-wrap: wrap;
+}
+
+.badge-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition-fast);
+}
+
+.badge-item:hover {
+    transform: translateY(-2px);
+}
+
+.badge-item img {
+    max-height: 80px;
+    width: auto;
+    opacity: 0.8;
+    transition: opacity var(--transition-fast);
+}
+
+.badge-item:hover img {
+    opacity: 1;
+}
+
+@media (max-width: 768px) {
+    .badges-container {
+        gap: 2rem;
+    }
+    
+    .badge-item img {
+        max-height: 60px;
+    }
+    
+    .trust-title {
+        font-size: var(--font-size-base);
+    }
+}
