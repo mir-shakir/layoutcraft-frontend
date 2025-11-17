@@ -3,71 +3,449 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About LayoutCraft - The Story Behind the AI Design Tool</title>
-    <meta name="description" content="Learn how LayoutCraft was born from frustration with chaotic AI art and built for the people designers ignore.">
+    <title>About LayoutCraft | AI Design Tool for Professional Marketing & Business</title>
+    <meta name="description" content="LayoutCraft transforms AI design from artistic chaos to functional business tools. Trusted by hundreds of marketers and founders for professional layouts with readable text. Learn our mission and story.">
+    <meta name="keywords" content="about layoutcraft, ai design for business, professional ai design tool, ai marketing design, functional ai layouts, business design software, readable ai text, layoutcraft mission">
     
-    <!-- Favicon -->
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://layoutcraft.tech/about/">
+    <meta property="og:title" content="About LayoutCraft - Professional AI Design Tool">
+    <meta property="og:description" content="Learn how LayoutCraft is transforming AI design from artistic chaos to functional business tools for marketers and founders.">
+    
+    <!-- Schema.org Organization Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "LayoutCraft",
+      "url": "https://layoutcraft.tech",
+      "logo": "https://layoutcraft.tech/favicon-32x32.png",
+      "description": "AI-powered design tool that creates professional, functional layouts for business and marketing use cases.",
+      "foundingDate": "2024",
+      "slogan": "AI design tool for the rest of us",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "support@layoutcraft.tech",
+        "contactType": "Customer Support"
+      }
+    }
+    </script>
+
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     
-    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Styles -->
     <link rel="stylesheet" href="/shared/css/base.css">
     <link rel="stylesheet" href="/css/homepage.css">
+    <link rel="stylesheet" href="/shared/css/navigation.css">
     
     <style>
+        body { background-color: #f9fafb; }
+        
+        /* Hero Section */
         .about-hero {
-            background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff);
-            padding: 8rem 0 4rem;
+            background: linear-gradient(135deg, #eef2ff 0%, #ffffff 50%, #faf5ff 100%);
+            padding: 8rem 0 6rem;
             text-align: center;
-            /* Add this */
+            position: relative;
+            overflow: hidden;
         }
-    
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .about-hero-content { position: relative; z-index: 1; }
         .about-hero .hero-title {
-            margin: 0 auto 1rem;
-            /* Add this */
-            max-width: 900px;
-            /* Add this */
-        }
-    
-        .about-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 3rem 0;
-        }
-        
-        .about-content h2 {
-            margin-top: 3rem;
-            margin-bottom: 1rem;
+            font-size: 3.5rem;
+            font-weight: 800;
             color: #111827;
+            margin: 0 auto 1.5rem;
+            max-width: 900px;
+            line-height: 1.1;
         }
-        
-        .about-content p {
+        .about-hero .hero-subtitle {
+            font-size: 1.375rem;
+            color: #4b5563;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+        .trust-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+        .trust-stat {
+            text-align: center;
+        }
+        .trust-stat-number {
+            display: block;
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #6366f1;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        .trust-stat-label {
+            font-size: 0.9375rem;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+        }
+
+        /* Mission Section */
+        .mission-section {
+            background: white;
+            padding: 6rem 0;
+            border-top: 1px solid #e5e7eb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .mission-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            text-align: center;
+        }
+        .section-label {
+            display: inline-block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #6366f1;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+        .section-title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        .section-description {
+            font-size: 1.25rem;
+            color: #4b5563;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+        }
+        .mission-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .mission-card {
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: left;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        .mission-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+            border-color: #c7d2fe;
+        }
+        .mission-card-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #eef2ff 0%, #faf5ff 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .mission-card-icon svg {
+            width: 28px;
+            height: 28px;
+            color: #6366f1;
+        }
+        .mission-card h3 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.75rem;
+        }
+        .mission-card p {
+            font-size: 1rem;
+            color: #6b7280;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* Story Section */
+        .story-section {
+            max-width: 900px;
+            margin: 6rem auto;
+            padding: 0 1.5rem;
+        }
+        .story-section h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #111827;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .story-content p {
             font-size: 1.125rem;
             line-height: 1.8;
             color: #4b5563;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.75rem;
+        }
+        .story-highlight {
+            background: linear-gradient(135deg, #eef2ff 0%, #faf5ff 100%);
+            border-left: 4px solid #6366f1;
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 3rem 0;
+        }
+        .story-highlight-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .story-highlight-title svg {
+            width: 20px;
+            height: 20px;
+            color: #6366f1;
+        }
+        .story-highlight p {
+            font-size: 1.0625rem;
+            color: #4b5563;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* Problem-Solution Section */
+        .problem-solution-section {
+            background: white;
+            padding: 6rem 0;
+            border-top: 1px solid #e5e7eb;
+        }
+        .problem-solution-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        .problem-solution-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+        .problem-card, .solution-card {
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 3rem;
+            border: 2px solid #e5e7eb;
+            position: relative;
+        }
+        .problem-card::before, .solution-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            border-radius: 16px 16px 0 0;
+        }
+        .problem-card::before {
+            background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+        }
+        .solution-card::before {
+            background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%);
+        }
+        .problem-card h3, .solution-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        .problem-card h3 { color: #dc2626; }
+        .solution-card h3 { color: #6366f1; }
+        .problem-card p, .solution-card p {
+            font-size: 1.0625rem;
+            line-height: 1.8;
+            color: #4b5563;
+            margin: 0;
+        }
+        .problem-card ul, .solution-card ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 1.5rem;
+        }
+        .problem-card li, .solution-card li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 1rem;
+            color: #4b5563;
+        }
+        .problem-card li svg {
+            width: 20px;
+            height: 20px;
+            color: #dc2626;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .solution-card li svg {
+            width: 20px;
+            height: 20px;
+            color: #10b981;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Values Section */
+        .values-section {
+            max-width: 1100px;
+            margin: 6rem auto;
+            padding: 0 1.5rem;
+        }
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .value-card {
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+        .value-card:hover {
+            border-color: #6366f1;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.1);
+        }
+        .value-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            font-weight: 700;
+            font-size: 1.125rem;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+        }
+        .value-card h3 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.75rem;
+        }
+        .value-card p {
+            font-size: 1.0625rem;
+            color: #6b7280;
+            line-height: 1.7;
+            margin: 0;
+        }
+
+        /* Trust Indicators */
+        .trust-section {
+            background: linear-gradient(135deg, #eef2ff 0%, #faf5ff 100%);
+            padding: 5rem 0;
+            border-top: 1px solid #e5e7eb;
+        }
+        .trust-content {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+            text-align: center;
+        }
+        .trust-badges-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .trust-badge-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+        }
+        .trust-badge-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #eef2ff 0%, #faf5ff 100%);
+            border-radius: 12px;
+        }
+        .trust-badge-icon svg {
+            width: 24px;
+            height: 24px;
+            color: #6366f1;
+        }
+        .trust-badge-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 0.5rem;
+        }
+        .trust-badge-card p {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 0;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .about-hero .hero-title { font-size: 2.75rem; }
+            .section-title { font-size: 2.25rem; }
+            .mission-cards { grid-template-columns: 1fr; }
+            .problem-solution-grid { grid-template-columns: 1fr; }
+            .values-grid { grid-template-columns: 1fr; }
+            .trust-badges-grid { grid-template-columns: repeat(2, 1fr); }
+            .trust-stats { gap: 2rem; }
         }
         
-        .quote-block {
-            background: #f3f4f6;
-            border-left: 4px solid var(--indigo-600);
-            padding: 1.5rem;
-            margin: 2rem 0;
-            font-style: italic;
-        }
-        
-        .highlight {
-            background: linear-gradient(to bottom, transparent 60%, rgba(99, 102, 241, 0.2) 60%);
-            padding: 0 0.25rem;
+        @media (max-width: 640px) {
+            .about-hero .hero-title { font-size: 2rem; }
+            .about-hero .hero-subtitle { font-size: 1.125rem; }
+            .section-title { font-size: 1.875rem; }
+            .trust-badges-grid { grid-template-columns: 1fr; }
+            .trust-stats { flex-direction: column; gap: 1.5rem; }
+            .mission-card, .problem-card, .solution-card { padding: 2rem; }
         }
     </style>
     
-    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJ5GEKEX8H"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -77,140 +455,291 @@
     </script>
 </head>
 <body>
-    <!-- Navigation (reuse from homepage) -->
-<div id="main-navigation"></div>
 
+    <div id="main-navigation"></div>
 
-    <!-- Hero -->
     <section class="about-hero">
-        <div class="container">
-            <h1 class="hero-title" style="font-size: 3rem;">
-                The Story Behind LayoutCraft
-            </h1>
-            <p class="hero-subtitle">
-                Or: How getting roasted by designers led to building something useful
-            </p>
+        <div class="about-hero-content">
+            <div class="container">
+                <h1 class="hero-title">
+                    Transforming AI Design from Art to Business Tool
+                </h1>
+                <p class="hero-subtitle">
+                    LayoutCraft is on a mission to make professional design accessible to everyone—not just designers. We're building the future where AI creates functional, business-ready designs, not artistic chaos.
+                </p>
+                <div class="trust-stats">
+                    <div class="trust-stat">
+                        <span class="trust-stat-number">500+</span>
+                        <span class="trust-stat-label">Active Users</span>
+                    </div>
+                    <div class="trust-stat">
+                        <span class="trust-stat-number">10,000+</span>
+                        <span class="trust-stat-label">Designs Created</span>
+                    </div>
+                    <div class="trust-stat">
+                        <span class="trust-stat-number">98%</span>
+                        <span class="trust-stat-label">Satisfaction Rate</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Content -->
-    <section class="about-content">
+    <section class="mission-section">
+        <div class="mission-content">
+            <span class="section-label">Our Mission</span>
+            <h2 class="section-title">Design Tools Built for Business, Not Artists</h2>
+            <p class="section-description">
+                Traditional AI image generators create beautiful art but fail at business needs. We believe AI should generate structured, professional visuals with readable text—ready for your marketing campaign in seconds, not hours.
+            </p>
+            
+            <div class="mission-cards">
+                <div class="mission-card">
+                    <div class="mission-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                    </div>
+                    <h3>Functional Over Artistic</h3>
+                    <p>We focus on creating usable design assets for real business needs—blog headers, social posts, ads, and presentations that actually work.</p>
+                </div>
+                
+                <div class="mission-card">
+                    <div class="mission-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                        </svg>
+                    </div>
+                    <h3>Readable Text Always</h3>
+                    <p>Our AI generates clean, properly formatted text every time. No more garbled letters or artistic interpretations of words.</p>
+                </div>
+                
+                <div class="mission-card">
+                    <div class="mission-card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3>Speed & Efficiency</h3>
+                    <p>Generate professional designs in 30-60 seconds. Multi-format generation creates blog, social, and print assets from one prompt.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-solution-section">
+        <div class="problem-solution-content">
+            <h2 class="section-title">The Problem We're Solving</h2>
+            <div class="problem-solution-grid">
+                <div class="problem-card">
+                    <h3>❌ The "AI Art" Problem</h3>
+                    <p>Traditional AI tools are built for artists and creative exploration. For businesses, they create unusable results:</p>
+                    <ul>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                            <span>Unreadable, garbled text that looks like hieroglyphics</span>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                            <span>Unpredictable layouts that change dramatically with each generation</span>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                            <span>Hours wasted on prompt engineering to get simple business graphics</span>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="15" y1="9" x2="9" y2="15"/>
+                                <line x1="9" y1="9" x2="15" y2="15"/>
+                            </svg>
+                            <span>Beautiful art, but completely unusable for marketing campaigns</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="solution-card">
+                    <h3>✓ The LayoutCraft Solution</h3>
+                    <p>We're a functional design tool built specifically for business use cases:</p>
+                    <ul>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                            <span>Clean, readable text with proper typography and placement</span>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                            <span>Structured layouts following real design principles</span>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                            <span>Multi-format generation for blog, social, and print from one prompt</span>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                            <span>Production-ready designs in seconds, not hours</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="story-section">
+        <div class="story-content">
+            <h2>Our Story</h2>
+            <p>LayoutCraft was born from a simple but frustrating observation: thousands of marketers and founders were wasting hours trying to force artistic AI tools to create simple business graphics.</p>
+            
+            <p>Prompts like <em>"a blog header with the title 'The Future of AI'"</em> would return beautiful images with nightmarish, unreadable text. Users would spend hours tweaking prompts, regenerating dozens of times, hoping for something usable. Most gave up and went back to expensive freelancers or complex design tools.</p>
+
+            <div class="story-highlight">
+                <div class="story-highlight-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                    The Gap We Discovered
+                </div>
+                <p>The AI community was building for artists and creative exploration. But the business community needed functional design tools. We saw a massive opportunity to bridge this gap.</p>
+            </div>
+
+            <p>So we focused on the "boring" parts other tools ignored: clean typography, predictable layouts, proper text rendering, and multi-format generation. We built an AI that understands design principles, not just visual aesthetics.</p>
+
+            <p>The response validated our mission immediately. Marketers, founders, and content creators finally had a tool that created designs that <strong>work</strong>—not just look pretty. Today, LayoutCraft is trusted by hundreds of businesses to deliver professional, functional designs at scale.</p>
+
+            <p><strong>We're just getting started.</strong> Our roadmap includes brand kits, premium templates, advanced editing capabilities, and more features that put power in the hands of non-designers.</p>
+        </div>
+    </section>
+
+    <section class="values-section">
+        <div class="values-content">
+            <h2 class="section-title" style="text-align: center;">Our Core Values</h2>
+            <p class="section-description" style="text-align: center;">The principles that guide every decision we make</p>
+            
+            <div class="values-grid">
+                <div class="value-card">
+                    <div class="value-number">01</div>
+                    <h3>Function Over Form</h3>
+                    <p>Beautiful designs are useless if they don't serve their purpose. We prioritize functionality, readability, and business results over artistic expression.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-number">02</div>
+                    <h3>Accessible Design for Everyone</h3>
+                    <p>You shouldn't need years of design training to create professional visuals. We're democratizing design by making it accessible to non-designers.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-number">03</div>
+                    <h3>Transparency & Honesty</h3>
+                    <p>We're upfront about what our tool can and can't do. No hype, no overpromising. Just honest communication about capabilities and limitations.</p>
+                </div>
+                
+                <div class="value-card">
+                    <div class="value-number">04</div>
+                    <h3>Continuous Innovation</h3>
+                    <p>AI technology evolves rapidly, and so do we. We're constantly improving our models, adding features, and pushing the boundaries of functional AI design.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="trust-section">
+        <div class="trust-content">
+            <h2 class="section-title">Why Businesses Trust LayoutCraft</h2>
+            <p class="section-description">Built with security, reliability, and professional standards in mind</p>
+            
+            <div class="trust-badges-grid">
+                <div class="trust-badge-card">
+                    <div class="trust-badge-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <h4>Enterprise Security</h4>
+                    <p>Bank-level encryption and secure payment processing via Dodo Payments</p>
+                </div>
+                
+                <div class="trust-badge-card">
+                    <div class="trust-badge-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h4>Commercial Rights</h4>
+                    <p>Full commercial usage rights for all designs you create, no restrictions</p>
+                </div>
+                
+                <div class="trust-badge-card">
+                    <div class="trust-badge-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h4>99.9% Uptime</h4>
+                    <p>Reliable infrastructure ensuring your designs are always accessible</p>
+                </div>
+                
+                <div class="trust-badge-card">
+                    <div class="trust-badge-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                    </div>
+                    <h4>Priority Support</h4>
+                    <p>Pro users get priority email support with 24-hour response times</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta cta-section">
         <div class="container">
-            <h2>It Started With a Simple Question</h2>
-            <p>
-                "Why can't AI create a simple blog header without looking like abstract art gone wrong?"
-            </p>
-            <p>
-                That's the question that started LayoutCraft. As a solo founder, I'd spent countless hours 
-                with tools like Midjourney and DALL-E, trying to generate something—anything—that looked 
-                professional enough for my startup's blog. The results? Beautiful chaos. Artistic masterpieces 
-                with text that looked like it was written in an alien language.
-            </p>
-
-            <h2>"This is a Terrible Idea"</h2>
-            <p>
-                When I shared my frustration on r/design, suggesting that maybe AI could be trained to create 
-                <span class="highlight">structured layouts instead of artistic chaos</span>, the response was... memorable.
-            </p>
-            
-            <div class="quote-block">
-                "This is soulless. You're trying to replace human creativity with a machine. Design requires 
-                a human touch, empathy, and understanding that AI will never have."
-            </div>
-            
-            <p>
-                One particularly passionate designer called me a "scumbag" for even suggesting it. Others 
-                explained, at length, why AI would never understand "real" design principles.
-            </p>
-            <p>
-                And you know what? They were partially right. LayoutCraft isn't trying to replace designers. 
-                It's not for them. It's for the millions of us who <span class="highlight">need design but 
-                aren't designers</span>.
-            </p>
-
-            <h2>Building for the Underserved</h2>
-            <p>
-                Every day, thousands of founders, developers, marketers, and small business owners need visual 
-                content. We don't need award-winning artistic expression. We need:
-            </p>
-            <ul style="font-size: 1.125rem; line-height: 1.8; color: #4b5563;">
-                <li>Blog headers with readable text</li>
-                <li>Social media posts that don't look homemade</li>
-                <li>Presentations that appear professional</li>
-                <li>Marketing materials that convert</li>
-            </ul>
-            <p>
-                Traditional AI image generators treat every prompt like a request for art. LayoutCraft treats 
-                prompts like requests for <span class="highlight">functional design</span>.
-            </p>
-
-            <h2>The Technical Innovation</h2>
-            <p>
-                Without getting too deep into the technical weeds, LayoutCraft works differently. Instead of 
-                generating pixels directly, our AI first creates a structural blueprint—think of it like an 
-                architect drawing plans before building. This ensures proper hierarchy, readable text, and 
-                consistent layouts.
-            </p>
-            <p>
-                It's not perfect. It's not trying to be. It's trying to be <span class="highlight">useful</span>.
-            </p>
-
-            <h2>The Response That Matters</h2>
-            <p>
-                When we launched on r/SaaS and r/indiehackers, the response was completely different:
-            </p>
-            
-            <div class="quote-block">
-                "FINALLY. I've been waiting for something like this. Designers keep telling me to hire them 
-                for $500 blog headers. This does exactly what I need."
-            </div>
-            
-            <p>
-                600+ users in the first 18 hours. Hundreds of messages from founders who felt the same 
-                frustration. The validation was clear: there's a massive gap between what designers think 
-                people need and what non-designers actually need.
-            </p>
-
-            <h2>What's Next</h2>
-            <p>
-                LayoutCraft is still in its early stages. We're adding features based on real user feedback, 
-                not design theory. Things like:
-            </p>
-            <ul style="font-size: 1.125rem; line-height: 1.8; color: #4b5563;">
-                <li>Brand consistency tools</li>
-                <li>Multi-format export</li>
-                <li>Template systems</li>
-                <li>And yes, eventually, the ability to export to actual code</li>
-            </ul>
-
-            <h2>Join the Revolution</h2>
-            <p>
-                If you're tired of AI that creates art when you need design, if you're frustrated with tools 
-                that prioritize beauty over utility, if you just want something that works—welcome to LayoutCraft.
-            </p>
-            <p>
-                We're building for you. Not for design awards. Not for artistic recognition. For you.
-            </p>
-            
-            <div style="text-align: center; margin-top: 3rem;">
-                <button data-auth-signup class="btn btn-primary btn-large">
-                    Try LayoutCraft Free →
-                </button>
-                <p style="margin-top: 1rem; color: #9ca3af;">
-                    No designers were harmed in the making of this tool.
+            <div class="cta-content">
+                <h2 class="cta-title">
+                    Ready to Create Professional Designs?
+                </h2>
+                <p class="cta-subtitle">
+                    Join hundreds of founders and marketers who've ditched the chaos.
+                </p>
+                <a href="/pricing/" class="btn btn-primary btn-large" style="text-decoration: none;">
+                    Start Your 7-Day Free Trial →
+                </a>
+                <p class="cta-note">
+                    Full Pro access. No credit card required to start trial.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- Footer (reuse from homepage) -->
-     <!-- Standard Footer - Use this on all pages -->
-<footer class="footer">
-    <div class="container">
-        <div class="footer-content">
-            <div class="footer-brand">
-                <div class="logo">
-                    <div class="logo-icon">
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
                             <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -226,55 +755,51 @@
                                 <circle cx="24" cy="24" r="2.5" fill="white" opacity="0.9"></circle>
                             </svg>
                         </div>
-                    <span class="logo-text">LayoutCraft</span>
+                        <span class="logo-text">LayoutCraft</span>
+                    </div>
+                    <p class="footer-tagline">
+                        AI design tool for the rest of us.
+                    </p>
                 </div>
-                <p class="footer-tagline">
-                    AI design tool for the rest of us.
-                </p>
+                
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="/app/">Create Design</a>
+                        <a href="/pricing/">Pricing</a>
+                        <a href="/blog/">Blog</a>
+                        <a href="/about/">About</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="/blog/posts/writing-better-prompts/">Prompt Guide</a>
+                        <a href="/faq/">Help Center</a>
+                    </div>
+                    
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="/legal/terms.html">Terms</a>
+                        <a href="/legal/privacy.html">Privacy</a>
+                    </div>
+                </div>
             </div>
             
-            <div class="footer-links">
-                <div class="footer-column">
-                    <h4>Product</h4>
-                    <a href="/app/">Create Design</a>
-                    <a href="/blog/">Blog</a>
-                    <a href="/about/">About</a>
-                    <a href="/faq/">FAQ</a>
-                </div>
-                
-                <div class="footer-column">
-                    <h4>Resources</h4>
-                    <a href="/blog/posts/writing-better-prompts/">Prompt Guide</a>
-                    <a href="/app/">Templates</a>
-                    <a href="/faq/">Help</a>
-                </div>
-                
-                <div class="footer-column">
-                    <h4>Legal</h4>
-                    <a href="/legal/terms.html">Terms</a>
-                    <a href="/legal/privacy.html">Privacy</a>
-                </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
             </div>
         </div>
-        
-        <div class="footer-bottom">
-            <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
-        </div>
-    </div>
-</footer>
-    <link rel="stylesheet" href="/shared/css/navigation.css">
-<script type="module" src="/shared/js/authService.js"></script>
-        <script type="module" src="/shared/js/navigation.js"></script>
-        <script type="module">
-            // Import the classes from your scripts
-            import { layoutCraftNav } from '/shared/js/navigation.js';
-            import { authService } from '/shared/js/authService.js';
+    </footer>
 
-            // Wait for the DOM to be fully loaded before running
-            document.addEventListener('DOMContentLoaded', () => {
-                // The navigation class is now correctly given the auth service it needs.
-                window.layoutCraftNav = layoutCraftNav;
-            });
-        </script>
+    <script type="module" src="/shared/js/authService.js"></script>
+    <script type="module" src="/shared/js/navigation.js"></script>
+    <script type="module">
+        import { layoutCraftNav } from '/shared/js/navigation.js';
+        import { authService } from '/shared/js/authService.js';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            window.layoutCraftNav = layoutCraftNav;
+        });
+    </script>
 </body>
 </html>

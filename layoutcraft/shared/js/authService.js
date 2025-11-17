@@ -10,8 +10,8 @@ import { subscriptionService } from './subscriptionService.js';
 
 class AuthService {
     constructor() {
-        // this.apiBaseUrl = 'https://layoutcraft-backend.onrender.com';
-        this.apiBaseUrl = "http://127.0.0.1:8000"
+        this.apiBaseUrl = 'https://layoutcraft-backend.onrender.com';
+        // this.apiBaseUrl = "http://127.0.0.1:8000"
         // this.apiBaseUrl = "https://e0726f05943e.ngrok-free.app"
         this.tokenKey = 'layoutcraft_access_token';
         this.userKey = 'layoutcraft_user';
