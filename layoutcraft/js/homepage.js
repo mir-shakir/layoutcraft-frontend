@@ -1,5 +1,42 @@
 // Homepage Interactions
 document.addEventListener('DOMContentLoaded', () => {
+
+
+    // ADD THIS NEW FUNCTION
+    /**
+     * Handles all call-to-action clicks on the homepage.
+     * Checks if the user is logged in.
+     * - If logged in, saves prompt data and redirects to /app/.
+     * - If logged out, opens the authentication modal.
+     * @param {object | null} promptData - The prompt data from a button, if any.
+     */
+    function handleCTAClick(promptData = null) {
+        // The navigation module instance is attached to the window object by navigation.js
+        const nav = window.layoutCraftNav;
+        if (!nav || !nav.authService) {
+            console.error("Navigation or AuthService not initialized.");
+            alert("Something went wrong. Please refresh the page.");
+            return;
+        }
+
+        if (nav.authService.hasToken() && !nav.authService.isTokenExpired()) {
+            if (promptData) {
+                sessionStorage.setItem('layoutcraft_initial_data', JSON.stringify(promptData));
+            } else {
+                sessionStorage.removeItem('layoutcraft_initial_data');
+            }
+            window.location.href = '/app/';
+        } else {
+            if (promptData) {
+                // this data will be picked up by the auth modal after login/signup
+                sessionStorage.setItem('layoutcraft_post_auth_prompt', JSON.stringify(promptData));
+            } else {
+                // Ensure old data is cleared if the new action has no prompt.
+                sessionStorage.removeItem('layoutcraft_post_auth_prompt');
+            }
+            nav.openAuthModal('signup'); // Open the modalDefault to signup for new users
+        }
+    }
     // Hero input handling
     const heroInput = document.getElementById('hero-prompt');
     const heroButton = document.getElementById('hero-generate');
@@ -9,32 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
     heroButton?.addEventListener('click', () => {
         const prompt = heroInput.value.trim();
         if (prompt) {
-            // Encode and redirect to app with prompt
-            // const encoded = encodeURIComponent(prompt);
             const promptData = {
                 prompt: prompt,
                 template: "blog_header",
-                style:"auto"
-
+                style: "auto"
             };
-            sessionStorage.setItem('layoutcraft_initial_data', JSON.stringify(promptData));
-            window.location.href = '/app/';
-            console.log("hero button promt used")
-
-            // Track event
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'homepage_generate', {
-                    event_category: 'Engagement',
-                    event_label: 'hero_cta'
-                });
-            }
+            handleCTAClick(promptData);
         } else {
-            // Highlight input if empty
-            heroInput.focus();
-            heroInput.style.borderColor = '#ef4444';
-            setTimeout(() => {
-                heroInput.style.borderColor = '';
-            }, 2000);
+            // If the input is empty, still trigger the auth flow without a prompt
+            handleCTAClick();
         }
     });
 
@@ -46,31 +66,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Handle example chips
-    exampleChips.forEach(chip => {
-        chip.addEventListener('click', () => {
-            const promptData = {
-                prompt: chip.dataset.prompt,
-                style: chip.dataset.style, // Assumes you add data-style="..."
-                template: chip.dataset.template // Assumes you add data-template="..."
-            };
-            sessionStorage.setItem('layoutcraft_initial_data', JSON.stringify(promptData));
-            window.location.href = '/app/';
-            // Track example usage
-            if (typeof gtag !== 'undefined') {
-                gtag('event', 'use_homepage_chip', {
-                    event_category: 'Engagement',
-                    event_label: chip.textContent.trim()
-                });
-            }
-        });
+    const allExampleButtons = document.querySelectorAll('.example-chip, .example-try');
+allExampleButtons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const promptData = {
+            prompt: btn.dataset.prompt,
+            style: btn.dataset.style,
+            template: btn.dataset.template
+        };
+        handleCTAClick(promptData);
     });
+});
    
    // Smooth scroll for navigation
    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
        anchor.addEventListener('click', function (e) {
            e.preventDefault();
            const target = document.querySelector(this.getAttribute('href'));
-           if (target) {
+           if (target) { 
                target.scrollIntoView({
                    behavior: 'smooth',
                    block: 'start'
@@ -79,31 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
        });
    });
 
-
-   // Add this to the existing homepage.js
-
-// Handle example "Try This" buttons
-document.querySelectorAll('.example-try').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const promptData = {
-            prompt: btn.dataset.prompt,
-            style: btn.dataset.style,
-            template: btn.dataset.template
-        };
-        sessionStorage.setItem('layoutcraft_initial_data', JSON.stringify(promptData));
-       window.location.href = '/app/';
-        
-        // Track event
-        if (typeof gtag !== 'undefined') {
-            gtag('event', 'try_example', {
-                event_category: 'Engagement',
-                event_label: 'homepage_example'
-            });
-        }
-    });
-});
-   
    // Intersection Observer for animations
    const observerOptions = {
        threshold: 0.1,
@@ -188,5 +177,19 @@ document.querySelectorAll('.example-try').forEach(btn => {
                value: percent
            });
        }
-   }
+    }
+    
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('auth') === 'required') {
+        // Use a small timeout to ensure navigation.js has fully loaded
+        setTimeout(() => {
+            window.layoutCraftNav?.openAuthModal(
+                'signup', // Default to showing the signup form
+                'Please sign up or log in to access the designer.' // The custom message
+            );
+        }, 100);
+
+        // Clean the URL so the modal doesn't re-trigger on refresh
+        history.replaceState(null, '', window.location.pathname);
+    }
 });

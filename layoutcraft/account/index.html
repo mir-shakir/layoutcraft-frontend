@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - LayoutCraft</title>
+    <meta name="description" content="Manage your LayoutCraft account and subscription.">
+    <meta name="robots" content="noindex">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/shared/css/base.css">
+    <link rel="stylesheet" href="/shared/css/navigation.css">
+    <style>
+        body { background-color: #f9fafb; }
+        .account-header { text-align: center; padding: 6rem 1rem 4rem; background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff); }
+        .account-header h1 { font-size: 3rem; font-weight: 800; color: #111827; }
+        .account-container { max-width: 800px; margin: -2rem auto 4rem; padding: 0 1rem; }
+        .account-card { background: white; border-radius: 16px; padding: 2.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; margin-bottom: 2rem; }
+        .card-title { font-size: 1.5rem; font-weight: 600; color: #111827; border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1.5rem; }
+        .info-row { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
+        .info-row+.info-row { border-top: 1px solid #f3f4f6; }
+        .info-label { color: #6b7280; font-weight: 500; }
+        .info-value { color: #111827; font-weight: 600; text-transform: capitalize; }
+        .badge { padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.875rem; }
+        .badge.trialing { background-color: #fef3c7; color: #92400e; }
+        .badge.active { background-color: #dcfce7; color: #065f46; }
+        .badge.free { background-color: #f3f4f6; color: #4b5563; }
+        .manage-btn { display: flex; width: 100%; font-size: 1rem; padding: 0.875rem; margin-top: 1.5rem; }
+    </style>
+</head>
+<body>
+    <div id="main-navigation"></div>
+
+    <header class="account-header">
+        <h1>My Account</h1>
+    </header>
+
+    <main class="account-container">
+        <div class="account-card">
+            <h2 class="card-title">Subscription Details</h2>
+            <div id="subscription-loading">
+                <p>Loading your subscription details...</p>
+            </div>
+            <div id="subscription-details" style="display: none;">
+                <div class="info-row">
+                    <span class="info-label">Current Plan</span>
+                    <span class="info-value" id="plan-name"></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status</span>
+                    <span class="info-value badge" id="plan-status"></span>
+                </div>
+                <div class="info-row" id="trial-info" style="display: none;">
+                    <span class="info-label">Trial Ends</span>
+                    <span class="info-value" id="trial-end-date"></span>
+                </div>
+                <button class="btn btn-secondary manage-btn" id="manage-subscription-btn" style="display: none;">Manage Subscription</button>
+                <a href="/pricing/" class="btn btn-secondary manage-btn" id="upgrade-to-pro-btn" style="display: none;">Upgrade to Pro</a>
+            </div>
+        </div>
+        
+        <div class="account-card">
+             <h2 class="card-title">Support</h2>
+             <p>Have questions or need help? You can reach us at our support email. We'll get back to you as soon as possible.</p>
+             <a href="mailto:support@layoutcraft.tech" class="btn btn-secondary manage-btn">Contact Support</a>
+        </div>
+    </main>
+
+    <script type="module">
+        import { authService } from '/shared/js/authService.js';
+        import { subscriptionService } from '/shared/js/subscriptionService.js';
+        import { layoutCraftNav } from '/shared/js/navigation.js';
+        // This function will render the page with the subscription data
+        function renderPage(sub) {
+            const loadingEl = document.getElementById('subscription-loading');
+            const detailsEl = document.getElementById('subscription-details');
+            const manageBtn = document.getElementById('manage-subscription-btn');
+            const upgradeBtn = document.getElementById('upgrade-to-pro-btn');
+
+            if (sub) {
+                document.getElementById('plan-name').textContent = sub.plan;
+
+                const statusEl = document.getElementById('plan-status');
+
+                if (sub.status) {
+                    statusEl.textContent = sub.status;
+                    statusEl.classList.add(sub.status.toLowerCase());
+                    statusEl.className = 'info-value badge'; // Reset classes
+                }
+                if (sub.status && sub.status === 'trialing' && sub.trial_ends_at) {
+                    const trialInfoEl = document.getElementById('trial-info');
+                    const trialDateEl = document.getElementById('trial-end-date');
+                    const endDate = new Date(sub.trial_ends_at);
+                    trialDateEl.textContent = endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    trialInfoEl.style.display = 'flex';
+                }
+                const manageBtn = document.getElementById('manage-subscription-btn');
+                const upgradeBtn = document.getElementById('upgrade-to-pro-btn');
+
+                // Show the correct button based on subscription status
+                if (sub.plan === 'pro' && sub.status === 'active') {
+                    manageBtn.style.display = 'flex';
+                } else {
+                    upgradeBtn.style.display = 'flex';
+                }
+
+                loadingEl.style.display = 'none';
+                detailsEl.style.display = 'block';
+            } else {
+                loadingEl.innerHTML = '<p>Could not load subscription details. Please refresh the page.</p>';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+        window.layoutCraftNav = layoutCraftNav;
+
+        if (!authService.hasToken() || authService.isTokenExpired()) {
+            window.location.href = '/?auth=required';
+            return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentSuccess = urlParams.has('payment'); // Check for 'payment=success' or just 'payment'
+
+        if (paymentSuccess) {
+            // 1. Show a loading message
+            const loadingEl = document.getElementById('subscription-loading');
+            loadingEl.innerHTML = '<p>Thank you! Updating your account...</p>';
+
+            // 2. Force refresh user data from backend
+            await authService.forceRefreshUserData();
+
+            // 3. Clean the URL
+            history.replaceState(null, '', window.location.pathname);
+        }
+
+        // 4. Ensure data is fetched (either for the first time or after the refresh)
+        if (!subscriptionService.hasFetched) {
+            await subscriptionService.fetchSubscription();
+        }
+
+        // 5. Render the page with the fresh data
+        const sub = subscriptionService.getSubscription();
+        renderPage(sub);
+
+        // 6. Add event listener for the "Manage Subscription" button
+        document.getElementById('manage-subscription-btn').addEventListener('click', async () => {
+            const manageBtn = document.getElementById('manage-subscription-btn');
+            manageBtn.disabled = true;
+            manageBtn.textContent = 'Loading portal...';
+
+            try {
+                const response = await authService.fetchAuthenticated('/dodo/portal', {
+                    method: 'POST'
+                });
+
+                if (response.portal_url) {
+                    window.location.href = response.portal_url;
+                } else {
+                    throw new Error('Portal URL not found in response.');
+                }
+            } catch (error) {
+                console.error('Failed to create portal session:', error);
+                alert('Could not load the subscription management portal. Please try again later.');
+                manageBtn.disabled = false;
+                manageBtn.textContent = 'Manage Subscription';
+            }
+        });
+    });
+    </script>
+
+    <!-- <script type="module">
+        import { authService } from '/shared/js/authService.js';
+        import { subscriptionService } from '/shared/js/subscriptionService.js';
+        import { layoutCraftNav } from '/shared/js/navigation.js';
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            window.layoutCraftNav = layoutCraftNav;
+            
+            if (!authService.hasToken() || authService.isTokenExpired()) {
+                window.location.href = '/?auth=required';
+                return;
+            }
+
+            console.log('Fetching subscription details...');
+            // Ensure subscription data is fetched before rendering
+            if (!subscriptionService.hasFetched) {
+                console.log('Subscription data not fetched yet. Fetching now...');
+                await subscriptionService.fetchSubscription();
+            }
+            const sub = subscriptionService.getSubscription();
+            console.log('Subscription data:', sub);
+
+            const loadingEl = document.getElementById('subscription-loading');
+            const detailsEl = document.getElementById('subscription-details');
+            
+            if (sub) {
+                document.getElementById('plan-name').textContent = sub.plan;
+                
+                const statusEl = document.getElementById('plan-status');
+                //check if status is present first to avoid errors
+                if (sub.status) {
+                    statusEl.textContent = sub.status;
+                    statusEl.classList.add(sub.status.toLowerCase());
+                    statusEl.className = 'info-value badge'; // Reset classes
+                }
+
+
+                if (sub.status && sub.status === 'trialing' && sub.trial_ends_at) {
+                    const trialInfoEl = document.getElementById('trial-info');
+                    const trialDateEl = document.getElementById('trial-end-date');
+                    const endDate = new Date(sub.trial_ends_at);
+                    trialDateEl.textContent = endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                    trialInfoEl.style.display = 'flex';
+                }
+                const manageBtn = document.getElementById('manage-subscription-btn');
+                const upgradeBtn = document.getElementById('upgrade-to-pro-btn');
+
+                // This is your new requirement:
+                // Only show "Manage" if the plan is "pro" AND the status is "active"
+                if (sub.plan === 'pro' && sub.status === 'active') {
+                    manageBtn.style.display = 'flex';
+                } else {
+                    // Show "Upgrade" for "free" and "trialing" users
+                    upgradeBtn.style.display = 'flex';
+                }
+
+                loadingEl.style.display = 'none';
+                detailsEl.style.display = 'block';
+            } else {
+                loadingEl.innerHTML = '<p>Could not load subscription details. Please refresh the page.</p>';
+            }
+
+            document.getElementById('manage-subscription-btn').addEventListener('click', async () => {
+                const manageBtn = document.getElementById('manage-subscription-btn');
+                manageBtn.disabled = true;
+                manageBtn.textContent = 'Loading portal...';
+
+                try {
+                    const response = await authService.fetchAuthenticated('/dodo/portal', {
+                        method: 'POST'
+                    });
+
+                    if (response.portal_url) {
+                        window.location.href = response.portal_url;
+                    } else {
+                        throw new Error('Portal URL not found in response.');
+                    }
+                } catch (error) {
+                    console.error('Failed to create portal session:', error);
+                    alert('Could not load the subscription management portal. If you have an active subscription, please try again later.');
+                    manageBtn.disabled = false;
+                    manageBtn.textContent = 'Manage Subscription';
+                }
+            });
+        });
+    </script> -->
+</body>
+</html>

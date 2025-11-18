@@ -22,94 +22,7 @@
     <link rel="stylesheet" href="/shared/css/base.css">
     <link rel="stylesheet" href="/shared/css/navigation.css">
     <link rel="stylesheet" href="/css/homepage.css">
-
-    <style>
-        .history-hero {
-            background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff);
-            padding: 4rem 1rem;
-            text-align: center;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .hero-title {
-            font-size: 2.5rem;
-            font-weight: 800;
-            color: #111827;
-            margin-bottom: 0.5rem;
-        }
-
-        .hero-subtitle {
-            font-size: 1.125rem;
-            color: #6b7280;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .history-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1rem 4rem;
-        }
-
-        .history-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .design-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: var(--shadow-md);
-            overflow: hidden;
-            transition: all 0.2s ease-out;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .design-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .design-card-image {
-            width: 100%;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            background-color: #f3f4f6;
-        }
-
-        .design-card-content {
-            padding: 1rem 1.5rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .design-card-prompt {
-            font-size: 0.875rem;
-            color: #6b7280;
-            margin-bottom: 1rem;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            flex-grow: 1;
-        }
-
-        .design-card-meta {
-            font-size: 0.75rem;
-            color: #9ca3af;
-            margin-bottom: 1rem;
-        }
-
-        .state-container {
-            text-align: center;
-            padding: 4rem;
-            color: #6b7280;
-            grid-column: 1 / -1;
-        }
-    </style>
+    <link rel="stylesheet" href="/app/history/history.css">
 </head>
 
 <body>
@@ -122,18 +35,60 @@
                 This is your creative hub. Every design you generate and edit is saved here, ready for you to download
                 or continue refining.
             </p>
+            <div class="start-new-section">
+                <a href="/app/" class="start-new-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <line x1="12" y1="8" x2="12" y2="16"></line>
+                        <line x1="8" y1="12" x2="16" y2="12"></line>
+                    </svg>
+                    Start New Design
+                </a>
+            </div>
         </div>
     </div>
 
     <div class="history-container">
-        <div id="history-grid" class="history-grid">
-            <div id="loading-state" class="state-container">
-                <p>Loading your designs...</p>
+        <!-- Loading State -->
+        <div id="loading-state" class="state-container">
+            <div class="loading-spinner"></div>
+            <p>Loading your designs...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="state-container" style="display: none;">
+            <div class="empty-icon">📎</div>
+            <h2>No Designs Yet</h2>
+            <p>You haven't created any designs. Let's make something!</p>
+            <a href="/app/" class="btn btn-primary" style="margin-top: 1rem;">Start Creating</a>
+        </div>
+
+        <!-- Parent Prompts Container -->
+        <div id="parents-container" class="parents-list" style="display: none;">
+            <!-- Parent prompt cards will be rendered here -->
+        </div>
+
+        <!-- Load More Button -->
+        <div id="load-more-container" class="load-more-section" style="display: none;">
+            <button id="load-more-btn" class="load-more-btn">
+                <span class="load-more-text">Load More Designs</span>
+                <span class="load-more-loading" style="display: none;">
+                    <div class="mini-spinner"></div>
+                    Loading...
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Modal for Edit Groups -->
+    <div id="edit-groups-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Design Variations</h3>
+                <button id="close-modal" class="close-btn">×</button>
             </div>
-            <div id="empty-state" class="state-container" style="display: none;">
-                <h2>No Designs Yet</h2>
-                <p>You haven't created any designs. Let's make something!</p>
-                <a href="/app/" class="btn btn-primary" style="margin-top: 1rem;">Start Creating</a>
+            <div id="edit-groups-container" class="edit-groups-list">
+                <!-- Edit groups will be rendered here for mobile -->
             </div>
         </div>
     </div>
