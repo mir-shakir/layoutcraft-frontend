@@ -184,9 +184,61 @@ class LayoutCraftNav {
         });
     }
     
+    getPlanStatus() {
+        const subscription = subscriptionService.getSubscription();
+        if (!subscription) return { class: 'plan-free', label: 'Free', badge: null };
+
+        if (subscription.plan === 'pro') {
+            return { class: 'plan-pro', label: 'Pro', badge: 'PRO' };
+        } else if (subscription.plan === 'pro-trial' && subscription.trial_ends_at) {
+            const trialEnd = new Date(subscription.trial_ends_at);
+            const now = new Date();
+            const daysLeft = Math.max(0, Math.ceil((trialEnd - now) / (1000 * 60 * 60 * 24)));
+            if (daysLeft > 0) {
+                return { class: 'plan-trial', label: 'Pro Trial', badge: 'TRIAL', daysLeft };
+            }
+        }
+        return { class: 'plan-free', label: 'Free', badge: null };
+    }
+
+    renderPlanStatusHeader() {
+        const planStatus = this.getPlanStatus();
+
+        if (planStatus.class === 'plan-pro') {
+            return `<div class="dropdown-plan-header plan-pro">
+                <div class="plan-status-row">
+                    <svg class="plan-icon" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/></svg>
+                    <span class="plan-label">Pro Member</span>
+                </div>
+                <span class="plan-status-badge">Active</span>
+            </div>`;
+        } else if (planStatus.class === 'plan-trial') {
+            return `<div class="dropdown-plan-header plan-trial">
+                <div class="plan-status-row">
+                    <span class="plan-label">Pro Trial</span>
+                </div>
+                <div class="trial-progress-wrapper">
+                    <span class="trial-days-left">${planStatus.daysLeft} day${planStatus.daysLeft !== 1 ? 's' : ''} left</span>
+                </div>
+            </div>`;
+        } else {
+            return `<div class="dropdown-plan-header plan-free">
+                <div class="plan-status-row">
+                    <span class="plan-label">Free Plan</span>
+                </div>
+                <a href="/pricing/" class="plan-upgrade-btn">Upgrade</a>
+            </div>`;
+        }
+    }
+
     renderAuthSection() {
         if (this.isLoggedIn) {
-            return `<div class="profile-dropdown-container"><button class="profile-btn" type="button"><div class="profile-avatar">${this.currentUser?.full_name?.charAt(0) || this.currentUser?.email?.charAt(0) || 'U'}</div><span class="profile-name">${this.currentUser?.full_name || this.currentUser?.email || 'User'}</span><svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="profile-dropdown" id="profile-dropdown"><a href="/account/" class="dropdown-item">My Account</a> <button class="dropdown-item" type="button" data-auth-logout>Logout</button></div></div>`;
+            const planStatus = this.getPlanStatus();
+            const avatarBadge = planStatus.badge
+                ? `<span class="avatar-badge ${planStatus.class}">${planStatus.badge}</span>`
+                : '';
+
+            return `<div class="profile-dropdown-container ${planStatus.class}"><button class="profile-btn" type="button"><div class="profile-avatar-wrapper ${planStatus.class}"><div class="profile-avatar">${this.currentUser?.full_name?.charAt(0) || this.currentUser?.email?.charAt(0) || 'U'}</div>${avatarBadge}</div><span class="profile-name">${this.currentUser?.full_name || this.currentUser?.email || 'User'}</span><svg class="dropdown-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button><div class="profile-dropdown" id="profile-dropdown">${this.renderPlanStatusHeader()}<div class="dropdown-divider"></div><a href="/account/" class="dropdown-item">My Account</a><button class="dropdown-item" type="button" data-auth-logout>Logout</button></div></div>`;
         } else {
             return `<button class="nav-link nav-link-btn" type="button" data-auth-login>Log In</button><button class="nav-link nav-signup-btn" type="button" data-auth-signup>Sign Up</button>`;
         }
@@ -194,7 +246,14 @@ class LayoutCraftNav {
     
     renderMobileAuthSection() {
         if (this.isLoggedIn) {
-            return `<div class="mobile-profile-section"><div class="mobile-profile-info"><div class="profile-avatar">${this.currentUser?.full_name?.charAt(0) || this.currentUser?.email?.charAt(0) || 'U'}</div><span>${this.currentUser?.full_name || this.currentUser?.email || 'User'}</span></div> <a href="/account/" class="mobile-nav-link">My Account</a> <button class="mobile-nav-link logout-link" type="button" data-auth-logout>Logout</button></div>`;
+            const planStatus = this.getPlanStatus();
+            const mobilePlanInfo = planStatus.class === 'plan-pro'
+                ? '<span class="mobile-plan-badge plan-pro">PRO</span>'
+                : planStatus.class === 'plan-trial'
+                ? `<span class="mobile-plan-badge plan-trial">${planStatus.daysLeft} day${planStatus.daysLeft !== 1 ? 's' : ''} left</span>`
+                : '<span class="mobile-plan-badge plan-free">FREE</span>';
+
+            return `<div class="mobile-profile-section"><div class="mobile-profile-info ${planStatus.class}"><div class="profile-avatar-wrapper ${planStatus.class}"><div class="profile-avatar">${this.currentUser?.full_name?.charAt(0) || this.currentUser?.email?.charAt(0) || 'U'}</div></div><div class="mobile-profile-details"><span>${this.currentUser?.full_name || this.currentUser?.email || 'User'}</span>${mobilePlanInfo}</div></div>${planStatus.class === 'plan-free' ? '<a href="/pricing/" class="mobile-nav-link mobile-upgrade">Upgrade to Pro</a>' : ''}<a href="/account/" class="mobile-nav-link">My Account</a><button class="mobile-nav-link logout-link" type="button" data-auth-logout>Logout</button></div>`;
         } else {
             return `<button class="mobile-nav-link" type="button" data-auth-login>Log In</button><button class="mobile-nav-link mobile-signup" type="button" data-auth-signup>Sign Up</button>`;
         }

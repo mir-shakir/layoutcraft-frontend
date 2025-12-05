@@ -38,6 +38,9 @@ class SubscriptionService {
     }
 
     getSubscription() {
+        if(this.subscription === null && !this.hasFetched) {
+            this.fetchSubscription();
+        }
         return this.subscription;
     }
 

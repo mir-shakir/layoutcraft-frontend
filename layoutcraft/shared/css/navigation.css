@@ -112,6 +112,16 @@
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
+/* Plan Status CSS Variables */
+:root {
+    --plan-free-color: #6b7280;
+    --plan-trial-color: #d97706;
+    --plan-trial-bg: #fef3c7;
+    --plan-trial-border: #fcd34d;
+    --plan-pro-gradient: linear-gradient(135deg, #8b5cf6 0%, #ec4899 50%, #6366f1 100%);
+    --plan-pro-color: #7c3aed;
+}
+
 /* Profile Dropdown */
 .profile-dropdown-container {
     position: relative;
@@ -135,6 +145,56 @@
     background: #f3f4f6;
 }
 
+/* Avatar Wrapper - for plan ring effect */
+.profile-avatar-wrapper {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-avatar-wrapper::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    padding: 2px;
+    background: transparent;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+/* Pro Plan - Premium gradient ring */
+.profile-avatar-wrapper.plan-pro::before {
+    background: var(--plan-pro-gradient);
+    animation: proRingRotate 3s linear infinite;
+}
+
+@keyframes proRingRotate {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+}
+
+/* Trial Plan - Pulsing amber ring */
+.profile-avatar-wrapper.plan-trial::before {
+    background: var(--plan-trial-color);
+    border: 2px dashed var(--plan-trial-color);
+    animation: trialPulse 2s ease-in-out infinite;
+}
+
+@keyframes trialPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Free Plan - No ring */
+.profile-avatar-wrapper.plan-free::before {
+    background: transparent;
+}
+
 .profile-avatar {
     width: 32px;
     height: 32px;
@@ -146,6 +206,32 @@
     justify-content: center;
     font-weight: 600;
     font-size: 14px;
+}
+
+/* Avatar Badge (PRO/TRIAL) */
+.avatar-badge {
+    position: absolute;
+    bottom: -2px;
+    right: -4px;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 1px 4px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    border: 1.5px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+}
+
+.avatar-badge.plan-pro {
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    color: white;
+}
+
+.avatar-badge.plan-trial {
+    background: var(--plan-trial-bg);
+    color: var(--plan-trial-color);
+    border-color: var(--plan-trial-border);
 }
 
 .profile-name {
@@ -166,14 +252,15 @@
     right: 0;
     margin-top: 0.5rem;
     background: white;
-    border-radius: 8px;
+    border-radius: 10px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     border: 1px solid #e5e7eb;
-    min-width: 150px;
+    min-width: 180px;
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
     transition: all 0.2s;
+    overflow: hidden;
 }
 
 .profile-dropdown.active {
@@ -198,6 +285,90 @@
 
 .dropdown-item:hover {
     background: #f3f4f6;
+}
+
+/* Dropdown Plan Header */
+.dropdown-plan-header {
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.dropdown-plan-header.plan-free {
+    background: #f9fafb;
+}
+
+.dropdown-plan-header.plan-trial {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.dropdown-plan-header.plan-pro {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+}
+
+.plan-status-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.plan-icon {
+    color: var(--plan-pro-color);
+}
+
+.plan-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+.plan-status-badge {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: #dcfce7;
+    color: #16a34a;
+    text-transform: uppercase;
+}
+
+.trial-progress-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.trial-days-left {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--plan-trial-color);
+    background: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid var(--plan-trial-border);
+}
+
+.plan-upgrade-btn {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.plan-upgrade-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 0;
 }
 
 /* Mobile Menu Button */
@@ -314,6 +485,51 @@
     background: #f9fafb;
     border-radius: 8px;
     margin-bottom: 0.5rem;
+}
+
+.mobile-profile-info.plan-trial {
+    background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.mobile-profile-info.plan-pro {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+}
+
+.mobile-profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.mobile-plan-badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    width: fit-content;
+}
+
+.mobile-plan-badge.plan-free {
+    background: #f3f4f6;
+    color: var(--plan-free-color);
+}
+
+.mobile-plan-badge.plan-trial {
+    background: white;
+    color: var(--plan-trial-color);
+    border: 1px solid var(--plan-trial-border);
+}
+
+.mobile-plan-badge.plan-pro {
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    color: white;
+}
+
+.mobile-upgrade {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white !important;
+    text-align: center;
 }
 
 .logout-link {
