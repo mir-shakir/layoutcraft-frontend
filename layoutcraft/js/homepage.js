@@ -1,62 +1,212 @@
 // Homepage Interactions
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     // --- STATE MANAGEMENT ---
-    // We use a Set to track multiple selections
-    const selectedFormats = new Set(['blog_header']); 
-    const heroStyleSelect = document.getElementById('hero-style');
+    let allFormatsSelected = true; // Default to All Formats
+    let selectedFormats = []; // Empty when allFormatsSelected is true
+    let selectedStyle = 'auto';
+
     const heroInput = document.getElementById('hero-prompt');
     const heroButton = document.getElementById('hero-generate');
-    
+
+    // --- DATA (consistent with designer page) ---
+    const DIMENSIONS_DATA = [
+        { value: "all_formats", label: "All Formats", isAllFormats: true },
+        { value: "blog_header", label: "Blog Header" },
+        { value: "social_square", label: "Instagram Post" },
+        { value: "story", label: "Story" },
+        { value: "twitter_post", label: "Twitter Post" },
+        { value: "youtube_thumbnail", label: "YouTube Thumbnail" },
+    ];
+    const ALL_DIMENSION_VALUES = DIMENSIONS_DATA.filter(d => !d.isAllFormats).map(d => d.value);
+
+    const STYLE_DATA = [
+        { value: "auto", label: "Auto" },
+        { value: "minimal_luxury_space", label: "Minimal & Clean" },
+        { value: "bold_geometric_solid", label: "Bold Geometric" },
+        { value: "dark_neon_tech", label: "Neon / Tech" },
+        { value: "vibrant_gradient_energy", label: "Vibrant Energy" },
+    ];
+
     // --- 1. HERO INTERFACE LOGIC ---
 
-    // Handle Dimension Pills (Multi-Select Logic)
-    const dimensionPills = document.querySelectorAll('#hero-dimensions .pill');
-    
-    dimensionPills.forEach(pill => {
-        pill.addEventListener('click', (e) => {
-            const target = e.currentTarget;
-            const value = target.dataset.value;
+    // Create homepage dropdowns
+    function createHomeDropdown(containerId, type, options, isMultiSelect) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
 
-            // Special handling for "All Formats"
-            if (value === 'multi') {
-                const isCurrentlyActive = target.classList.contains('active');
-                
-                // Reset UI
-                dimensionPills.forEach(p => p.classList.remove('active'));
-                selectedFormats.clear();
+        container.innerHTML = '';
+        const dropdown = document.createElement('div');
+        dropdown.className = 'hero-custom-dropdown';
 
-                if (!isCurrentlyActive) {
-                    target.classList.add('active');
-                    selectedFormats.add('multi');
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'hero-dropdown-toggle';
+
+        const menu = document.createElement('div');
+        menu.className = 'hero-dropdown-menu';
+
+        const updateButtonLabel = () => {
+            if (isMultiSelect) {
+                if (allFormatsSelected) {
+                    button.textContent = 'All Formats';
                 } else {
-                    // If unselecting all, default back to blog_header
-                    const defaultPill = document.querySelector('.pill[data-value="blog_header"]');
-                    if(defaultPill) defaultPill.classList.add('active');
-                    selectedFormats.add('blog_header');
-                }
-                return;
-            }
-
-            // Regular Pill Logic
-            // If "All Formats" was previously active, clear it
-            if (selectedFormats.has('multi')) {
-                selectedFormats.clear();
-                document.querySelector('.pill[data-value="multi"]')?.classList.remove('active');
-            }
-
-            if (target.classList.contains('active')) {
-                // Don't allow deselecting the last item
-                if (selectedFormats.size > 1) {
-                    target.classList.remove('active');
-                    selectedFormats.delete(value);
+                    const count = selectedFormats.length;
+                    button.textContent = count === 1
+                        ? DIMENSIONS_DATA.find(d => d.value === selectedFormats[0])?.label || `Dimensions (${count})`
+                        : `Dimensions (${count})`;
                 }
             } else {
-                target.classList.add('active');
-                selectedFormats.add(value);
+                const selected = options.find(o => o.value === selectedStyle);
+                button.textContent = selected ? selected.label : 'Auto';
             }
+        };
+
+        const updateAllCheckboxStates = () => {
+            if (!isMultiSelect) return;
+            const allFormatsCheckbox = menu.querySelector('input[value="all_formats"]');
+            const otherCheckboxes = menu.querySelectorAll('input:not([value="all_formats"])');
+
+            if (allFormatsCheckbox) {
+                allFormatsCheckbox.checked = allFormatsSelected;
+            }
+            otherCheckboxes.forEach(cb => {
+                cb.checked = allFormatsSelected || selectedFormats.includes(cb.value);
+            });
+        };
+
+        options.forEach((option) => {
+            const item = document.createElement('div');
+            const isAllFormatsOption = option.isAllFormats;
+
+            item.className = 'hero-dropdown-item';
+
+            let isChecked = false;
+            if (isMultiSelect) {
+                if (isAllFormatsOption) {
+                    isChecked = allFormatsSelected;
+                } else {
+                    isChecked = allFormatsSelected || selectedFormats.includes(option.value);
+                }
+            } else {
+                isChecked = selectedStyle === option.value;
+            }
+
+            item.innerHTML = `<label>
+                <input type="${isMultiSelect ? 'checkbox' : 'radio'}"
+                name="hero-${type}-option"
+                value="${option.value}"
+                ${isChecked ? 'checked' : ''}>
+                ${option.label}
+            </label>`;
+
+            item.querySelector('input').addEventListener('change', (e) => {
+                if (isMultiSelect) {
+                    if (isAllFormatsOption) {
+                        if (e.target.checked) {
+                            allFormatsSelected = true;
+                            selectedFormats = [];
+                        } else {
+                            allFormatsSelected = false;
+                            selectedFormats = ['blog_header'];
+                        }
+                        updateAllCheckboxStates();
+                    } else {
+                        // Individual dimension selection
+                        if (allFormatsSelected) {
+                            allFormatsSelected = false;
+                            if (!e.target.checked) {
+                                selectedFormats = ALL_DIMENSION_VALUES.filter(d => d !== option.value);
+                            } else {
+                                selectedFormats = [option.value];
+                            }
+                        } else {
+                            if (e.target.checked) {
+                                if (!selectedFormats.includes(option.value)) {
+                                    selectedFormats.push(option.value);
+                                }
+                                if (selectedFormats.length === ALL_DIMENSION_VALUES.length) {
+                                    allFormatsSelected = true;
+                                    selectedFormats = [];
+                                }
+                            } else {
+                                selectedFormats = selectedFormats.filter(d => d !== option.value);
+                                if (selectedFormats.length === 0) {
+                                    selectedFormats = [option.value];
+                                    e.target.checked = true;
+                                }
+                            }
+                        }
+                        const allFormatsCheckbox = menu.querySelector('input[value="all_formats"]');
+                        if (allFormatsCheckbox) {
+                            allFormatsCheckbox.checked = allFormatsSelected;
+                        }
+                    }
+                } else {
+                    selectedStyle = option.value;
+                    menu.classList.remove('show');
+                }
+                updateButtonLabel();
+            });
+
+            menu.appendChild(item);
         });
+
+        updateButtonLabel();
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.hero-dropdown-menu.show').forEach(otherMenu => {
+                if (otherMenu !== menu) otherMenu.classList.remove('show');
+            });
+            menu.classList.toggle('show');
+        });
+
+        dropdown.appendChild(button);
+        dropdown.appendChild(menu);
+        container.appendChild(dropdown);
+    }
+
+    // Initialize dropdowns
+    createHomeDropdown('hero-dimensions-dropdown', 'dimensions', DIMENSIONS_DATA, true);
+    createHomeDropdown('hero-style-dropdown', 'style', STYLE_DATA, false);
+
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.hero-custom-dropdown')) {
+            document.querySelectorAll('.hero-dropdown-menu.show').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        }
     });
+
+    // Helper to get selected formats for sending to app
+    function getSelectedFormatsForApp() {
+        if (allFormatsSelected) {
+            return 'multi';
+        } else if (selectedFormats.length === 1) {
+            return selectedFormats[0];
+        } else {
+            return 'multi'; // Multiple selected = multi
+        }
+    }
+
+    // Helper to set formats from external data (chips, etc.)
+    function setFormatsFromTemplate(template) {
+        if (template === 'multi' || template === 'all_formats') {
+            allFormatsSelected = true;
+            selectedFormats = [];
+        } else {
+            allFormatsSelected = false;
+            selectedFormats = [template];
+        }
+        // Re-render dimensions dropdown to update UI
+        createHomeDropdown('hero-dimensions-dropdown', 'dimensions', DIMENSIONS_DATA, true);
+    }
+
+    function setStyleFromValue(styleValue) {
+        selectedStyle = styleValue;
+        createHomeDropdown('hero-style-dropdown', 'style', STYLE_DATA, false);
+    }
 
     // Typewriter Logic
     const prompts = [
@@ -131,7 +281,7 @@ document.addEventListener('DOMContentLoaded', () => {
     chipButtons.forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
-            
+
             // 1. Populate Prompt
             if(heroInput) {
                 heroInput.value = btn.dataset.prompt;
@@ -140,33 +290,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 heroInput.closest('.hero-composer')?.scrollIntoView({behavior: "smooth", block: "center"});
             }
 
-            // 2. Update Style UI
-            if(heroStyleSelect) {
-                heroStyleSelect.value = btn.dataset.style;
-                // Visual feedback
-                heroStyleSelect.style.borderColor = '#6366f1';
-                setTimeout(() => heroStyleSelect.style.borderColor = '', 500);
+            // 2. Update Style
+            if (btn.dataset.style) {
+                setStyleFromValue(btn.dataset.style);
             }
 
-            // 3. Update Pills UI
+            // 3. Update Dimensions
             const template = btn.dataset.template;
-            dimensionPills.forEach(p => p.classList.remove('active'));
-            selectedFormats.clear();
-            
-            // Special check for 'multi' vs specific template
-            if (template === 'multi') {
-                const multiPill = document.querySelector('.pill[data-value="multi"]');
-                if(multiPill) {
-                    multiPill.classList.add('active');
-                    selectedFormats.add('multi');
-                }
-            } else {
-                const matchingPill = document.querySelector(`.pill[data-value="${template}"]`);
-                if(matchingPill) {
-                    matchingPill.classList.add('active');
-                    selectedFormats.add(template);
-                }
-            }
+            setFormatsFromTemplate(template);
 
             // Stop typewriter
             isUserInteracting = true;
@@ -353,23 +484,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle "Create Campaign" (Hero Button)
     heroButton?.addEventListener('click', () => {
         const prompt = heroInput.value.trim();
-        const style = heroStyleSelect ? heroStyleSelect.value : 'auto';
-        
-        // Convert Set to simple string for app compatibility
-        let templateToSend = 'blog_header'; 
-        if (selectedFormats.has('multi') || selectedFormats.size > 1) {
-            templateToSend = 'blog_header'; // Safeguard until app supports 'multi'
-        } else if (selectedFormats.size === 1) {
-            templateToSend = selectedFormats.values().next().value;
-        }
-        
+        const templateToSend = getSelectedFormatsForApp();
+
         // Only send prompt if there is text
         const promptData = prompt ? {
             prompt: prompt,
             template: templateToSend,
-            style: style
+            style: selectedStyle
         } : null;
-        
+
         handleCTAClick(promptData);
     });
 
@@ -397,7 +520,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Feature visuals click handler (Clicking the image acts as the CTA)
     const featureVisuals = document.querySelectorAll('.feature-visual');
     featureVisuals.forEach(visual => {
-        visual.addEventListener('click', (e) => {
+        visual.addEventListener('click', () => {
             const row = visual.closest('.feature-row');
             const btn = row.querySelector('.feature-cta');
             if (btn) btn.click();
