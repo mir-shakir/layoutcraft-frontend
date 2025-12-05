@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Account - LayoutCraft</title>
-    <meta name="description" content="Manage your LayoutCraft account and subscription.">
+    <title>Settings - LayoutCraft</title>
+    <meta name="description" content="Manage your LayoutCraft account settings and subscription.">
     <meta name="robots" content="noindex">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -14,67 +14,303 @@
     <link rel="stylesheet" href="/shared/css/base.css">
     <link rel="stylesheet" href="/shared/css/navigation.css">
     <style>
-        body { background-color: #f9fafb; }
-        .account-header { text-align: center; padding: 6rem 1rem 4rem; background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff); }
-        .account-header h1 { font-size: 3rem; font-weight: 800; color: #111827; }
-        .account-container { max-width: 800px; margin: -2rem auto 4rem; padding: 0 1rem; }
-        .account-card { background: white; border-radius: 16px; padding: 2.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; margin-bottom: 2rem; }
-        .card-title { font-size: 1.5rem; font-weight: 600; color: #111827; border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1.5rem; }
+        body { background-color: #f9fafb; min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* Layout */
+        .settings-layout {
+            display: flex;
+            flex-direction: column;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            width: 100%;
+            flex: 1;
+            gap: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .settings-layout {
+                flex-direction: row;
+                padding-top: 4rem;
+            }
+        }
+
+        /* Sidebar */
+        .settings-sidebar {
+            width: 100%;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            .settings-sidebar {
+                width: 250px;
+            }
+        }
+
+        .settings-sidebar h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 1.5rem;
+            padding-left: 0.75rem;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            color: #4b5563;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-size: 1rem;
+        }
+
+        .nav-item:hover {
+            background-color: #f3f4f6;
+            color: #111827;
+        }
+
+        .nav-item.active {
+            background-color: #eff6ff;
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        /* Content Area */
+        .settings-content {
+            flex: 1;
+            min-width: 0; /* Prevent overflow in flex items */
+        }
+
+        .settings-section {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #111827;
+            margin: 0;
+        }
+
+        .section-description {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1.5rem;
+            max-width: 600px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.625rem 0.875rem;
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+            background-color: #fff;
+            color: #111827;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .form-input:disabled, .form-input[readonly] {
+            background-color: #f9fafb;
+            color: #6b7280;
+            border-color: #e5e7eb;
+            cursor: not-allowed;
+        }
+
+        /* Subscription Card Styles (Adapted) */
+        .subscription-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
         .info-row { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
         .info-row+.info-row { border-top: 1px solid #f3f4f6; }
         .info-label { color: #6b7280; font-weight: 500; }
         .info-value { color: #111827; font-weight: 600; text-transform: capitalize; }
-        .badge { padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.875rem; }
+
+        .badge { padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.875rem; display: inline-block;}
         .badge.trialing { background-color: #fef3c7; color: #92400e; }
         .badge.active { background-color: #dcfce7; color: #065f46; }
         .badge.free { background-color: #f3f4f6; color: #4b5563; }
-        .manage-btn { display: flex; width: 100%; font-size: 1rem; padding: 0.875rem; margin-top: 1.5rem; }
+
+        .manage-btn {
+            display: inline-flex;
+            justify-content: center;
+            font-size: 0.875rem;
+            padding: 0.625rem 1.25rem;
+            margin-top: 1.5rem;
+            font-weight: 500;
+        }
     </style>
 </head>
 <body>
     <div id="main-navigation"></div>
 
-    <header class="account-header">
-        <h1>My Account</h1>
-    </header>
+    <div class="settings-layout">
+        <!-- Sidebar -->
+        <aside class="settings-sidebar">
+            <h1>Settings</h1>
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="general">General</button>
+                <button class="nav-item" data-tab="subscription">Subscription</button>
+            </nav>
+        </aside>
 
-    <main class="account-container">
-        <div class="account-card">
-            <h2 class="card-title">Subscription Details</h2>
-            <div id="subscription-loading">
-                <p>Loading your subscription details...</p>
-            </div>
-            <div id="subscription-details" style="display: none;">
-                <div class="info-row">
-                    <span class="info-label">Current Plan</span>
-                    <span class="info-value" id="plan-name"></span>
+        <!-- Main Content -->
+        <main class="settings-content">
+            <!-- General Tab -->
+            <section id="settings-general" class="settings-section active">
+                <div class="section-header">
+                    <h2 class="section-title">General Settings</h2>
+                    <p class="section-description">View your personal information.</p>
                 </div>
-                <div class="info-row">
-                    <span class="info-label">Status</span>
-                    <span class="info-value badge" id="plan-status"></span>
+
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" id="user-name" readonly>
                 </div>
-                <div class="info-row" id="trial-info" style="display: none;">
-                    <span class="info-label">Trial Ends</span>
-                    <span class="info-value" id="trial-end-date"></span>
+
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-input" id="user-email" readonly>
                 </div>
-                <button class="btn btn-secondary manage-btn" id="manage-subscription-btn" style="display: none;">Manage Subscription</button>
-                <a href="/pricing/" class="btn btn-secondary manage-btn" id="upgrade-to-pro-btn" style="display: none;">Upgrade to Pro</a>
-            </div>
-        </div>
-        
-        <div class="account-card">
-             <h2 class="card-title">Support</h2>
-             <p>Have questions or need help? You can reach us at our support email. We'll get back to you as soon as possible.</p>
-             <a href="mailto:support@layoutcraft.tech" class="btn btn-secondary manage-btn">Contact Support</a>
-        </div>
-    </main>
+
+                <div class="form-group">
+                    <label class="form-label">User ID</label>
+                    <input type="text" class="form-input" id="user-id" readonly>
+                    <p class="section-description" style="margin-top: 0.25rem; font-size: 0.75rem;">Used for support inquiries.</p>
+                </div>
+            </section>
+
+            <!-- Subscription Tab -->
+            <section id="settings-subscription" class="settings-section">
+                <div class="section-header">
+                    <h2 class="section-title">Subscription</h2>
+                    <p class="section-description">Manage your plan and billing details.</p>
+                </div>
+
+                <div class="subscription-card">
+                    <div id="subscription-loading">
+                        <p>Loading your subscription details...</p>
+                    </div>
+
+                    <div id="subscription-details" style="display: none;">
+                        <div class="info-row">
+                            <span class="info-label">Current Plan</span>
+                            <span class="info-value" id="plan-name"></span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Status</span>
+                            <span class="info-value badge" id="plan-status"></span>
+                        </div>
+                        <div class="info-row" id="trial-info" style="display: none;">
+                            <span class="info-label">Trial Ends</span>
+                            <span class="info-value" id="trial-end-date"></span>
+                        </div>
+
+                        <div style="display: flex; gap: 1rem; align-items: center;">
+                            <button class="btn btn-secondary manage-btn" id="manage-subscription-btn" style="display: none;">Manage Subscription</button>
+                            <a href="/pricing/" class="btn btn-primary manage-btn" id="upgrade-to-pro-btn" style="display: none;">Upgrade to Pro</a>
+                        </div>
+                    </div>
+                </div>
+
+                 <div class="subscription-card">
+                     <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Support</h3>
+                     <p style="color: #6b7280; font-size: 0.875rem; margin-bottom: 1rem;">Have questions or need help? You can reach us at our support email.</p>
+                     <a href="mailto:support@layoutcraft.tech" class="btn btn-secondary manage-btn" style="margin-top: 0;">Contact Support</a>
+                </div>
+            </section>
+        </main>
+    </div>
 
     <script type="module">
         import { authService } from '/shared/js/authService.js';
         import { subscriptionService } from '/shared/js/subscriptionService.js';
         import { layoutCraftNav } from '/shared/js/navigation.js';
-        // This function will render the page with the subscription data
-        function renderPage(sub) {
+
+        // Tab Switching Logic
+        function setupTabs() {
+            const navItems = document.querySelectorAll('.nav-item');
+            const sections = document.querySelectorAll('.settings-section');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const tabName = item.dataset.tab;
+
+                    // Update Nav
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
+
+                    // Update Content
+                    sections.forEach(section => {
+                        section.classList.remove('active');
+                        if (section.id === `settings-${tabName}`) {
+                            section.classList.add('active');
+                        }
+                    });
+                });
+            });
+        }
+
+        // Render General Settings
+        function renderGeneralSettings() {
+            const user = authService.getCurrentUser();
+            if (user) {
+                document.getElementById('user-name').value = user.full_name || 'N/A';
+                document.getElementById('user-email').value = user.email || 'N/A';
+                document.getElementById('user-id').value = user.id || 'N/A';
+            }
+        }
+
+        // Render Subscription Settings
+        function renderSubscriptionSettings(sub) {
             const loadingEl = document.getElementById('subscription-loading');
             const detailsEl = document.getElementById('subscription-details');
             const manageBtn = document.getElementById('manage-subscription-btn');
@@ -87,9 +323,11 @@
 
                 if (sub.status) {
                     statusEl.textContent = sub.status;
+                    // Reset classes and add specific one
+                    statusEl.className = 'info-value badge';
                     statusEl.classList.add(sub.status.toLowerCase());
-                    statusEl.className = 'info-value badge'; // Reset classes
                 }
+
                 if (sub.status && sub.status === 'trialing' && sub.trial_ends_at) {
                     const trialInfoEl = document.getElementById('trial-info');
                     const trialDateEl = document.getElementById('trial-end-date');
@@ -97,14 +335,14 @@
                     trialDateEl.textContent = endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
                     trialInfoEl.style.display = 'flex';
                 }
-                const manageBtn = document.getElementById('manage-subscription-btn');
-                const upgradeBtn = document.getElementById('upgrade-to-pro-btn');
 
                 // Show the correct button based on subscription status
                 if (sub.plan === 'pro' && sub.status === 'active') {
-                    manageBtn.style.display = 'flex';
+                    manageBtn.style.display = 'inline-flex';
+                    upgradeBtn.style.display = 'none';
                 } else {
-                    upgradeBtn.style.display = 'flex';
+                    upgradeBtn.style.display = 'inline-flex';
+                    manageBtn.style.display = 'none';
                 }
 
                 loadingEl.style.display = 'none';
@@ -115,148 +353,65 @@
         }
 
         document.addEventListener('DOMContentLoaded', async () => {
-        window.layoutCraftNav = layoutCraftNav;
-
-        if (!authService.hasToken() || authService.isTokenExpired()) {
-            window.location.href = '/?auth=required';
-            return;
-        }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const paymentSuccess = urlParams.has('payment'); // Check for 'payment=success' or just 'payment'
-
-        if (paymentSuccess) {
-            // 1. Show a loading message
-            const loadingEl = document.getElementById('subscription-loading');
-            loadingEl.innerHTML = '<p>Thank you! Updating your account...</p>';
-
-            // 2. Force refresh user data from backend
-            await authService.forceRefreshUserData();
-
-            // 3. Clean the URL
-            history.replaceState(null, '', window.location.pathname);
-        }
-
-        // 4. Ensure data is fetched (either for the first time or after the refresh)
-        if (!subscriptionService.hasFetched) {
-            await subscriptionService.fetchSubscription();
-        }
-
-        // 5. Render the page with the fresh data
-        const sub = subscriptionService.getSubscription();
-        renderPage(sub);
-
-        // 6. Add event listener for the "Manage Subscription" button
-        document.getElementById('manage-subscription-btn').addEventListener('click', async () => {
-            const manageBtn = document.getElementById('manage-subscription-btn');
-            manageBtn.disabled = true;
-            manageBtn.textContent = 'Loading portal...';
-
-            try {
-                const response = await authService.fetchAuthenticated('/dodo/portal', {
-                    method: 'POST'
-                });
-
-                if (response.portal_url) {
-                    window.location.href = response.portal_url;
-                } else {
-                    throw new Error('Portal URL not found in response.');
-                }
-            } catch (error) {
-                console.error('Failed to create portal session:', error);
-                alert('Could not load the subscription management portal. Please try again later.');
-                manageBtn.disabled = false;
-                manageBtn.textContent = 'Manage Subscription';
-            }
-        });
-    });
-    </script>
-
-    <!-- <script type="module">
-        import { authService } from '/shared/js/authService.js';
-        import { subscriptionService } from '/shared/js/subscriptionService.js';
-        import { layoutCraftNav } from '/shared/js/navigation.js';
-
-        document.addEventListener('DOMContentLoaded', async () => {
             window.layoutCraftNav = layoutCraftNav;
-            
+
             if (!authService.hasToken() || authService.isTokenExpired()) {
                 window.location.href = '/?auth=required';
                 return;
             }
 
-            console.log('Fetching subscription details...');
-            // Ensure subscription data is fetched before rendering
+            // Initialize UI
+            setupTabs();
+            renderGeneralSettings();
+
+            // Handle Payment Success Redirect
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentSuccess = urlParams.has('payment');
+
+            if (paymentSuccess) {
+                const loadingEl = document.getElementById('subscription-loading');
+                loadingEl.innerHTML = '<p>Thank you! Updating your account...</p>';
+
+                // Switch to subscription tab automatically if payment succeeded
+                document.querySelector('[data-tab="subscription"]').click();
+
+                await authService.forceRefreshUserData();
+                history.replaceState(null, '', window.location.pathname);
+            }
+
+            // Fetch Subscription Data
             if (!subscriptionService.hasFetched) {
-                console.log('Subscription data not fetched yet. Fetching now...');
                 await subscriptionService.fetchSubscription();
             }
             const sub = subscriptionService.getSubscription();
-            console.log('Subscription data:', sub);
+            renderSubscriptionSettings(sub);
 
-            const loadingEl = document.getElementById('subscription-loading');
-            const detailsEl = document.getElementById('subscription-details');
-            
-            if (sub) {
-                document.getElementById('plan-name').textContent = sub.plan;
-                
-                const statusEl = document.getElementById('plan-status');
-                //check if status is present first to avoid errors
-                if (sub.status) {
-                    statusEl.textContent = sub.status;
-                    statusEl.classList.add(sub.status.toLowerCase());
-                    statusEl.className = 'info-value badge'; // Reset classes
-                }
+            // Manage Subscription Button Logic
+            const manageBtn = document.getElementById('manage-subscription-btn');
+            if (manageBtn) {
+                manageBtn.addEventListener('click', async () => {
+                    manageBtn.disabled = true;
+                    manageBtn.textContent = 'Loading portal...';
 
+                    try {
+                        const response = await authService.fetchAuthenticated('/dodo/portal', {
+                            method: 'POST'
+                        });
 
-                if (sub.status && sub.status === 'trialing' && sub.trial_ends_at) {
-                    const trialInfoEl = document.getElementById('trial-info');
-                    const trialDateEl = document.getElementById('trial-end-date');
-                    const endDate = new Date(sub.trial_ends_at);
-                    trialDateEl.textContent = endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                    trialInfoEl.style.display = 'flex';
-                }
-                const manageBtn = document.getElementById('manage-subscription-btn');
-                const upgradeBtn = document.getElementById('upgrade-to-pro-btn');
-
-                // This is your new requirement:
-                // Only show "Manage" if the plan is "pro" AND the status is "active"
-                if (sub.plan === 'pro' && sub.status === 'active') {
-                    manageBtn.style.display = 'flex';
-                } else {
-                    // Show "Upgrade" for "free" and "trialing" users
-                    upgradeBtn.style.display = 'flex';
-                }
-
-                loadingEl.style.display = 'none';
-                detailsEl.style.display = 'block';
-            } else {
-                loadingEl.innerHTML = '<p>Could not load subscription details. Please refresh the page.</p>';
-            }
-
-            document.getElementById('manage-subscription-btn').addEventListener('click', async () => {
-                const manageBtn = document.getElementById('manage-subscription-btn');
-                manageBtn.disabled = true;
-                manageBtn.textContent = 'Loading portal...';
-
-                try {
-                    const response = await authService.fetchAuthenticated('/dodo/portal', {
-                        method: 'POST'
-                    });
-
-                    if (response.portal_url) {
-                        window.location.href = response.portal_url;
-                    } else {
-                        throw new Error('Portal URL not found in response.');
+                        if (response.portal_url) {
+                            window.location.href = response.portal_url;
+                        } else {
+                            throw new Error('Portal URL not found in response.');
+                        }
+                    } catch (error) {
+                        console.error('Failed to create portal session:', error);
+                        alert('Could not load the subscription management portal. Please try again later.');
+                        manageBtn.disabled = false;
+                        manageBtn.textContent = 'Manage Subscription';
                     }
-                } catch (error) {
-                    console.error('Failed to create portal session:', error);
-                    alert('Could not load the subscription management portal. If you have an active subscription, please try again later.');
-                    manageBtn.disabled = false;
-                    manageBtn.textContent = 'Manage Subscription';
-                }
-            });
+                });
+            }
         });
-    </script> -->
+    </script>
 </body>
 </html>
