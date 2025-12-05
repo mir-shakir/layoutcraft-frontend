@@ -1,0 +1,537 @@
+/* Base Navigation */
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    z-index: 9999;
+    transition: all 0.3s ease;
+}
+
+.nav-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+}
+
+/* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: #4338ca;
+    font-weight: 700;
+    font-size: 1.25rem;
+    transition: opacity 0.2s;
+}
+
+.logo:hover {
+    opacity: 0.8;
+}
+
+.logo-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.nav-link.active {
+    color: #111827;
+    /* A darker, non-interactive color */
+    font-weight: 700;
+    /* Make it bold */
+    cursor: default;
+    pointer-events: none;
+    /* This prevents the click entirely */
+}
+
+/* Desktop Navigation */
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    color: #4b5563;
+    font-weight: 500;
+    transition: color 0.2s;
+    text-decoration: none;
+    padding: 0.5rem 0;
+}
+
+.nav-link:hover {
+    color: #4338ca;
+}
+
+.nav-link-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+}
+
+.nav-signup-btn {
+    background: #f3f4f6;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: inherit;
+    transition: all 0.2s;
+}
+
+.nav-signup-btn:hover {
+    background: #e5e7eb;
+}
+
+.nav-cta {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.nav-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+/* Profile Dropdown */
+.profile-dropdown-container {
+    position: relative;
+}
+
+.profile-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background 0.2s;
+    font-family: inherit;
+    color: #374151;
+}
+
+.profile-btn:hover {
+    background: #f3f4f6;
+}
+
+.profile-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+    color: #4338ca;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.profile-name {
+    font-weight: 500;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dropdown-arrow {
+    transition: transform 0.2s;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 0.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    min-width: 150px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.2s;
+}
+
+.profile-dropdown.active {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    color: #374151;
+    transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+    background: #f3f4f6;
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: #374151;
+}
+
+.mobile-menu-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+.mobile-menu-btn .close-icon {
+    display: none;
+}
+
+.mobile-menu-btn.active .menu-icon {
+    display: none;
+}
+
+.mobile-menu-btn.active .close-icon {
+    display: block;
+}
+
+/* Mobile Menu - TRULY FIXED VERSION */
+.mobile-menu {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: white;
+    /* Use visibility and opacity for better mobile compatibility */
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s linear 0.3s, opacity 0.3s ease-in-out;
+    overflow-y: auto;
+    z-index: 9998;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-menu.active {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+}
+
+/* Alternative: If you prefer slide from right, use this instead:
+.mobile-menu {
+    transform: translateX(100%);
+}
+.mobile-menu.active {
+    transform: translateX(0);
+}
+*/
+
+.mobile-menu-content {
+    padding: 1rem;
+}
+
+.mobile-nav-link {
+    display: block;
+    padding: 1rem;
+    color: #374151;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background 0.2s;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.mobile-nav-link:hover {
+    background: #f3f4f6;
+}
+
+.mobile-cta {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white !important;
+    text-align: center;
+    margin-top: 0.5rem;
+}
+
+.mobile-signup {
+    background: #f3f4f6;
+    text-align: center;
+}
+
+.mobile-divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 1rem 0;
+}
+
+.mobile-profile-section {
+    padding: 1rem 0;
+}
+
+.mobile-profile-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: #f9fafb;
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.logout-link {
+    color: #dc2626;
+}
+
+/* Auth Modal */
+.auth-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.auth-modal-overlay.active {
+    display: flex;
+}
+
+.auth-modal-content {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    max-width: 400px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+}
+
+.auth-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6b7280;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.auth-modal-close:hover {
+    background: #f3f4f6;
+}
+
+.auth-modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #111827;
+}
+
+.auth-modal-subtitle {
+    color: #6b7280;
+    margin-bottom: 1.5rem;
+}
+
+.auth-form-group {
+    margin-bottom: 1rem;
+}
+
+.auth-form-group label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.auth-form-group input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.2s;
+}
+
+.auth-form-group input:focus {
+    outline: none;
+    border-color: #818cf8;
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1);
+}
+
+.auth-error {
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.auth-submit-btn {
+    width: 100%;
+    padding: 0.875rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.auth-submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.auth-toggle {
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.auth-toggle button {
+    background: none;
+    border: none;
+    color: #4338ca;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Success Toast */
+.success-toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #10b981;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s;
+    z-index: 10001;
+}
+
+.success-toast.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .nav {
+        padding: 0 1rem;
+    }
+
+    .nav .container {
+        overflow: visible !important;
+    }
+
+    .desktop-nav {
+        display: none;
+    }
+
+    .mobile-menu-btn {
+        display: block;
+    }
+
+    /* Ensure mobile menu is above everything */
+    .mobile-menu {
+        z-index: 99999 !important;
+    }
+
+    .auth-modal-content {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .success-toast {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+    }
+
+    /* Force menu to be visible when active (NO LONGER NESTED) */
+    .mobile-menu.active {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        transform: none !important;
+        background: white !important;
+    }
+
+    .mobile-nav-link.active {
+        background-color: #f3f4f6;
+        /* A light background to show selection */
+        color: #4338ca;
+        /* Use a primary or darker color for the text */
+        font-weight: 700;
+        /* Make it bold to stand out */
+        pointer-events: none;
+        /* Prevents clicking the link for the current page */
+        cursor: default;
+    }
+
+    /* Ensure content is visible (NO LONGER NESTED) */
+    .mobile-menu.active .mobile-menu-content {
+        display: block !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+    }
+}

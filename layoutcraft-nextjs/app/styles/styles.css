@@ -1,0 +1,1083 @@
+/* ===========================================
+   LAYOUTCRAFT MVP - ENHANCED PRODUCTION STYLES
+   ========================================== */
+
+/* CSS CUSTOM PROPERTIES (VARIABLES) */
+:root {
+    /* Colors */
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    --glass-bg: rgba(255, 255, 255, 0.25);
+    --glass-border: rgba(255, 255, 255, 0.18);
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    --glass-hover-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.5);
+
+    /* Enhanced color palette */
+    --indigo-50: #eef2ff;
+    --indigo-100: #e0e7ff;
+    --indigo-400: #818cf8;
+    --indigo-500: #6366f1;
+    --indigo-600: #4f46e5;
+    --indigo-700: #4338ca;
+    --purple-100: #f3e8ff;
+    --purple-400: #c084fc;
+    --purple-500: #a855f7;
+    --purple-600: #9333ea;
+    --purple-700: #7c3aed;
+    --emerald-100: #dcfce7;
+    --emerald-500: #10b981;
+    --emerald-600: #059669;
+    --teal-600: #0d9488;
+    --orange-600: #ea580c;
+
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 2.5rem;
+    --spacing-3xl: 3rem;
+
+    /* Typography */
+    --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+
+    /* Border radius */
+    --border-radius: 0.5rem;
+    --border-radius-lg: 0.75rem;
+    --border-radius-xl: 1rem;
+    --border-radius-2xl: 1.5rem;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+    /* Transitions */
+    --transition-fast: 0.15s ease-out;
+    --transition-normal: 0.3s ease-out;
+    --transition-slow: 0.5s ease-out;
+
+    /* Z-index layers */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+}
+
+/* RESET AND BASE STYLES */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    -moz-tab-size: 4;
+    tab-size: 4;
+}
+
+body {
+    font-family: var(--font-family);
+    line-height: 1.6;
+    color: #1a202c;
+    overflow-x: hidden;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide content until Alpine.js loads */
+[x-cloak] {
+    display: none !important;
+}
+
+/* GLASSMORPHISM COMPONENTS */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: var(--border-radius-2xl);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    opacity: 0;
+    transition: opacity var(--transition-normal);
+}
+
+.glass-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--glass-hover-shadow);
+}
+
+.glass-card:hover::before {
+    opacity: 1;
+}
+
+/* FORM ELEMENTS */
+.prompt-input {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    font-size: var(--font-size-base);
+    line-height: 1.5;
+    transition: all var(--transition-normal);
+    resize: none;
+    font-family: inherit;
+}
+
+.prompt-input:focus {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: var(--indigo-400);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    transform: translateY(-1px);
+}
+
+.prompt-input::placeholder {
+    color: #6b7280;
+    opacity: 0.8;
+}
+
+/* BUTTON COMPONENTS */
+.engine-btn {
+    background: rgba(255, 255, 255, 0.6);
+    border: 2px solid rgba(200, 200, 200, 0.3);
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+    position: relative;
+    overflow: hidden;
+}
+
+.engine-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left var(--transition-slow);
+}
+
+.engine-btn:hover {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: var(--indigo-400);
+    transform: translateY(-1px);
+}
+
+.engine-btn:hover::before {
+    left: 100%;
+}
+
+.engine-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.engine-btn-active {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: var(--indigo-500);
+    color: var(--indigo-700);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* LOADING DOTS ANIMATION */
+.loading-dots::after {
+    content: '...';
+    animation: loading-dots 1.5s infinite;
+}
+
+@keyframes loading-dots {
+
+    0%,
+    20% {
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* RETRY SUGGESTION STYLING */
+.retry-suggestion {
+    background: rgba(255, 237, 204, 0.8);
+    border: 1px solid rgba(251, 191, 36, 0.3);
+    border-radius: var(--border-radius);
+    padding: 0.25rem 0.5rem;
+    font-size: var(--font-size-xs);
+    color: var(--orange-600);
+    animation: retry-pulse 2s ease-in-out infinite;
+}
+
+@keyframes retry-pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.8;
+        transform: scale(1.02);
+    }
+}
+
+/* PROMPT CHARACTER COUNTER */
+.prompt-counter {
+    font-size: var(--font-size-xs);
+    color: #6b7280;
+    transition: color var(--transition-fast);
+}
+
+.prompt-counter.over-limit {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+/* QUICK PROMPT BUTTONS */
+.quick-prompt-btn {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+    color: #4b5563;
+    transition: all var(--transition-normal);
+    cursor: pointer;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-prompt-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.8);
+    border-color: var(--indigo-400);
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: var(--shadow-md);
+}
+
+.quick-prompt-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.quick-prompt-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+    transition: left var(--transition-slow);
+}
+
+.quick-prompt-btn:hover::before {
+    left: 100%;
+}
+
+/* MOBILE COLLAPSE ANIMATIONS */
+.mobile-collapse-enter {
+    animation: mobile-collapse-enter 0.2s ease-out;
+}
+
+@keyframes mobile-collapse-enter {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.mobile-collapse-exit {
+    animation: mobile-collapse-exit 0.15s ease-in;
+}
+
+@keyframes mobile-collapse-exit {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
+/* COLLAPSE ARROW ANIMATIONS */
+.collapse-arrow {
+    transition: transform var(--transition-normal);
+}
+
+.collapse-arrow.expanded {
+    transform: rotate(180deg);
+}
+
+/* HERO SECTION ENHANCEMENTS */
+.hero-gradient-text {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 25%, #db2777 50%, #dc2626 75%, #ea580c 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: gradient-shift 3s ease-in-out infinite;
+}
+
+@keyframes gradient-shift {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* FEEDBACK FORM STYLING */
+.feedback-form {
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    border-radius: var(--border-radius-xl);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: var(--spacing-lg);
+    transition: all var(--transition-normal);
+}
+
+.feedback-form:hover {
+    background: rgba(255, 255, 255, 0.5);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.feedback-input {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(209, 213, 219, 0.5);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    font-size: var(--font-size-base);
+    transition: all var(--transition-normal);
+    font-family: inherit;
+}
+
+.feedback-input:focus {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: var(--indigo-400);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    transform: translateY(-1px);
+}
+
+.feedback-input::placeholder {
+    color: #9ca3af;
+    opacity: 0.8;
+}
+
+/* SUCCESS STATES */
+.success-checkmark {
+    background: var(--emerald-100);
+    border-radius: 50%;
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    animation: success-bounce 0.6s ease-out;
+}
+
+@keyframes success-bounce {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* COMING SOON FEATURES */
+.feature-card {
+    background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: var(--border-radius-xl);
+    padding: var(--spacing-lg);
+    text-align: center;
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left var(--transition-slow);
+}
+
+.feature-card:hover {
+    background: rgba(255, 255, 255, 0.4);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.feature-card:hover::before {
+    left: 100%;
+}
+
+.feature-icon {
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    border-radius: var(--border-radius);
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-md);
+    transition: transform var(--transition-normal);
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* FOOTER STYLING */
+footer {
+    background: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(209, 213, 219, 0.5);
+    margin-top: var(--spacing-3xl);
+}
+
+
+
+/* Add these new styles at the end of the file */
+
+/* Integrated Prompt Suggestion Buttons */
+.prompt-suggestion-btn {
+    display: inline-block;
+    background-color: rgba(238, 242, 255, 0.7);
+    /* Light indigo background from your palette */
+    color: #4338ca;
+    /* Indigo text color */
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.35rem 0.85rem;
+    border-radius: 9999px;
+    /* This creates the pill shape */
+    border: 1px solid rgba(199, 210, 254, 0.8);
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.prompt-suggestion-btn:hover:not(:disabled) {
+    background-color: #e0e7ff;
+    /* A slightly darker hover state */
+    color: #3730a3;
+    transform: translateY(-1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.06);
+}
+
+.prompt-suggestion-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* RESPONSIVE DESIGN ENHANCEMENTS */
+@media (max-width: 768px) {
+    .glass-card {
+        margin: 0 var(--spacing-xs);
+        padding: var(--spacing-lg);
+    }
+
+    .hero-gradient-text {
+        font-size: 2.5rem;
+        line-height: 1.2;
+    }
+
+    .quick-prompt-btn {
+        padding: var(--spacing-sm);
+        font-size: var(--font-size-xs);
+    }
+
+    .feature-card {
+        padding: var(--spacing-md);
+    }
+
+    .feedback-form {
+        padding: var(--spacing-md);
+    }
+}
+
+
+/* Add these new styles at the end of the file */
+
+/* Utility to hide scrollbars while keeping functionality */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* For IE, Edge and Firefox */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+
+/* Add this at the end of styles.css */
+
+.mvp-banner {
+    background: rgba(224, 231, 255, 0.8); /* --indigo-100 with transparency */
+    color: var(--indigo-700);
+    padding: var(--spacing-sm) 0;
+    border-bottom: 1px solid rgba(199, 210, 254, 0.5); /* --indigo-200 */
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+}
+
+.close-banner-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 9999px;
+    transition: background-color var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.close-banner-btn:hover {
+    background-color: rgba(199, 210, 254, 0.5);
+}
+
+
+
+
+/* ===========================================
+   AUTHENTICATION MODAL STYLES
+   ========================================== */
+
+/* This prevents the page from scrolling when the modal is open */
+.body-no-scroll {
+    overflow: hidden;
+}
+
+/* Profile dropdown animations */
+.profile-dropdown-enter {
+    animation: profile-dropdown-enter 0.15s ease-out;
+}
+
+@keyframes profile-dropdown-enter {
+    from {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Auth modal form field focus styles */
+.auth-modal-panel input:focus {
+    transition: var(--transition-fast);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+}
+
+/* Pro model unavailable overlay */
+.pro-unavailable-overlay {
+    background: rgba(107, 114, 128, 0.8);
+    backdrop-filter: blur(2px);
+}
+
+/* Profile avatar styling */
+.profile-avatar {
+    background: linear-gradient(135deg, var(--indigo-100), var(--purple-100));
+    color: var(--indigo-600);
+    font-weight: 600;
+}
+
+
+
+/* Enhanced mobile spacing - add to the end of styles.css */
+@media (max-width: 768px) {
+    /* Tighter mobile spacing */
+    .glass-card {
+        margin: 0 var(--spacing-xs);
+        padding: var(--spacing-md) var(--spacing-lg);
+    }
+
+    .hero-gradient-text {
+        font-size: 2rem;
+        line-height: 1.1;
+        margin-bottom: 1rem;
+    }
+
+    /* Mobile-specific spacing adjustments */
+    main {
+        padding: var(--spacing-md) var(--spacing-md) 5rem; /* Extra bottom padding for sticky button */
+    }
+
+    /* Style grid improvements for mobile */
+    .theme-grid-mobile {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+    }
+
+    /* Better button feedback */
+    .active\:scale-95:active {
+        transform: scale(0.95);
+    }
+
+    /* FAQ mobile improvements */
+    .faq-mobile summary {
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    .faq-mobile .faq-content {
+        padding: 0 1rem 1rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Image fade-in animation */
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced button feedback */
+.active\:scale-95:active {
+    transform: scale(0.95);
+}
+
+/* Sticky button styling */
+.sticky-generate-btn {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Add padding to body when fixed generate button is present on mobile */
+@media (max-width: 768px) {
+    body {
+        padding-bottom: 120px; /* Space for fixed generate button */
+        /* Optimize scroll performance on mobile */
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+    }
+
+    /* Ensure footer is properly visible */
+    footer {
+        margin-bottom: 0 !important;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Reduce backdrop-filter on mobile for better performance */
+    .glass-card {
+        backdrop-filter: blur(8px); /* Reduced from 16px */
+        -webkit-backdrop-filter: blur(8px);
+    }
+
+    /* Disable expensive effects on mobile */
+    .glass-card:hover {
+        transform: none; /* Disable hover transforms on mobile */
+    }
+
+    .preview-container:hover {
+        transform: none; /* Disable hover scaling on mobile */
+    }
+
+    /* Optimize sticky elements */
+    .sticky-generate-btn {
+        backdrop-filter: blur(8px); /* Reduced blur */
+        -webkit-backdrop-filter: blur(8px);
+        will-change: transform; /* Optimize for animations */
+    }
+
+    .mvp-banner {
+        backdrop-filter: blur(4px); /* Reduced blur */
+        -webkit-backdrop-filter: blur(4px);
+    }
+}
+
+/* Progress indicator styling */
+.progress-bar {
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+    background-size: 200% 100%;
+    animation: progress-shimmer 2s infinite;
+}
+
+@keyframes progress-shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* Better visual feedback for all interactive elements */
+button:not(:disabled):active,
+.interactive:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease-out;
+}
+
+/* Mobile-specific performance optimizations */
+@media (max-width: 768px) {
+    /* Disable complex animations on mobile */
+    button:not(:disabled):active,
+    .interactive:active {
+        transform: none; /* Disable scale animations on mobile */
+    }
+
+    /* Use simpler alternatives for mobile */
+    .quick-prompt-btn:hover:not(:disabled) {
+        transform: none; /* Disable complex transforms */
+        background: rgba(255, 255, 255, 0.8);
+        border-color: var(--indigo-400);
+    }
+
+    .engine-btn:hover {
+        transform: none; /* Disable hover transforms */
+        background: rgba(255, 255, 255, 0.8);
+        border-color: var(--indigo-400);
+    }
+
+    /* Disable shine animations on mobile */
+    .quick-prompt-btn::before,
+    .engine-btn::before,
+    .feature-card::before {
+        display: none;
+    }
+}
+
+/* Enhanced loading state */
+.loading-enhanced {
+    position: relative;
+    overflow: hidden;
+}
+
+.loading-enhanced::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: loading-sweep 2s infinite;
+}
+
+@keyframes loading-sweep {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Mobile-optimized modal */
+@media (max-width: 480px) {
+    .modal-mobile {
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+    }
+}
+
+/* Improved empty state button */
+.empty-state-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    transition: all 0.3s ease;
+}
+
+.empty-state-btn:hover {
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    transform: translateY(-2px);
+}
+
+/* Better spacing for smaller screens */
+@media (max-width: 640px) {
+    .section-spacing {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+
+    .hero-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .grid-gap-mobile {
+        gap: 1rem;
+    }
+}
+
+/* Mobile auth buttons */
+@media (max-width: 768px) {
+    .mobile-auth-section {
+        border-top: 1px solid rgba(209, 213, 219, 0.3);
+        padding-top: var(--spacing-md);
+        margin-top: var(--spacing-md);
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-gradient-text {
+        font-size: 2rem;
+    }
+
+    .glass-card {
+        margin: 0;
+        border-radius: var(--border-radius-lg);
+    }
+}
+
+/* ACCESSIBILITY IMPROVEMENTS */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .hero-gradient-text {
+        animation: none;
+        background-position: 0% 50%;
+    }
+
+    .loading-dots::after {
+        animation: none;
+        content: '...';
+    }
+}
+
+/* HIGH CONTRAST MODE */
+@media (prefers-contrast: high) {
+    .glass-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid #000;
+    }
+
+    .quick-prompt-btn,
+    .engine-btn {
+        background: rgba(255, 255, 255, 0.95);
+        border: 2px solid #333;
+    }
+
+    .feedback-input {
+        background: rgba(255, 255, 255, 0.98);
+        border: 2px solid #333;
+    }
+}
+
+/* DARK MODE SUPPORT (if needed in future) */
+/* @media (prefers-color-scheme: dark) {
+    :root {
+        --glass-bg: rgba(0, 0, 0, 0.3);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+    }
+} */
+
+/* PREVIEW CONTAINER STYLES */
+.preview-container {
+    background: transparent;
+    transition: all var(--transition-normal);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.preview-container:hover {
+    transform: scale(1.02);
+}
+
+.empty-state-container,
+.loading-state-container {
+    transition: all var(--transition-normal);
+    position: relative;
+    overflow: hidden;
+}
+
+.empty-state-container {
+    border-style: dashed;
+    border-width: 2px;
+    border-color: rgba(209, 213, 219, 0.6);
+    background: rgba(249, 250, 251, 0.5);
+}
+
+.loading-state-container {
+    border-style: solid;
+    border-width: 2px;
+    border-color: rgba(165, 180, 252, 0.6);
+    background: rgba(238, 242, 255, 0.5);
+}
+
+/* Ensure images maintain their aspect ratio */
+.preview-container img {
+    object-fit: contain;
+    object-position: center;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 0.5rem;
+}
+
+/* Responsive adjustments for preview containers */
+@media (max-width: 768px) {
+    .preview-container,
+    .empty-state-container,
+    .loading-state-container {
+        max-width: 85vw !important; /* More aggressive mobile constraint */
+        max-height: 40vh !important; /* Limit height too */
+        margin: 0 auto;
+        overflow: hidden; /* Prevent any possible overflow */
+    }
+
+    /* Ensure mobile screens don't overflow */
+    .glass-card {
+        margin: 0 1rem;
+        overflow-x: hidden; /* Prevent horizontal overflow */
+    }
+}
+
+@media (max-width: 480px) {
+    .preview-container,
+    .empty-state-container,
+    .loading-state-container {
+        max-width: 80vw !important; /* Even more conservative for small phones */
+        max-height: 35vh !important; /* Reduce height further */
+    }
+
+    /* Smaller padding on mobile for preview containers */
+    .empty-state-container,
+    .loading-state-container {
+        padding: 0.75rem;
+    }
+
+    /* Adjust glass card padding */
+    .glass-card {
+        margin: 0 0.5rem;
+        padding: 1rem;
+    }
+}
+
+/* Additional safety for very wide containers */
+@media (max-width: 375px) {
+    .preview-container,
+    .empty-state-container,
+    .loading-state-container {
+        max-width: 75vw !important; /* Ultra-safe for very small screens */
+        max-height: 30vh !important;
+    }
+
+    .empty-state-container,
+    .loading-state-container {
+        padding: 0.5rem;
+    }
+}
+
+/* PRINT STYLES */
+@media print {
+    .glass-card {
+        background: white;
+        border: 1px solid #ccc;
+        box-shadow: none;
+    }
+
+    .hero-gradient-text {
+        -webkit-text-fill-color: initial;
+        color: #000;
+    }
+
+    .loading-dots::after,
+    .retry-suggestion {
+        display: none;
+    }
+}
