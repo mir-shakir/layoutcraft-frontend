@@ -360,6 +360,13 @@
                 return;
             }
 
+            // Listen for logout events - redirect to home when user logs out
+            document.addEventListener('authChange', () => {
+                if (!authService.hasToken()) {
+                    window.location.href = '/';
+                }
+            });
+
             // Initialize UI components
             initTabNavigation();
             initCopyButton();
