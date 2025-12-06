@@ -67,14 +67,14 @@ import { subscriptionService } from "../../shared/js/subscriptionService.js";
 
     // ... after the elements object
 
-function showUpgradeModal(message) {
-    // First, remove any existing modal to prevent duplicates
-    const existingModal = document.getElementById('upgrade-modal');
-    if (existingModal) {
-        existingModal.remove();
-    }
+    function showUpgradeModal(message) {
+        // First, remove any existing modal to prevent duplicates
+        const existingModal = document.getElementById('upgrade-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
 
-    const modalHTML = `
+        const modalHTML = `
         <div class="auth-modal-overlay active" id="upgrade-modal" style="z-index: 10001;">
             <div class="auth-modal-content">
                 <button class="auth-modal-close" type="button">×</button>
@@ -84,18 +84,18 @@ function showUpgradeModal(message) {
             </div>
         </div>
     `;
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-    const modal = document.getElementById('upgrade-modal');
-    modal.querySelector('.auth-modal-close').addEventListener('click', () => {
-        modal.remove();
-    });
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
+        const modal = document.getElementById('upgrade-modal');
+        modal.querySelector('.auth-modal-close').addEventListener('click', () => {
             modal.remove();
-        }
-    });
-}
+        });
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    }
 
     // --- INITIALIZATION ---
     async function init() {
@@ -203,26 +203,35 @@ function showUpgradeModal(message) {
         const dropdown = document.createElement('div');
         dropdown.className = 'custom-dropdown';
 
+        // In edit mode, dropdowns can be viewed but not changed
+        const isEditMode = state.appMode === 'editing';
+
         const button = document.createElement('button');
         button.className = 'dropdown-toggle';
+        if (isEditMode) {
+            button.classList.add('locked');
+        }
 
         const menu = document.createElement('div');
         menu.className = 'dropdown-menu';
 
         const updateButtonLabel = () => {
+            let labelText = '';
             if (isMultiSelect) {
                 if (state.allFormatsSelected) {
-                    button.textContent = 'All Formats';
+                    labelText = 'All Formats';
                 } else {
                     const count = state.selectedDimensions.length;
-                    button.textContent = count === 1
+                    labelText = count === 1
                         ? DIMENSIONS_DATA.find(d => d.value === state.selectedDimensions[0])?.label || `Dimensions (${count})`
                         : `Dimensions (${count})`;
                 }
             } else {
                 const selected = options.find(o => o.value === state.selectedStyle);
-                button.textContent = `Style: ${selected ? selected.label : 'Auto'}`;
+                labelText = `Style: ${selected ? selected.label : 'Auto'}`;
             }
+            // Set the button text (no lock icon needed)
+            button.textContent = labelText;
         };
 
         const updateAllCheckboxStates = () => {
@@ -261,22 +270,22 @@ function showUpgradeModal(message) {
                 isChecked = state.selectedStyle === option.value;
             }
 
-            item.innerHTML = `<label class="${isLocked ? 'locked' : ''}" style="${isLocked ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
+            item.innerHTML = `<label class="${isLocked ? 'locked' : ''}" style="${isLocked || isEditMode ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
                 <input type="${isMultiSelect ? 'checkbox' : 'radio'}"
                 name="${type}-option"
                 value="${option.value}"
                 ${isChecked ? 'checked' : ''}
-                ${isLocked ? 'disabled' : ''}>
-                ${option.label} ${isLocked ? '🔒' : ''}
+                ${isLocked || isEditMode ? 'disabled' : ''}>
+                ${option.label} ${isLocked && !isEditMode ? '🔒' : ''}
             </label>`;
 
-            if (isLocked) {
+            if (isLocked && !isEditMode) {
                 item.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     showUpgradeModal('Selecting multiple dimensions is a Pro feature. Upgrade to generate designs in multiple sizes at once!');
                 });
-            } else {
+            } else if (!isEditMode) {
                 item.querySelector('input').addEventListener('change', (e) => {
                     if (isAllFormatsOption) {
                         // Handle "All Formats" toggle
@@ -515,8 +524,8 @@ function showUpgradeModal(message) {
     async function performAction() {
         if (state.appMode === 'editing' && !subscriptionService.isOnTrialOrPro()) {
             showUpgradeModal('The ability to refine and edit designs with prompts is a Pro feature. Upgrade to unlock this powerful workflow!');
-        return; 
-    }
+            return;
+        }
 
         if (elements.generateBtn.disabled) return;
 
@@ -544,6 +553,18 @@ function showUpgradeModal(message) {
 
                 state.appMode = 'editing';
                 state.selectedForEditing = state.generatedDesigns.map(d => d.size_preset); // Select all by default
+
+                // Update dimensions state to reflect the generated designs
+                const generatedPresets = state.generatedDesigns.map(d => d.size_preset);
+                if (generatedPresets.length === ALL_DIMENSION_VALUES.length &&
+                    ALL_DIMENSION_VALUES.every(v => generatedPresets.includes(v))) {
+                    state.allFormatsSelected = true;
+                    state.selectedDimensions = [];
+                } else {
+                    state.allFormatsSelected = false;
+                    state.selectedDimensions = generatedPresets;
+                }
+                // Style is already set from the user's selection before generating
 
             } else { // Editing
                 addSpinnersToSelectedDesigns();
@@ -618,6 +639,22 @@ function showUpgradeModal(message) {
 
             // Pre-select all designs in the loaded group for editing by their size_preset
             state.selectedForEditing = state.generatedDesigns.map(d => d.size_preset);
+
+            // Update dimensions state to reflect the loaded designs
+            const loadedPresets = state.generatedDesigns.map(d => d.size_preset);
+            if (loadedPresets.length === ALL_DIMENSION_VALUES.length &&
+                ALL_DIMENSION_VALUES.every(v => loadedPresets.includes(v))) {
+                state.allFormatsSelected = true;
+                state.selectedDimensions = [];
+            } else {
+                state.allFormatsSelected = false;
+                state.selectedDimensions = loadedPresets;
+            }
+
+            // Update style state if the generation group has a theme
+            if (generationGroup.theme) {
+                state.selectedStyle = generationGroup.theme;
+            }
 
         } catch (error) {
             if (error.message === 'SESSION_EXPIRED') {

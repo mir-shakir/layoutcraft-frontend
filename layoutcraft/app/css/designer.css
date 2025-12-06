@@ -972,6 +972,11 @@
     transition: all 0.2s;
 }
 
+.dropdown-toggle.locked {
+    opacity: 0.8;
+    background: #e5e7eb;
+}
+
 .dropdown-menu {
     position: absolute;
     top: 100%;
@@ -1219,6 +1224,7 @@
     from {
         transform: rotate(0deg);
     }
+
     to {
         transform: rotate(360deg);
     }
