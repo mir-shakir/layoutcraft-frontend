@@ -109,16 +109,17 @@ class AuthService {
         return message || 'An unexpected error occurred. Please try again.';
     }
 
-    async handleResponse(response) {
+    async handleResponse(response, isLoginRequest = false) {
         if (!response.ok) {
-            if (response.status === 401) {
-                this.logout(); // Clears token from storage
-                // Redirect to the homepage, which will then show the auth modal.
+            // FIX: Only redirect on 401 if it's NOT a login request
+            if (response.status === 401 && !isLoginRequest) {
+                this.logout(); 
                 window.location.href = '/?auth=required';
-                // Throw a specific error that our app pages can look for.
                 throw new Error('SESSION_EXPIRED');
             }
+
             const errorData = await response.json().catch(() => ({}));
+            // This allows the "Invalid email or password" message to pass through
             const rawMessage = errorData.detail || `Error: ${response.status}`;
             throw new Error(this.formatAuthError(rawMessage));
         }
@@ -127,7 +128,7 @@ class AuthService {
         if (contentType && contentType.includes('application/json')) {
             return response.json();
         }
-        return response.blob(); // For image generation
+        return response.blob(); 
     }
 
     // ADD THIS NEW FUNCTION TO THE AuthService CLASS
@@ -171,7 +172,10 @@ class AuthService {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(credentials)
         });
-        const data = await this.handleResponse(response);
+        
+        // Pass a flag or let handleResponse check the URL
+        const data = await this.handleResponse(response, true); // true = isLoginRequest
+        
         if (data.access_token && data.user) {
             this.saveToken(data.access_token);
             this.saveUser(data.user);
