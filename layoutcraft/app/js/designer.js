@@ -63,6 +63,8 @@ import { subscriptionService } from "../../shared/js/subscriptionService.js";
         progressBar: document.getElementById('progress-bar'),
         retryBtn: document.getElementById('retry-btn'),
         appContainer: document.querySelector('.designer-app'),
+        workspaceLayout: document.querySelector('.workspace-layout'),
+        useBrandKitToggle: document.getElementById('use-brand-kit'),
     };
 
     // ... after the elements object
@@ -99,13 +101,21 @@ import { subscriptionService } from "../../shared/js/subscriptionService.js";
 
     // --- INITIALIZATION ---
     async function init() {
-        if (elements.appContainer) {
-            elements.appContainer.style.visibility = 'visible';
-            elements.appContainer.style.opacity = '1';
+        // Show the workspace layout
+        if (elements.workspaceLayout) {
+            elements.workspaceLayout.style.visibility = 'visible';
+            elements.workspaceLayout.style.opacity = '1';
         }
         checkAuthStatus();
         setupEventListeners();
         await subscriptionService.fetchSubscription();
+
+        // Set default dimension for free users (All Formats is Pro-only)
+        if (!subscriptionService.isOnTrialOrPro()) {
+            state.allFormatsSelected = false;
+            state.selectedDimensions = ['blog_header']; // Default to first option
+        }
+
         loadInitialData(); // Load any initial data from sessionStorage
         loadDesignForEditing(); // Check for ?edit=... parameter
         renderUI();
@@ -118,6 +128,12 @@ import { subscriptionService } from "../../shared/js/subscriptionService.js";
         elements.retryBtn.addEventListener('click', handleStartNew);
         document.addEventListener('authChange', onAuthChange);
 
+        // Listen for design load events from workspace history view
+        document.addEventListener('loadDesign', (e) => {
+            hydrateStateFromDesign(e.detail);
+            renderUI();
+        });
+
         // Global listener to close dropdowns when clicking outside
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.custom-dropdown')) {
@@ -126,6 +142,35 @@ import { subscriptionService } from "../../shared/js/subscriptionService.js";
                 });
             }
         });
+    }
+
+    // Hydrate editor state from a loaded design (from history)
+    function hydrateStateFromDesign(designData) {
+        state.appMode = 'editing';
+        state.generation_id = designData.generation_id;
+        state.generatedDesigns = designData.images_json || [];
+        state.selectedForEditing = state.generatedDesigns.map(d => d.size_preset);
+
+        // Update dimensions state
+        const loadedPresets = state.generatedDesigns.map(d => d.size_preset);
+        if (loadedPresets.length === ALL_DIMENSION_VALUES.length &&
+            ALL_DIMENSION_VALUES.every(v => loadedPresets.includes(v))) {
+            state.allFormatsSelected = true;
+            state.selectedDimensions = [];
+        } else {
+            state.allFormatsSelected = false;
+            state.selectedDimensions = loadedPresets;
+        }
+
+        // Update style if provided
+        if (designData.theme) {
+            state.selectedStyle = designData.theme;
+        }
+
+        // Clear any existing prompt
+        state.prompt = '';
+        elements.promptInput.value = '';
+        elements.charIndicator.textContent = `0/${PROMPT_MAX_LENGTH}`;
     }
 
     function onAuthChange() {
@@ -254,15 +299,19 @@ import { subscriptionService } from "../../shared/js/subscriptionService.js";
         options.forEach((option, index) => {
             const item = document.createElement('div');
             const isAllFormatsOption = option.isAllFormats;
-            // Lock non-first options for non-pro users (but not the All Formats option itself)
-            const isLocked = isMultiSelect && !isAllFormatsOption && !subscriptionService.isOnTrialOrPro() && index > 1;
+            const isPro = subscriptionService.isOnTrialOrPro();
+
+            // Lock "All Formats" for free users, and lock additional dimensions beyond the first for free users
+            const isAllFormatsLocked = isAllFormatsOption && !isPro;
+            const isLocked = isMultiSelect && !isAllFormatsOption && !isPro && index > 1;
 
             item.className = 'dropdown-item';
 
             let isChecked = false;
             if (isMultiSelect) {
                 if (isAllFormatsOption) {
-                    isChecked = state.allFormatsSelected;
+                    // Free users can never have All Formats selected
+                    isChecked = isPro && state.allFormatsSelected;
                 } else {
                     isChecked = state.allFormatsSelected || state.selectedDimensions.includes(option.value);
                 }
@@ -270,20 +319,26 @@ import { subscriptionService } from "../../shared/js/subscriptionService.js";
                 isChecked = state.selectedStyle === option.value;
             }
 
-            item.innerHTML = `<label class="${isLocked ? 'locked' : ''}" style="${isLocked || isEditMode ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
+            const isDisabled = isLocked || isAllFormatsLocked || isEditMode;
+            const showLockIcon = (isLocked || isAllFormatsLocked) && !isEditMode;
+
+            item.innerHTML = `<label class="${isDisabled ? 'locked' : ''}" style="${isDisabled ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
                 <input type="${isMultiSelect ? 'checkbox' : 'radio'}"
                 name="${type}-option"
                 value="${option.value}"
                 ${isChecked ? 'checked' : ''}
-                ${isLocked || isEditMode ? 'disabled' : ''}>
-                ${option.label} ${isLocked && !isEditMode ? '🔒' : ''}
+                ${isDisabled ? 'disabled' : ''}>
+                ${option.label} ${showLockIcon ? '<span class="pro-badge-small">PRO</span>' : ''}
             </label>`;
 
-            if (isLocked && !isEditMode) {
+            if ((isLocked || isAllFormatsLocked) && !isEditMode) {
                 item.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    showUpgradeModal('Selecting multiple dimensions is a Pro feature. Upgrade to generate designs in multiple sizes at once!');
+                    const message = isAllFormatsLocked
+                        ? 'Generating all formats at once is a Pro feature. Upgrade to create designs in multiple sizes simultaneously!'
+                        : 'Selecting multiple dimensions is a Pro feature. Upgrade to generate designs in multiple sizes at once!';
+                    showUpgradeModal(message);
                 });
             } else if (!isEditMode) {
                 item.querySelector('input').addEventListener('change', (e) => {
@@ -537,10 +592,12 @@ import { subscriptionService } from "../../shared/js/subscriptionService.js";
         try {
             if (state.appMode === 'generating') {
                 const dimensionsToSend = state.allFormatsSelected ? ALL_DIMENSION_VALUES : state.selectedDimensions;
+                const useBrandKit = elements.useBrandKitToggle?.checked || false;
                 const body = {
                     prompt: state.prompt,
                     theme: state.selectedStyle,
-                    size_presets: dimensionsToSend
+                    size_presets: dimensionsToSend,
+                    use_brand_kit: useBrandKit
                 };
                 const generationGroup = await authService.fetchAuthenticated('/api/v1/generate', {
                     method: 'POST',

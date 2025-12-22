@@ -37,7 +37,7 @@ class AuthService {
             // Decode the token to get the expiration timestamp
             const payload = JSON.parse(atob(token.split('.')[1]));
             const expiry = payload.exp;
-            
+
             // Get the current time in seconds
             const now = Math.floor(Date.now() / 1000);
 
@@ -139,7 +139,7 @@ class AuthService {
      * @returns {Promise<any>} The parsed JSON response.
      */
     async fetchAuthenticated(endpoint, options = {}) {
-        if(!this.hasToken() || this.isTokenExpired()) {
+        if (!this.hasToken() || this.isTokenExpired()) {
             this.logout(); // Clean up storage
             window.location.href = '/?auth=required'; // Redirect
             // Throw the specific error to stop the calling function (e.g., performAction)
@@ -181,47 +181,47 @@ class AuthService {
 
     // Add this new function inside the AuthService class
 
-/**
- * Clears local user/subscription cache and fetches the latest user profile.
- * This is used after a payment to get the new subscription status.
- */
-async forceRefreshUserData() {
-    if (!this.hasToken()) {
-        return; // Not logged in, nothing to refresh
-    }
-
-    // 1. Clear the stale local data
-    localStorage.removeItem(this.userKey);
-
-    // We also need to clear the subscription service. Let's add a function for that.
-    // (We will add this in the next step, for now, we just clear its variable)
-    if (subscriptionService) {
-        subscriptionService.clearSubscription();
-    }
-
-    try {
-        // 2. Fetch the fresh user profile from the backend
-        const userProfile = await this.loadUserProfile();
-
-        // 3. Save the new, fresh data
-        if (userProfile && userProfile.id) {
-            this.saveUser(userProfile);
-
-            // 4. Re-populate the subscription service with the new data
-            if (subscriptionService) {
-                await subscriptionService.fetchSubscription();
-            }
-            return userProfile;
-        } else {
-            throw new Error("Failed to fetch a valid user profile.");
+    /**
+     * Clears local user/subscription cache and fetches the latest user profile.
+     * This is used after a payment to get the new subscription status.
+     */
+    async forceRefreshUserData() {
+        if (!this.hasToken()) {
+            return; // Not logged in, nothing to refresh
         }
-    } catch (error) {
-        console.error("forceRefreshUserData failed:", error);
-        // If fetching fails, log the user out as a safety measure
-        this.logout();
-        window.location.href = '/?auth=required';
+
+        // 1. Clear the stale local data
+        localStorage.removeItem(this.userKey);
+
+        // We also need to clear the subscription service. Let's add a function for that.
+        // (We will add this in the next step, for now, we just clear its variable)
+        if (subscriptionService) {
+            subscriptionService.clearSubscription();
+        }
+
+        try {
+            // 2. Fetch the fresh user profile from the backend
+            const userProfile = await this.loadUserProfile();
+
+            // 3. Save the new, fresh data
+            if (userProfile && userProfile.id) {
+                this.saveUser(userProfile);
+
+                // 4. Re-populate the subscription service with the new data
+                if (subscriptionService) {
+                    await subscriptionService.fetchSubscription();
+                }
+                return userProfile;
+            } else {
+                throw new Error("Failed to fetch a valid user profile.");
+            }
+        } catch (error) {
+            console.error("forceRefreshUserData failed:", error);
+            // If fetching fails, log the user out as a safety measure
+            this.logout();
+            window.location.href = '/?auth=required';
+        }
     }
-}
 
     async loadUserProfile() {
         return await this.fetchAuthenticated('/auth/profile', {
