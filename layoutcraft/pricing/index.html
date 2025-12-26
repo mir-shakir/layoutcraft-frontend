@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pricing Plans - LayoutCraft | AI Design Tool Starting at $0</title>
-    <meta name="description" content="Choose between LayoutCraft's Free and Pro plans. Get multi-dimension generation, unlimited design refinements, and 6 months of history. Start with a 7-day free trial. No credit card required.">
-    <meta name="keywords" content="design tool pricing, AI design software, layout generator plans, design subscription, free design tool">
+    <meta name="description"
+        content="Choose between LayoutCraft's Free and Pro plans. Get multi-dimension generation, unlimited design refinements, and 6 months of history. Start with a 7-day free trial. No credit card required.">
+    <meta name="keywords"
+        content="design tool pricing, AI design software, layout generator plans, design subscription, free design tool">
 
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -15,7 +18,7 @@
     <link rel="stylesheet" href="/shared/css/base.css">
     <link rel="stylesheet" href="/shared/css/navigation.css">
     <link rel="stylesheet" href="/css/homepage.css">
-    
+
     <!-- Schema Markup for SEO -->
     <script type="application/ld+json">
     {
@@ -40,10 +43,12 @@
       ]
     }
     </script>
-    
+
     <style>
-        body { background-color: #f9fafb; }
-        
+        body {
+            background-color: #f9fafb;
+        }
+
         /* Hero Section */
         .pricing-hero {
             background: linear-gradient(135deg, #eef2ff 0%, #ffffff 50%, #faf5ff 100%);
@@ -52,6 +57,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .pricing-hero::before {
             content: '';
             position: absolute;
@@ -60,10 +66,15 @@
             right: 0;
             bottom: 0;
             background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
+                radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 50%);
             pointer-events: none;
         }
-        .pricing-hero-content { position: relative; z-index: 1; }
+
+        .pricing-hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
         .pricing-hero h1 {
             font-size: 3.5rem;
             font-weight: 800;
@@ -71,6 +82,7 @@
             margin-bottom: 1.25rem;
             line-height: 1.1;
         }
+
         .pricing-hero .subtitle {
             font-size: 1.375rem;
             color: #4b5563;
@@ -78,6 +90,7 @@
             margin: 0 auto 2rem;
             line-height: 1.6;
         }
+
         .trial-badge {
             display: inline-flex;
             align-items: center;
@@ -90,6 +103,7 @@
             margin-top: 1rem;
             box-shadow: 0 4px 12px rgba(252, 211, 77, 0.3);
         }
+
         .trial-badge svg {
             width: 20px;
             height: 20px;
@@ -102,6 +116,7 @@
             border-top: 1px solid #e5e7eb;
             border-bottom: 1px solid #e5e7eb;
         }
+
         .social-proof-content {
             max-width: 1100px;
             margin: 0 auto;
@@ -112,15 +127,18 @@
             flex-wrap: wrap;
             padding: 0 1rem;
         }
+
         .social-stat {
             text-align: center;
         }
+
         .social-stat-number {
             font-size: 2rem;
             font-weight: 800;
             color: #6366f1;
             display: block;
         }
+
         .social-stat-label {
             font-size: 0.875rem;
             color: #6b7280;
@@ -139,25 +157,29 @@
             position: relative;
             z-index: 2;
         }
+
         .plan-card {
             background: white;
             border-radius: 20px;
             padding: 3rem;
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
             border: 2px solid #e5e7eb;
             display: flex;
             flex-direction: column;
             transition: all 0.3s ease;
             position: relative;
         }
+
         .plan-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
         }
+
         .plan-card.pro {
             border: 2px solid #6366f1;
-            box-shadow: 0 8px 40px rgba(99,102,241,0.2);
+            box-shadow: 0 8px 40px rgba(99, 102, 241, 0.2);
         }
+
         .plan-card.pro::before {
             content: 'MOST POPULAR';
             position: absolute;
@@ -172,72 +194,96 @@
             border-radius: 99px;
             letter-spacing: 0.05em;
         }
+
         .plan-header {
             text-align: center;
             margin-bottom: 2rem;
             padding-bottom: 2rem;
             border-bottom: 1px solid #f3f4f6;
         }
-        .plan-name { 
-            font-size: 1.5rem; 
-            font-weight: 700; 
+
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 700;
             color: #111827;
             margin-bottom: 0.5rem;
         }
-        .plan-price { 
-            font-size: 3.5rem; 
-            font-weight: 800; 
+
+        .plan-price {
+            font-size: 3.5rem;
+            font-weight: 800;
             color: #111827;
             line-height: 1;
         }
-        .plan-price span { 
-            font-size: 1.125rem; 
-            font-weight: 500; 
-            color: #6b7280; 
+
+        .plan-price span {
+            font-size: 1.125rem;
+            font-weight: 500;
+            color: #6b7280;
         }
-        .plan-description { 
-            color: #6b7280; 
+
+        .plan-description {
+            color: #6b7280;
             margin-top: 0.75rem;
             font-size: 1rem;
             line-height: 1.5;
         }
-        .plan-features { 
-            list-style: none; 
-            margin: 0 0 2.5rem; 
-            padding: 0; 
-            flex-grow: 1; 
+
+        .plan-features {
+            list-style: none;
+            margin: 0 0 2.5rem;
+            padding: 0;
+            flex-grow: 1;
         }
-        .plan-features li { 
-            display: flex; 
-            align-items: flex-start; 
-            gap: 0.875rem; 
-            margin-bottom: 1.125rem; 
+
+        .plan-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.875rem;
+            margin-bottom: 1.125rem;
             color: #374151;
             font-size: 0.9375rem;
         }
-        .plan-features svg { 
-            color: #10b981; 
-            flex-shrink: 0; 
+
+        .plan-features svg {
+            color: #10b981;
+            flex-shrink: 0;
             margin-top: 2px;
             width: 20px;
             height: 20px;
         }
-        .plan-features li.coming-soon { 
-            color: #9ca3af; 
+
+        .plan-features li.coming-soon {
+            color: #9ca3af;
             opacity: 0.7;
         }
-        .plan-features li.coming-soon svg { 
-            color: #9ca3af; 
+
+        .plan-features li.coming-soon svg {
+            color: #9ca3af;
         }
-        .plan-cta { 
-            width: 100%; 
-            font-size: 1.0625rem; 
+
+        .badge-new {
+            background-color: #10b981;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.125rem 0.375rem;
+            border-radius: 4px;
+            margin-left: 0.5rem;
+            vertical-align: middle;
+            text-transform: uppercase;
+        }
+
+        .plan-cta {
+            width: 100%;
+            font-size: 1.0625rem;
             padding: 1rem;
             text-decoration: none;
             font-weight: 600;
             border-radius: 10px;
             transition: all 0.3s ease;
         }
+
         .plan-cta:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
@@ -249,6 +295,7 @@
             padding: 5rem 0;
             border-top: 1px solid #e5e7eb;
         }
+
         .value-props-grid {
             max-width: 1100px;
             margin: 0 auto;
@@ -257,9 +304,11 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 3rem;
         }
+
         .value-prop {
             text-align: center;
         }
+
         .value-prop-icon {
             width: 64px;
             height: 64px;
@@ -270,17 +319,20 @@
             align-items: center;
             justify-content: center;
         }
+
         .value-prop-icon svg {
             width: 32px;
             height: 32px;
             color: #6366f1;
         }
+
         .value-prop h3 {
             font-size: 1.25rem;
             font-weight: 700;
             color: #111827;
             margin-bottom: 0.75rem;
         }
+
         .value-prop p {
             color: #6b7280;
             line-height: 1.6;
@@ -292,6 +344,7 @@
             margin: 5rem auto;
             padding: 0 1rem;
         }
+
         .section-title {
             text-align: center;
             font-size: 2.5rem;
@@ -299,6 +352,7 @@
             color: #111827;
             margin-bottom: 1rem;
         }
+
         .section-subtitle {
             text-align: center;
             font-size: 1.125rem;
@@ -308,51 +362,70 @@
             margin-left: auto;
             margin-right: auto;
         }
-        .comparison-table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            background: white; 
-            border-radius: 16px; 
-            overflow: hidden; 
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
         }
-        .comparison-table th, .comparison-table td { 
-            padding: 1.5rem; 
-            border-bottom: 1px solid #f3f4f6; 
-            text-align: left; 
+
+        .comparison-table th,
+        .comparison-table td {
+            padding: 1.5rem;
+            border-bottom: 1px solid #f3f4f6;
+            text-align: left;
         }
+
         .comparison-table thead {
             background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
         }
-        .comparison-table th { 
-            font-weight: 700; 
+
+        .comparison-table th {
+            font-weight: 700;
             color: #111827;
             font-size: 1rem;
         }
-        .comparison-table td:nth-child(2), .comparison-table th:nth-child(2) { text-align: center; }
-        .comparison-table td:nth-child(3), .comparison-table th:nth-child(3) { text-align: center; }
-        .comparison-table td:first-child { 
-            font-weight: 500; 
+
+        .comparison-table td:nth-child(2),
+        .comparison-table th:nth-child(2) {
+            text-align: center;
+        }
+
+        .comparison-table td:nth-child(3),
+        .comparison-table th:nth-child(3) {
+            text-align: center;
+        }
+
+        .comparison-table td:first-child {
+            font-weight: 500;
             color: #374151;
             font-size: 0.9375rem;
         }
-        .comparison-table .check { 
-            color: #10b981; 
-            font-weight: 700; 
-            font-size: 1.5rem; 
+
+        .comparison-table .check {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1.5rem;
         }
-        .comparison-table .cross { 
-            color: #d1d5db; 
-            font-weight: 400; 
-            font-size: 1.5rem; 
+
+        .comparison-table .cross {
+            color: #d1d5db;
+            font-weight: 400;
+            font-size: 1.5rem;
         }
-        .comparison-table .pro-cell { 
+
+        .comparison-table .pro-cell {
             background: linear-gradient(135deg, #f4f6ff 0%, #faf5ff 100%);
         }
-        .comparison-table strong { 
+
+        .comparison-table strong {
             color: #6366f1;
             font-weight: 600;
         }
+
         .comparison-table tbody tr:last-child td {
             border-bottom: none;
         }
@@ -362,6 +435,7 @@
             background: linear-gradient(135deg, #eef2ff 0%, #ffffff 50%, #faf5ff 100%);
             padding: 5rem 0;
         }
+
         .faq-trust-grid {
             max-width: 1100px;
             margin: 0 auto;
@@ -371,89 +445,102 @@
             gap: 4rem;
             align-items: flex-start;
         }
+
         .faq-section h2 {
             font-size: 2rem;
             font-weight: 800;
             color: #111827;
             margin-bottom: 2rem;
         }
-        .faq-item { 
+
+        .faq-item {
             background: white;
             border-radius: 12px;
             padding: 1.75rem;
             margin-bottom: 1.25rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
             transition: all 0.3s ease;
         }
+
         .faq-item:hover {
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
         }
-        .faq-item h4 { 
-            font-weight: 700; 
-            color: #111827; 
+
+        .faq-item h4 {
+            font-weight: 700;
+            color: #111827;
             margin-bottom: 0.75rem;
             font-size: 1.0625rem;
         }
-        .faq-item p { 
-            color: #6b7280; 
-            line-height: 1.7; 
+
+        .faq-item p {
+            color: #6b7280;
+            line-height: 1.7;
             margin-bottom: 0;
             font-size: 0.9375rem;
         }
-        
-        .trust-card { 
-            background: white; 
-            border-radius: 16px; 
-            padding: 2.5rem; 
-            box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+
+        .trust-card {
+            background: white;
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
             border: 2px solid #e5e7eb;
             position: sticky;
             top: 2rem;
         }
-        .trust-card h3 { 
-            font-size: 1.5rem; 
-            font-weight: 800; 
-            color: #111827; 
+
+        .trust-card h3 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #111827;
             margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
+
         .trust-card h3 svg {
             width: 24px;
             height: 24px;
             color: #10b981;
         }
-        .trust-card p { 
-            color: #6b7280; 
-            line-height: 1.7; 
+
+        .trust-card p {
+            color: #6b7280;
+            line-height: 1.7;
             margin-bottom: 1.75rem;
             font-size: 0.9375rem;
         }
-        .trust-card ul { 
-            list-style: none; 
+
+        .trust-card ul {
+            list-style: none;
             padding: 0;
             margin: 0;
         }
-        .trust-card li { 
-            display: flex; 
-            align-items: flex-start; 
-            gap: 0.875rem; 
-            margin-bottom: 1.25rem; 
+
+        .trust-card li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.875rem;
+            margin-bottom: 1.25rem;
             color: #374151;
             font-size: 0.9375rem;
             line-height: 1.6;
         }
+
         .trust-card li:last-child {
             margin-bottom: 0;
         }
-        .trust-card svg { 
-            color: #10b981; 
-            flex-shrink: 0; 
+
+        .trust-card svg {
+            color: #10b981;
+            flex-shrink: 0;
             margin-top: 2px;
             width: 20px;
             height: 20px;
         }
+
         .trust-badge {
             display: inline-flex;
             align-items: center;
@@ -466,6 +553,7 @@
             border-radius: 99px;
             margin-top: 1.5rem;
         }
+
         .trust-badge svg {
             width: 16px;
             height: 16px;
@@ -479,6 +567,7 @@
             position: relative;
             overflow: hidden;
         }
+
         .final-cta::before {
             content: '';
             position: absolute;
@@ -487,9 +576,10 @@
             right: 0;
             bottom: 0;
             background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+                radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
             pointer-events: none;
         }
+
         .final-cta-content {
             max-width: 800px;
             margin: 0 auto;
@@ -497,6 +587,7 @@
             position: relative;
             z-index: 1;
         }
+
         .final-cta h2 {
             font-size: 3rem;
             font-weight: 800;
@@ -504,12 +595,14 @@
             margin-bottom: 1rem;
             line-height: 1.2;
         }
+
         .final-cta p {
             font-size: 1.25rem;
             color: rgba(255, 255, 255, 0.9);
             margin-bottom: 2.5rem;
             line-height: 1.6;
         }
+
         .final-cta .btn {
             background: white;
             color: #6366f1;
@@ -520,15 +613,18 @@
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
         }
+
         .final-cta .btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
         }
+
         .final-cta-note {
             margin-top: 1.5rem;
             font-size: 0.9375rem;
             color: rgba(255, 255, 255, 0.8);
         }
+
         .final-cta-features {
             display: flex;
             justify-content: center;
@@ -536,6 +632,7 @@
             margin-top: 2rem;
             flex-wrap: wrap;
         }
+
         .final-cta-feature {
             display: flex;
             align-items: center;
@@ -543,6 +640,7 @@
             color: white;
             font-size: 0.9375rem;
         }
+
         .final-cta-feature svg {
             width: 20px;
             height: 20px;
@@ -550,36 +648,82 @@
 
         /* Responsive Design */
         @media (max-width: 968px) {
-            .pricing-grid { grid-template-columns: 1fr; max-width: 500px; }
-            .value-props-grid { grid-template-columns: 1fr; }
-            .faq-trust-grid { grid-template-columns: 1fr; }
-            .trust-card { position: static; }
-            .pricing-hero h1 { font-size: 2.5rem; }
-            .final-cta h2 { font-size: 2.25rem; }
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                max-width: 500px;
+            }
+
+            .value-props-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .faq-trust-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .trust-card {
+                position: static;
+            }
+
+            .pricing-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .final-cta h2 {
+                font-size: 2.25rem;
+            }
         }
-        
+
         @media (max-width: 640px) {
-            .pricing-hero h1 { font-size: 2rem; }
-            .pricing-hero .subtitle { font-size: 1.125rem; }
-            .plan-card { padding: 2rem; }
-            .plan-price { font-size: 2.5rem; }
-            .social-proof-content { gap: 1.5rem; }
-            .final-cta h2 { font-size: 1.875rem; }
-            .final-cta p { font-size: 1.0625rem; }
-            .final-cta-features { flex-direction: column; align-items: center; gap: 1rem; }
+            .pricing-hero h1 {
+                font-size: 2rem;
+            }
+
+            .pricing-hero .subtitle {
+                font-size: 1.125rem;
+            }
+
+            .plan-card {
+                padding: 2rem;
+            }
+
+            .plan-price {
+                font-size: 2.5rem;
+            }
+
+            .social-proof-content {
+                gap: 1.5rem;
+            }
+
+            .final-cta h2 {
+                font-size: 1.875rem;
+            }
+
+            .final-cta p {
+                font-size: 1.0625rem;
+            }
+
+            .final-cta-features {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
         }
     </style>
 </head>
+
 <body>
     <div id="main-navigation"></div>
 
     <header class="pricing-hero">
         <div class="pricing-hero-content">
             <h1>Simple, Transparent Pricing</h1>
-            <p class="subtitle">Start creating professional designs for free. Upgrade to Pro when you're ready to unlock unlimited power.</p>
+            <p class="subtitle">Start creating professional designs for free. Upgrade to Pro when you're ready to unlock
+                unlimited power.</p>
             <div class="trial-badge">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"/>
+                    <path
+                        d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
                 </svg>
                 New users get 7 days of Pro free — No credit card required
             </div>
@@ -640,6 +784,13 @@
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
+                        <span><strong>Brand Kit</strong> for consistent designs <span
+                                class="badge-new">NEW</span></span>
+                    </li>
+                    <li>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
                         <span><strong>Unlimited</strong> design refinements</span>
                     </li>
                     <li>
@@ -666,12 +817,7 @@
                         </svg>
                         <span><strong>Premium templates</strong> library (Coming Soon)</span>
                     </li>
-                    <li class="coming-soon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                        <span><strong>Brand Kit</strong> for consistent designs (Coming Soon)</span>
-                    </li>
+
                 </ul>
                 <button class="btn btn-primary plan-cta" id="upgrade-btn">Start 7-Day Free Trial</button>
             </div>
@@ -682,32 +828,35 @@
                 <div class="value-prop">
                     <div class="value-prop-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
                         </svg>
                     </div>
                     <h3>Save Hours of Work</h3>
-                    <p>Generate multiple design formats from a single prompt. No more manual resizing or recreating layouts.</p>
+                    <p>Generate multiple design formats from a single prompt. No more manual resizing or recreating
+                        layouts.</p>
                 </div>
                 <div class="value-prop">
                     <div class="value-prop-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <polyline points="12 6 12 12 16 14"/>
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
                         </svg>
                     </div>
                     <h3>Risk-Free Trial</h3>
-                    <p>Try Pro for 7 days completely free. No credit card required to start. Cancel anytime, no questions asked.</p>
+                    <p>Try Pro for 7 days completely free. No credit card required to start. Cancel anytime, no
+                        questions asked.</p>
                 </div>
                 <div class="value-prop">
                     <div class="value-prop-icon">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="3" width="18" height="18" rx="2"/>
-                            <path d="M9 3v18"/>
-                            <path d="M15 3v18"/>
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <path d="M9 3v18" />
+                            <path d="M15 3v18" />
                         </svg>
                     </div>
                     <h3>Professional Results</h3>
-                    <p>High-quality exports ready for web, social media, or print. Your designs look polished every time.</p>
+                    <p>High-quality exports ready for web, social media, or print. Your designs look polished every
+                        time.</p>
                 </div>
             </div>
         </section>
@@ -728,6 +877,11 @@
                         <td>Design Dimensions</td>
                         <td>Single format per prompt</td>
                         <td class="pro-cell"><strong>Multiple formats</strong> at once</td>
+                    </tr>
+                    <tr>
+                        <td>Brand Kit <span class="badge-new">NEW</span></td>
+                        <td class="cross">✕</td>
+                        <td class="pro-cell check">✓</td>
                     </tr>
                     <tr>
                         <td>Design Refinements</td>
@@ -764,11 +918,7 @@
                         <td class="cross">✕</td>
                         <td class="pro-cell"><strong>Coming Soon</strong></td>
                     </tr>
-                    <tr>
-                        <td>Brand Kit (Colors, Fonts, Logos)</td>
-                        <td class="cross">✕</td>
-                        <td class="pro-cell"><strong>Coming Soon</strong></td>
-                    </tr>
+
                 </tbody>
             </table>
         </section>
@@ -777,35 +927,48 @@
             <div class="faq-trust-grid">
                 <div class="faq-section">
                     <h2>Frequently Asked Questions</h2>
-                    
+
                     <div class="faq-item">
                         <h4>How does the 7-day free trial work?</h4>
-                        <p>Sign up and get instant access to all Pro features for 7 days—no credit card required. If you choose to upgrade during or after your trial, your paid subscription begins after the trial period ends. Cancel anytime before the trial ends and you won't be charged.</p>
+                        <p>Sign up and get instant access to all Pro features for 7 days—no credit card required. If you
+                            choose to upgrade during or after your trial, your paid subscription begins after the trial
+                            period ends. Cancel anytime before the trial ends and you won't be charged.</p>
                     </div>
-                    
+
                     <div class="faq-item">
                         <h4>What is Multi-Dimension Generation?</h4>
-                        <p>Instead of creating one design at a time, Pro users can generate multiple formats from a single prompt. For example, write "Product launch announcement" and instantly get a blog header (1200×628), Instagram post (1080×1080), and Twitter banner (1500×500) all at once. This saves hours of manual resizing and reformatting.</p>
+                        <p>Instead of creating one design at a time, Pro users can generate multiple formats from a
+                            single prompt. For example, write "Product launch announcement" and instantly get a blog
+                            header (1200×628), Instagram post (1080×1080), and Twitter banner (1500×500) all at once.
+                            This saves hours of manual resizing and reformatting.</p>
                     </div>
-                    
+
                     <div class="faq-item">
                         <h4>Can I cancel my Pro subscription anytime?</h4>
-                        <p>Yes. There are no contracts or commitments. Cancel from your account settings and you'll retain Pro access until the end of your current billing period. After that, your account automatically reverts to the Free plan with no loss of data.</p>
+                        <p>Yes. There are no contracts or commitments. Cancel from your account settings and you'll
+                            retain Pro access until the end of your current billing period. After that, your account
+                            automatically reverts to the Free plan with no loss of data.</p>
                     </div>
-                    
+
                     <div class="faq-item">
                         <h4>What happens to my designs if I downgrade?</h4>
-                        <p>All your designs remain safe and accessible. You can view your entire design history (up to 6 months on Pro, 1 month on Free), but editing and refinement capabilities will be limited to Free plan features. You can re-upgrade at any time to regain full access.</p>
+                        <p>All your designs remain safe and accessible. You can view your entire design history (up to 6
+                            months on Pro, 1 month on Free), but editing and refinement capabilities will be limited to
+                            Free plan features. You can re-upgrade at any time to regain full access.</p>
                     </div>
-                    
+
                     <div class="faq-item">
                         <h4>Do you offer refunds?</h4>
-                        <p>We offer a 7-day free trial so you can try Pro risk-free before committing. If you experience technical issues preventing you from using the service, contact our support team and we'll work with you to find a solution.</p>
+                        <p>We offer a 7-day free trial so you can try Pro risk-free before committing. If you experience
+                            technical issues preventing you from using the service, contact our support team and we'll
+                            work with you to find a solution.</p>
                     </div>
-                    
+
                     <div class="faq-item">
                         <h4>Can I switch between plans?</h4>
-                        <p>Absolutely. Upgrade from Free to Pro at any time to unlock all features. If you downgrade from Pro to Free, the change takes effect at the end of your current billing cycle, so you get full value from your payment.</p>
+                        <p>Absolutely. Upgrade from Free to Pro at any time to unlock all features. If you downgrade
+                            from Pro to Free, the change takes effect at the end of your current billing cycle, so you
+                            get full value from your payment.</p>
                     </div>
                 </div>
 
@@ -813,26 +976,30 @@
                     <div class="trust-card">
                         <h3>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                             </svg>
                             Secure Payment Processing
                         </h3>
-                        <p>Your payment security is our top priority. We use Dodo Payments, a globally trusted payment processor, to handle all transactions. Your financial information is encrypted and never stored on our servers.</p>
-                        
+                        <p>Your payment security is our top priority. We use Dodo Payments, a globally trusted payment
+                            processor, to handle all transactions. Your financial information is encrypted and never
+                            stored on our servers.</p>
+
                         <ul>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                                 </svg>
-                                <span><strong>Bank-level encryption</strong> protects all payment data during transmission</span>
+                                <span><strong>Bank-level encryption</strong> protects all payment data during
+                                    transmission</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                                 </svg>
-                                <span><strong>PCI-DSS compliant</strong> payment infrastructure meets industry security standards</span>
+                                <span><strong>PCI-DSS compliant</strong> payment infrastructure meets industry security
+                                    standards</span>
                             </li>
                             <li>
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -846,13 +1013,14 @@
                                     <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
                                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                                 </svg>
-                                <span><strong>Easy cancellation</strong> from your account dashboard, no support tickets needed</span>
+                                <span><strong>Easy cancellation</strong> from your account dashboard, no support tickets
+                                    needed</span>
                             </li>
                         </ul>
-                        
+
                         <div class="trust-badge">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                             </svg>
                             Secured by Dodo Payments
                         </div>
@@ -864,9 +1032,11 @@
         <section class="final-cta">
             <div class="final-cta-content">
                 <h2>Ready to Create Professional Designs?</h2>
-                <p>Join hundreds of founders, marketers, and creators who've transformed their design workflow with LayoutCraft.</p>
+                <p>Join hundreds of founders, marketers, and creators who've transformed their design workflow with
+                    LayoutCraft.</p>
                 <button class="btn" id="upgrade-btn-bottom">Start Your 7-Day Free Trial</button>
-                <p class="final-cta-note">No credit card required to start • Full Pro access for 7 days • Cancel anytime</p>
+                <p class="final-cta-note">No credit card required to start • Full Pro access for 7 days • Cancel anytime
+                </p>
                 <div class="final-cta-features">
                     <div class="final-cta-feature">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -897,7 +1067,8 @@
                 <div class="footer-brand">
                     <div class="logo">
                         <div class="logo-icon">
-                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
                                 <defs>
                                     <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                                         <stop offset="0%" style="stop-color:#6366f1;"></stop>
@@ -907,7 +1078,8 @@
                                 <rect width="48" height="48" rx="8" fill="url(#brandGradient)"></rect>
                                 <path
                                     d="M12 12V28C12 32.4183 15.5817 36 20 36H36V20C36 15.5817 32.4183 12 28 12H20C20 20 20 20 20 20H28C28 20 28 28 28 28"
-                                    stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+                                    stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+                                    opacity="0.95">
                                 </path>
                                 <circle cx="24" cy="24" r="2.5" fill="white" opacity="0.9"></circle>
                             </svg>
@@ -967,7 +1139,7 @@
                     layoutCraftNav.openAuthModal('signup');
                     return;
                 }
-                if(subscriptionService.isPro()){
+                if (subscriptionService.isPro()) {
                     // User is already Pro. We need to redirect them to the app.
                     btn.textContent = 'Redirecting to app...';
                     window.location.href = '/app/';
@@ -982,7 +1154,7 @@
                     const response = await authService.fetchAuthenticated('/dodo/create-checkout', {
                         method: 'POST'
                     });
-                    
+
                     if (response.checkout_url) {
                         window.location.href = response.checkout_url;
                     } else {
@@ -997,7 +1169,7 @@
             };
 
             upgradeButtons.forEach(btn => {
-                if(btn) {
+                if (btn) {
                     btn.addEventListener('click', handleUpgradeClick);
                 }
             });
@@ -1005,19 +1177,20 @@
             if (authService.hasToken() && !authService.isTokenExpired()) {
 
                 subscriptionService.fetchSubscription();
-                if(subscriptionService.isPro()){
+                if (subscriptionService.isPro()) {
                     // User is already Pro, change the button text
                     upgradeButtons.forEach(btn => {
-                        if(btn) btn.textContent = 'Start Creating Designs';
+                        if (btn) btn.textContent = 'Start Creating Designs';
                     });
                     return;
-                }else{
+                } else {
                     upgradeButtons.forEach(btn => {
-                        if(btn) btn.textContent = 'Get Pro';
+                        if (btn) btn.textContent = 'Get Pro';
                     });
                 }
             }
         });
     </script>
 </body>
+
 </html>

@@ -16,25 +16,28 @@ import { subscriptionService } from "../../shared/js/subscriptionService.js";
         generation_id: null, // <-- ADD THIS: To store the ID for the whole group
         selectedForEditing: [], // <-- This will now store size_preset strings, e.g., ['blog_header']
         prompt: '',
-        selectedDimensions: ['blog_header'], // Default to a single item in an array
+        selectedDimensions: [], // Empty means "All Formats" is selected
+        allFormatsSelected: true, // Default to All Formats
         selectedStyle: 'auto',
         isGenerating: false,
     };
 
     // --- DATA ---
     const DIMENSIONS_DATA = [
+        { value: "all_formats", label: "All Formats", isAllFormats: true },
         { value: "blog_header", label: "Blog Header (1200x630)" },
         { value: "social_square", label: "Social Post (1080x1080)" },
         { value: "story", label: "Story (1080x1920)" },
         { value: "twitter_post", label: "Twitter Post (1024x512)" },
         { value: "youtube_thumbnail", label: "YouTube Thumbnail (1280x720)" },
     ];
+    const ALL_DIMENSION_VALUES = DIMENSIONS_DATA.filter(d => !d.isAllFormats).map(d => d.value);
     const STYLE_DATA = [
-        { value: "auto", label: "✨ Auto" },
+        { value: "auto", label: "Auto" },
+        { value: "minimal_luxury_space", label: "Minimal & Clean" },
         { value: "bold_geometric_solid", label: "Bold Geometric" },
-        { value: "minimal_luxury_space", label: "Minimal" },
-        { value: "vibrant_gradient_energy", label: "Vibrant" },
-        { value: "dark_neon_tech", label: "Neon Tech" },
+        { value: "dark_neon_tech", label: "Neon / Tech" },
+        { value: "vibrant_gradient_energy", label: "Vibrant Energy" },
     ];
     const PROMPT_MAX_LENGTH = 500;
 
@@ -60,18 +63,20 @@ import { subscriptionService } from "../../shared/js/subscriptionService.js";
         progressBar: document.getElementById('progress-bar'),
         retryBtn: document.getElementById('retry-btn'),
         appContainer: document.querySelector('.designer-app'),
+        workspaceLayout: document.querySelector('.workspace-layout'),
+        useBrandKitToggle: document.getElementById('use-brand-kit'),
     };
 
     // ... after the elements object
 
-function showUpgradeModal(message) {
-    // First, remove any existing modal to prevent duplicates
-    const existingModal = document.getElementById('upgrade-modal');
-    if (existingModal) {
-        existingModal.remove();
-    }
+    function showUpgradeModal(message) {
+        // First, remove any existing modal to prevent duplicates
+        const existingModal = document.getElementById('upgrade-modal');
+        if (existingModal) {
+            existingModal.remove();
+        }
 
-    const modalHTML = `
+        const modalHTML = `
         <div class="auth-modal-overlay active" id="upgrade-modal" style="z-index: 10001;">
             <div class="auth-modal-content">
                 <button class="auth-modal-close" type="button">×</button>
@@ -81,28 +86,36 @@ function showUpgradeModal(message) {
             </div>
         </div>
     `;
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-    const modal = document.getElementById('upgrade-modal');
-    modal.querySelector('.auth-modal-close').addEventListener('click', () => {
-        modal.remove();
-    });
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
+        const modal = document.getElementById('upgrade-modal');
+        modal.querySelector('.auth-modal-close').addEventListener('click', () => {
             modal.remove();
-        }
-    });
-}
+        });
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+            }
+        });
+    }
 
     // --- INITIALIZATION ---
     async function init() {
-        if (elements.appContainer) {
-            elements.appContainer.style.visibility = 'visible';
-            elements.appContainer.style.opacity = '1';
+        // Show the workspace layout
+        if (elements.workspaceLayout) {
+            elements.workspaceLayout.style.visibility = 'visible';
+            elements.workspaceLayout.style.opacity = '1';
         }
         checkAuthStatus();
         setupEventListeners();
         await subscriptionService.fetchSubscription();
+
+        // Set default dimension for free users (All Formats is Pro-only)
+        if (!subscriptionService.isOnTrialOrPro()) {
+            state.allFormatsSelected = false;
+            state.selectedDimensions = ['blog_header']; // Default to first option
+        }
+
         loadInitialData(); // Load any initial data from sessionStorage
         loadDesignForEditing(); // Check for ?edit=... parameter
         renderUI();
@@ -115,6 +128,12 @@ function showUpgradeModal(message) {
         elements.retryBtn.addEventListener('click', handleStartNew);
         document.addEventListener('authChange', onAuthChange);
 
+        // Listen for design load events from workspace history view
+        document.addEventListener('loadDesign', (e) => {
+            hydrateStateFromDesign(e.detail);
+            renderUI();
+        });
+
         // Global listener to close dropdowns when clicking outside
         document.addEventListener('click', (e) => {
             if (!e.target.closest('.custom-dropdown')) {
@@ -123,6 +142,35 @@ function showUpgradeModal(message) {
                 });
             }
         });
+    }
+
+    // Hydrate editor state from a loaded design (from history)
+    function hydrateStateFromDesign(designData) {
+        state.appMode = 'editing';
+        state.generation_id = designData.generation_id;
+        state.generatedDesigns = designData.images_json || [];
+        state.selectedForEditing = state.generatedDesigns.map(d => d.size_preset);
+
+        // Update dimensions state
+        const loadedPresets = state.generatedDesigns.map(d => d.size_preset);
+        if (loadedPresets.length === ALL_DIMENSION_VALUES.length &&
+            ALL_DIMENSION_VALUES.every(v => loadedPresets.includes(v))) {
+            state.allFormatsSelected = true;
+            state.selectedDimensions = [];
+        } else {
+            state.allFormatsSelected = false;
+            state.selectedDimensions = loadedPresets;
+        }
+
+        // Update style if provided
+        if (designData.theme) {
+            state.selectedStyle = designData.theme;
+        }
+
+        // Clear any existing prompt
+        state.prompt = '';
+        elements.promptInput.value = '';
+        elements.charIndicator.textContent = `0/${PROMPT_MAX_LENGTH}`;
     }
 
     function onAuthChange() {
@@ -164,11 +212,15 @@ function showUpgradeModal(message) {
                     elements.promptInput.value = data.prompt;
                 }
                 if (data.template) {
-                     if (!subscriptionService.isOnTrialOrPro()) {
+                    if (data.template === 'multi' || data.template === 'all_formats') {
+                        state.allFormatsSelected = true;
+                        state.selectedDimensions = [];
+                    } else if (!subscriptionService.isOnTrialOrPro()) {
+                        state.allFormatsSelected = false;
                         state.selectedDimensions = [data.template];
                     } else {
-                        // If they are pro, we can allow multiple if we decide to later
-                        state.selectedDimensions = [data.template]; 
+                        state.allFormatsSelected = false;
+                        state.selectedDimensions = [data.template];
                     }
                 }
                 if (data.style) {
@@ -196,89 +248,124 @@ function showUpgradeModal(message) {
         const dropdown = document.createElement('div');
         dropdown.className = 'custom-dropdown';
 
+        // In edit mode, dropdowns can be viewed but not changed
+        const isEditMode = state.appMode === 'editing';
+
         const button = document.createElement('button');
         button.className = 'dropdown-toggle';
+        if (isEditMode) {
+            button.classList.add('locked');
+        }
 
         const menu = document.createElement('div');
         menu.className = 'dropdown-menu';
 
         const updateButtonLabel = () => {
+            let labelText = '';
             if (isMultiSelect) {
-                const count = state.selectedDimensions.length;
-                button.textContent = `Dimensions (${count})`;
+                if (state.allFormatsSelected) {
+                    labelText = 'All Formats';
+                } else {
+                    const count = state.selectedDimensions.length;
+                    labelText = count === 1
+                        ? DIMENSIONS_DATA.find(d => d.value === state.selectedDimensions[0])?.label || `Dimensions (${count})`
+                        : `Dimensions (${count})`;
+                }
             } else {
                 const selected = options.find(o => o.value === state.selectedStyle);
-                button.textContent = `Style: ${selected ? selected.label : 'Auto'}`;
+                labelText = `Style: ${selected ? selected.label : 'Auto'}`;
             }
+            // Set the button text (no lock icon needed)
+            button.textContent = labelText;
+        };
+
+        const updateAllCheckboxStates = () => {
+            if (!isMultiSelect) return;
+            const allFormatsCheckbox = menu.querySelector('input[value="all_formats"]');
+            const otherCheckboxes = menu.querySelectorAll('input:not([value="all_formats"])');
+
+            if (allFormatsCheckbox) {
+                allFormatsCheckbox.checked = state.allFormatsSelected;
+            }
+            otherCheckboxes.forEach(cb => {
+                if (state.allFormatsSelected) {
+                    cb.checked = true;
+                } else {
+                    cb.checked = state.selectedDimensions.includes(cb.value);
+                }
+            });
         };
 
         options.forEach((option, index) => {
             const item = document.createElement('div');
-            const isLocked = isMultiSelect && !subscriptionService.isOnTrialOrPro() && index > 0;
+            const isAllFormatsOption = option.isAllFormats;
+            const isPro = subscriptionService.isOnTrialOrPro();
 
+            // Lock "All Formats" for free users, and lock additional dimensions beyond the first for free users
+            const isAllFormatsLocked = isAllFormatsOption && !isPro;
+            const isLocked = isMultiSelect && !isAllFormatsOption && !isPro && index > 1;
 
             item.className = 'dropdown-item';
-            // item.innerHTML = `<label>
-            //     <input type="${isMultiSelect ? 'checkbox' : 'radio'}" 
-            //         name="${type}-option"
-            //         value="${option.value}" 
-            //         ${isMultiSelect ? (state.selectedDimensions.includes(option.value) ? 'checked' : '') : (state.selectedStyle === option.value ? 'checked' : '')}>
-            //         ${option.label}
-            // </label>`;
 
-            item.innerHTML = `<label class="${isLocked ? 'locked' : ''}" style="${isLocked ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
-                <input type="${isMultiSelect ? 'checkbox' : 'radio'}" 
+            let isChecked = false;
+            if (isMultiSelect) {
+                if (isAllFormatsOption) {
+                    // Free users can never have All Formats selected
+                    isChecked = isPro && state.allFormatsSelected;
+                } else {
+                    isChecked = state.allFormatsSelected || state.selectedDimensions.includes(option.value);
+                }
+            } else {
+                isChecked = state.selectedStyle === option.value;
+            }
+
+            const isDisabled = isLocked || isAllFormatsLocked || isEditMode;
+            const showLockIcon = (isLocked || isAllFormatsLocked) && !isEditMode;
+
+            item.innerHTML = `<label class="${isDisabled ? 'locked' : ''}" style="${isDisabled ? 'opacity: 0.6; cursor: not-allowed;' : ''}">
+                <input type="${isMultiSelect ? 'checkbox' : 'radio'}"
                 name="${type}-option"
-                value="${option.value}" 
-                ${isMultiSelect ? (state.selectedDimensions.includes(option.value) ? 'checked' : '') : (state.selectedStyle === option.value ? 'checked' : '')}
-                ${isLocked ? 'disabled' : ''}>
-                ${option.label} ${isLocked ? '🔒' : ''}
+                value="${option.value}"
+                ${isChecked ? 'checked' : ''}
+                ${isDisabled ? 'disabled' : ''}>
+                ${option.label} ${showLockIcon ? '<span class="pro-badge-small">PRO</span>' : ''}
             </label>`;
 
-            if (isLocked) {
+            if ((isLocked || isAllFormatsLocked) && !isEditMode) {
                 item.addEventListener('click', (e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    showUpgradeModal('Selecting multiple dimensions is a Pro feature. Upgrade to generate designs in multiple sizes at once!');
+                    const message = isAllFormatsLocked
+                        ? 'Generating all formats at once is a Pro feature. Upgrade to create designs in multiple sizes simultaneously!'
+                        : 'Selecting multiple dimensions is a Pro feature. Upgrade to generate designs in multiple sizes at once!';
+                    showUpgradeModal(message);
                 });
-            } else {
+            } else if (!isEditMode) {
                 item.querySelector('input').addEventListener('change', (e) => {
-                    handleSelectionChange(type, option.value, e.target.checked);
+                    if (isAllFormatsOption) {
+                        // Handle "All Formats" toggle
+                        if (e.target.checked) {
+                            state.allFormatsSelected = true;
+                            state.selectedDimensions = [];
+                        } else {
+                            // When unchecking All Formats, default to first dimension
+                            state.allFormatsSelected = false;
+                            state.selectedDimensions = ['blog_header'];
+                        }
+                        updateAllCheckboxStates();
+                    } else {
+                        handleSelectionChange(type, option.value, e.target.checked);
+                        // Update All Formats checkbox state
+                        const allFormatsCheckbox = menu.querySelector('input[value="all_formats"]');
+                        if (allFormatsCheckbox) {
+                            allFormatsCheckbox.checked = state.allFormatsSelected;
+                        }
+                    }
                     updateButtonLabel();
                     if (!isMultiSelect) menu.classList.remove('show');
                 });
             }
 
-            // item.querySelector('input').addEventListener('change', (e) => {
-            //     handleSelectionChange(type, option.value, e.target.checked);
-            //     updateButtonLabel();
-            //     if (!isMultiSelect) menu.classList.remove('show');
-            // });
-
-            // const isLocked = isMultiSelect && !state.isLoggedIn && index > 1;
-
-            // item.innerHTML = `<label class="${isLocked ? 'locked' : ''}">
-            //     <input type="${isMultiSelect ? 'checkbox' : 'radio'}" 
-            //            name="style-option"
-            //            value="${option.value}" 
-            //            ${isMultiSelect ? (state.selectedDimensions.includes(option.value) ? 'checked' : '') : (state.selectedStyle === option.value ? 'checked' : '')}
-            //            ${isLocked ? 'disabled' : ''}>
-            //     ${option.label} ${isLocked ? '🔒' : ''}
-            // </label>`;
-
-            // if (isLocked) {
-            //     item.addEventListener('click', (e) => {
-            //         e.preventDefault();
-            //         e.stopPropagation();
-            //         window.layoutCraftNav?.openAuthModal('signup');
-            //     });
-            // } else {
-            //     item.querySelector('input').addEventListener('change', (e) => {
-            //         handleSelectionChange(type, option.value, e.target.checked);
-            //         updateButtonLabel();
-            //         if (!isMultiSelect) menu.classList.remove('show');
-            //     });
-            // }
             menu.appendChild(item);
         });
 
@@ -366,17 +453,42 @@ function showUpgradeModal(message) {
     // --- UI HANDLERS & STATE UPDATES ---
 
     function handleSelectionChange(type, value, isSelected) {
-        if (type === 'dimensions' && isSelected && !subscriptionService.isOnTrialOrPro() && state.selectedDimensions.length > 0) {
-            // Prevent the checkbox from being checked
-            event.target.checked = false;
-            showUpgradeModal('Selecting multiple dimensions is a Pro feature. Upgrade to generate designs in multiple sizes at once!');
-            return; // Stop the function here
-        }
         if (type === 'dimensions') {
-            if (isSelected) {
-                if (!state.selectedDimensions.includes(value)) state.selectedDimensions.push(value);
+            // When user selects/deselects individual dimensions, turn off "All Formats"
+            if (state.allFormatsSelected) {
+                // Transition from "All Formats" to individual selection
+                state.allFormatsSelected = false;
+                // If unchecking something while All Formats was on, keep all except unchecked
+                if (!isSelected) {
+                    state.selectedDimensions = ALL_DIMENSION_VALUES.filter(d => d !== value);
+                } else {
+                    // This shouldn't happen (selecting when all selected), but handle it
+                    state.selectedDimensions = [value];
+                }
             } else {
-                state.selectedDimensions = state.selectedDimensions.filter(d => d !== value);
+                // Normal individual selection logic
+                if (isSelected) {
+                    if (!subscriptionService.isOnTrialOrPro() && state.selectedDimensions.length > 0) {
+                        event.target.checked = false;
+                        showUpgradeModal('Selecting multiple dimensions is a Pro feature. Upgrade to generate designs in multiple sizes at once!');
+                        return;
+                    }
+                    if (!state.selectedDimensions.includes(value)) {
+                        state.selectedDimensions.push(value);
+                    }
+                    // Check if all dimensions are now selected
+                    if (state.selectedDimensions.length === ALL_DIMENSION_VALUES.length) {
+                        state.allFormatsSelected = true;
+                        state.selectedDimensions = [];
+                    }
+                } else {
+                    state.selectedDimensions = state.selectedDimensions.filter(d => d !== value);
+                    // Don't allow deselecting the last dimension
+                    if (state.selectedDimensions.length === 0) {
+                        state.selectedDimensions = [value];
+                        event.target.checked = true;
+                    }
+                }
             }
         } else {
             state.selectedStyle = value;
@@ -445,7 +557,8 @@ function showUpgradeModal(message) {
             } else {
                 btnText.textContent = 'Generate';
             }
-            elements.generateBtn.disabled = !(hasText && state.selectedDimensions.length > 0) || state.isGenerating;
+            const hasDimensions = state.allFormatsSelected || state.selectedDimensions.length > 0;
+            elements.generateBtn.disabled = !(hasText && hasDimensions) || state.isGenerating;
         }
     }
 
@@ -466,8 +579,8 @@ function showUpgradeModal(message) {
     async function performAction() {
         if (state.appMode === 'editing' && !subscriptionService.isOnTrialOrPro()) {
             showUpgradeModal('The ability to refine and edit designs with prompts is a Pro feature. Upgrade to unlock this powerful workflow!');
-        return; 
-    }
+            return;
+        }
 
         if (elements.generateBtn.disabled) return;
 
@@ -478,10 +591,13 @@ function showUpgradeModal(message) {
 
         try {
             if (state.appMode === 'generating') {
+                const dimensionsToSend = state.allFormatsSelected ? ALL_DIMENSION_VALUES : state.selectedDimensions;
+                const useBrandKit = elements.useBrandKitToggle?.checked || false;
                 const body = {
                     prompt: state.prompt,
                     theme: state.selectedStyle,
-                    size_presets: state.selectedDimensions
+                    size_presets: dimensionsToSend,
+                    use_brand_kit: useBrandKit
                 };
                 const generationGroup = await authService.fetchAuthenticated('/api/v1/generate', {
                     method: 'POST',
@@ -494,6 +610,18 @@ function showUpgradeModal(message) {
 
                 state.appMode = 'editing';
                 state.selectedForEditing = state.generatedDesigns.map(d => d.size_preset); // Select all by default
+
+                // Update dimensions state to reflect the generated designs
+                const generatedPresets = state.generatedDesigns.map(d => d.size_preset);
+                if (generatedPresets.length === ALL_DIMENSION_VALUES.length &&
+                    ALL_DIMENSION_VALUES.every(v => generatedPresets.includes(v))) {
+                    state.allFormatsSelected = true;
+                    state.selectedDimensions = [];
+                } else {
+                    state.allFormatsSelected = false;
+                    state.selectedDimensions = generatedPresets;
+                }
+                // Style is already set from the user's selection before generating
 
             } else { // Editing
                 addSpinnersToSelectedDesigns();
@@ -568,6 +696,22 @@ function showUpgradeModal(message) {
 
             // Pre-select all designs in the loaded group for editing by their size_preset
             state.selectedForEditing = state.generatedDesigns.map(d => d.size_preset);
+
+            // Update dimensions state to reflect the loaded designs
+            const loadedPresets = state.generatedDesigns.map(d => d.size_preset);
+            if (loadedPresets.length === ALL_DIMENSION_VALUES.length &&
+                ALL_DIMENSION_VALUES.every(v => loadedPresets.includes(v))) {
+                state.allFormatsSelected = true;
+                state.selectedDimensions = [];
+            } else {
+                state.allFormatsSelected = false;
+                state.selectedDimensions = loadedPresets;
+            }
+
+            // Update style state if the generation group has a theme
+            if (generationGroup.theme) {
+                state.selectedStyle = generationGroup.theme;
+            }
 
         } catch (error) {
             if (error.message === 'SESSION_EXPIRED') {

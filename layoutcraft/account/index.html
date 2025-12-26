@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Account - LayoutCraft</title>
-    <meta name="description" content="Manage your LayoutCraft account and subscription.">
+    <title>Settings - LayoutCraft</title>
+    <meta name="description" content="Manage your LayoutCraft account settings and subscription.">
     <meta name="robots" content="noindex">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -13,59 +13,156 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/shared/css/base.css">
     <link rel="stylesheet" href="/shared/css/navigation.css">
-    <style>
-        body { background-color: #f9fafb; }
-        .account-header { text-align: center; padding: 6rem 1rem 4rem; background: linear-gradient(to bottom right, #eef2ff, #ffffff, #faf5ff); }
-        .account-header h1 { font-size: 3rem; font-weight: 800; color: #111827; }
-        .account-container { max-width: 800px; margin: -2rem auto 4rem; padding: 0 1rem; }
-        .account-card { background: white; border-radius: 16px; padding: 2.5rem; box-shadow: 0 4px 20px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; margin-bottom: 2rem; }
-        .card-title { font-size: 1.5rem; font-weight: 600; color: #111827; border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1.5rem; }
-        .info-row { display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
-        .info-row+.info-row { border-top: 1px solid #f3f4f6; }
-        .info-label { color: #6b7280; font-weight: 500; }
-        .info-value { color: #111827; font-weight: 600; text-transform: capitalize; }
-        .badge { padding: 0.25rem 0.75rem; border-radius: 99px; font-size: 0.875rem; }
-        .badge.trialing { background-color: #fef3c7; color: #92400e; }
-        .badge.active { background-color: #dcfce7; color: #065f46; }
-        .badge.free { background-color: #f3f4f6; color: #4b5563; }
-        .manage-btn { display: flex; width: 100%; font-size: 1rem; padding: 0.875rem; margin-top: 1.5rem; }
-    </style>
+    <link rel="stylesheet" href="/account/settings.css">
 </head>
 <body>
     <div id="main-navigation"></div>
 
-    <header class="account-header">
-        <h1>My Account</h1>
-    </header>
+    <main class="settings-page">
+        <div class="settings-container">
+            <!-- Sidebar Navigation -->
+            <aside class="settings-sidebar">
+                <h1 class="settings-title">Settings</h1>
+                <nav class="settings-nav">
+                    <button class="settings-nav-item active" data-tab="general">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <span>General</span>
+                    </button>
+                    <button class="settings-nav-item" data-tab="subscription">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                            <line x1="1" y1="10" x2="23" y2="10"/>
+                        </svg>
+                        <span>Subscription</span>
+                    </button>
+                </nav>
+            </aside>
 
-    <main class="account-container">
-        <div class="account-card">
-            <h2 class="card-title">Subscription Details</h2>
-            <div id="subscription-loading">
-                <p>Loading your subscription details...</p>
+            <!-- Content Area -->
+            <div class="settings-content">
+                <!-- General Tab -->
+                <section class="settings-panel active" id="panel-general">
+                    <div class="panel-header">
+                        <h2 class="panel-title">General Settings</h2>
+                        <p class="panel-description">View and manage your account information.</p>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="card-section">
+                            <h3 class="section-title">Profile Information</h3>
+                            <p class="section-description">Your personal details associated with this account.</p>
+                        </div>
+
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <div class="form-input-wrapper">
+                                    <input type="text" class="form-input readonly" id="user-name" readonly>
+                                    <span class="input-hint">Contact support to update</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Email Address</label>
+                                <div class="form-input-wrapper">
+                                    <input type="email" class="form-input readonly" id="user-email" readonly>
+                                    <span class="input-hint">Contact support to update</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">User ID</label>
+                                <div class="form-input-wrapper">
+                                    <input type="text" class="form-input readonly mono" id="user-id" readonly>
+                                    <button class="copy-btn" id="copy-user-id" title="Copy to clipboard">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="card-section">
+                            <h3 class="section-title">Support</h3>
+                            <p class="section-description">Need help with your account or have questions?</p>
+                        </div>
+                        <div class="card-actions">
+                            <a href="mailto:support@layoutcraft.tech" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                                Contact Support
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Subscription Tab -->
+                <section class="settings-panel" id="panel-subscription">
+                    <div class="panel-header">
+                        <h2 class="panel-title">Subscription</h2>
+                        <p class="panel-description">Manage your plan and billing details.</p>
+                    </div>
+
+                    <!-- Loading State -->
+                    <div class="settings-card" id="subscription-loading">
+                        <div class="loading-state">
+                            <div class="loading-spinner"></div>
+                            <p>Loading subscription details...</p>
+                        </div>
+                    </div>
+
+                    <!-- Subscription Details (hidden initially) -->
+                    <div id="subscription-content" style="display: none;">
+                        <!-- Current Plan Card -->
+                        <div class="settings-card plan-card" id="plan-card">
+                            <div class="plan-header">
+                                <div class="plan-info">
+                                    <span class="plan-badge" id="plan-badge">Free</span>
+                                    <h3 class="plan-name" id="plan-name">Free Plan</h3>
+                                </div>
+                                <span class="plan-status" id="plan-status">Active</span>
+                            </div>
+
+                            <!-- Trial Info (hidden by default) -->
+                            <div class="trial-banner" id="trial-info" style="display: none;">
+                                <div class="trial-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <polyline points="12 6 12 12 16 14"/>
+                                    </svg>
+                                </div>
+                                <div class="trial-details">
+                                    <span class="trial-label">Trial ends on</span>
+                                    <span class="trial-date" id="trial-end-date"></span>
+                                </div>
+                            </div>
+
+                            <div class="plan-features" id="plan-features">
+                                <!-- Features populated by JS -->
+                            </div>
+
+                            <div class="plan-actions">
+                                <button class="btn btn-primary" id="manage-subscription-btn" style="display: none;">
+                                    Manage Subscription
+                                </button>
+                                <a href="/pricing/" class="btn btn-primary" id="upgrade-btn" style="display: none;">
+                                    Upgrade to Pro
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
             </div>
-            <div id="subscription-details" style="display: none;">
-                <div class="info-row">
-                    <span class="info-label">Current Plan</span>
-                    <span class="info-value" id="plan-name"></span>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">Status</span>
-                    <span class="info-value badge" id="plan-status"></span>
-                </div>
-                <div class="info-row" id="trial-info" style="display: none;">
-                    <span class="info-label">Trial Ends</span>
-                    <span class="info-value" id="trial-end-date"></span>
-                </div>
-                <button class="btn btn-secondary manage-btn" id="manage-subscription-btn" style="display: none;">Manage Subscription</button>
-                <a href="/pricing/" class="btn btn-secondary manage-btn" id="upgrade-to-pro-btn" style="display: none;">Upgrade to Pro</a>
-            </div>
-        </div>
-        
-        <div class="account-card">
-             <h2 class="card-title">Support</h2>
-             <p>Have questions or need help? You can reach us at our support email. We'll get back to you as soon as possible.</p>
-             <a href="mailto:support@layoutcraft.tech" class="btn btn-secondary manage-btn">Contact Support</a>
         </div>
     </main>
 
@@ -73,171 +170,166 @@
         import { authService } from '/shared/js/authService.js';
         import { subscriptionService } from '/shared/js/subscriptionService.js';
         import { layoutCraftNav } from '/shared/js/navigation.js';
-        // This function will render the page with the subscription data
-        function renderPage(sub) {
-            const loadingEl = document.getElementById('subscription-loading');
-            const detailsEl = document.getElementById('subscription-details');
-            const manageBtn = document.getElementById('manage-subscription-btn');
-            const upgradeBtn = document.getElementById('upgrade-to-pro-btn');
 
-            if (sub) {
-                document.getElementById('plan-name').textContent = sub.plan;
+        // Tab Navigation
+        function initTabNavigation() {
+            const navItems = document.querySelectorAll('.settings-nav-item');
+            const panels = document.querySelectorAll('.settings-panel');
 
-                const statusEl = document.getElementById('plan-status');
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const tabId = item.dataset.tab;
 
-                if (sub.status) {
-                    statusEl.textContent = sub.status;
-                    statusEl.classList.add(sub.status.toLowerCase());
-                    statusEl.className = 'info-value badge'; // Reset classes
-                }
-                if (sub.status && sub.status === 'trialing' && sub.trial_ends_at) {
-                    const trialInfoEl = document.getElementById('trial-info');
-                    const trialDateEl = document.getElementById('trial-end-date');
-                    const endDate = new Date(sub.trial_ends_at);
-                    trialDateEl.textContent = endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                    trialInfoEl.style.display = 'flex';
-                }
-                const manageBtn = document.getElementById('manage-subscription-btn');
-                const upgradeBtn = document.getElementById('upgrade-to-pro-btn');
+                    // Update nav active state
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    item.classList.add('active');
 
-                // Show the correct button based on subscription status
-                if (sub.plan === 'pro' && sub.status === 'active') {
-                    manageBtn.style.display = 'flex';
-                } else {
-                    upgradeBtn.style.display = 'flex';
-                }
+                    // Update panel visibility
+                    panels.forEach(panel => panel.classList.remove('active'));
+                    document.getElementById(`panel-${tabId}`).classList.add('active');
 
-                loadingEl.style.display = 'none';
-                detailsEl.style.display = 'block';
-            } else {
-                loadingEl.innerHTML = '<p>Could not load subscription details. Please refresh the page.</p>';
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', async () => {
-        window.layoutCraftNav = layoutCraftNav;
-
-        if (!authService.hasToken() || authService.isTokenExpired()) {
-            window.location.href = '/?auth=required';
-            return;
-        }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const paymentSuccess = urlParams.has('payment'); // Check for 'payment=success' or just 'payment'
-
-        if (paymentSuccess) {
-            // 1. Show a loading message
-            const loadingEl = document.getElementById('subscription-loading');
-            loadingEl.innerHTML = '<p>Thank you! Updating your account...</p>';
-
-            // 2. Force refresh user data from backend
-            await authService.forceRefreshUserData();
-
-            // 3. Clean the URL
-            history.replaceState(null, '', window.location.pathname);
-        }
-
-        // 4. Ensure data is fetched (either for the first time or after the refresh)
-        if (!subscriptionService.hasFetched) {
-            await subscriptionService.fetchSubscription();
-        }
-
-        // 5. Render the page with the fresh data
-        const sub = subscriptionService.getSubscription();
-        renderPage(sub);
-
-        // 6. Add event listener for the "Manage Subscription" button
-        document.getElementById('manage-subscription-btn').addEventListener('click', async () => {
-            const manageBtn = document.getElementById('manage-subscription-btn');
-            manageBtn.disabled = true;
-            manageBtn.textContent = 'Loading portal...';
-
-            try {
-                const response = await authService.fetchAuthenticated('/dodo/portal', {
-                    method: 'POST'
+                    // Update URL hash
+                    history.replaceState(null, '', `#${tabId}`);
                 });
+            });
 
-                if (response.portal_url) {
-                    window.location.href = response.portal_url;
-                } else {
-                    throw new Error('Portal URL not found in response.');
-                }
-            } catch (error) {
-                console.error('Failed to create portal session:', error);
-                alert('Could not load the subscription management portal. Please try again later.');
-                manageBtn.disabled = false;
-                manageBtn.textContent = 'Manage Subscription';
+            // Check for hash on load
+            const hash = window.location.hash.replace('#', '');
+            if (hash && document.querySelector(`[data-tab="${hash}"]`)) {
+                document.querySelector(`[data-tab="${hash}"]`).click();
             }
-        });
-    });
-    </script>
+        }
 
-    <!-- <script type="module">
-        import { authService } from '/shared/js/authService.js';
-        import { subscriptionService } from '/shared/js/subscriptionService.js';
-        import { layoutCraftNav } from '/shared/js/navigation.js';
+        // Populate user data
+        function populateUserData(user) {
+            if (!user) return;
 
-        document.addEventListener('DOMContentLoaded', async () => {
-            window.layoutCraftNav = layoutCraftNav;
-            
-            if (!authService.hasToken() || authService.isTokenExpired()) {
-                window.location.href = '/?auth=required';
+            document.getElementById('user-name').value = user.full_name || 'Not set';
+            document.getElementById('user-email').value = user.email || 'Not set';
+            document.getElementById('user-id').value = user.id || 'Unknown';
+        }
+
+        // Copy user ID functionality
+        function initCopyButton() {
+            const copyBtn = document.getElementById('copy-user-id');
+            const userIdInput = document.getElementById('user-id');
+
+            copyBtn.addEventListener('click', async () => {
+                try {
+                    await navigator.clipboard.writeText(userIdInput.value);
+                    copyBtn.classList.add('copied');
+                    setTimeout(() => copyBtn.classList.remove('copied'), 2000);
+                } catch (err) {
+                    console.error('Failed to copy:', err);
+                }
+            });
+        }
+
+        // Render subscription details
+        function renderSubscription(sub) {
+            const loadingEl = document.getElementById('subscription-loading');
+            const contentEl = document.getElementById('subscription-content');
+            const planBadge = document.getElementById('plan-badge');
+            const planName = document.getElementById('plan-name');
+            const planStatus = document.getElementById('plan-status');
+            const planCard = document.getElementById('plan-card');
+            const trialInfo = document.getElementById('trial-info');
+            const manageBtn = document.getElementById('manage-subscription-btn');
+            const upgradeBtn = document.getElementById('upgrade-btn');
+            const planFeatures = document.getElementById('plan-features');
+
+            if (!sub) {
+                loadingEl.innerHTML = '<div class="error-state"><p>Could not load subscription details. Please refresh the page.</p></div>';
                 return;
             }
 
-            console.log('Fetching subscription details...');
-            // Ensure subscription data is fetched before rendering
-            if (!subscriptionService.hasFetched) {
-                console.log('Subscription data not fetched yet. Fetching now...');
-                await subscriptionService.fetchSubscription();
-            }
-            const sub = subscriptionService.getSubscription();
-            console.log('Subscription data:', sub);
+            // Set plan info
+            const isPro = sub.plan === 'pro';
+            const isTrialing = sub.plan === 'pro-trial';
+            const isFree = !isPro && !isTrialing;
 
-            const loadingEl = document.getElementById('subscription-loading');
-            const detailsEl = document.getElementById('subscription-details');
-            
-            if (sub) {
-                document.getElementById('plan-name').textContent = sub.plan;
-                
-                const statusEl = document.getElementById('plan-status');
-                //check if status is present first to avoid errors
-                if (sub.status) {
-                    statusEl.textContent = sub.status;
-                    statusEl.classList.add(sub.status.toLowerCase());
-                    statusEl.className = 'info-value badge'; // Reset classes
-                }
-
-
-                if (sub.status && sub.status === 'trialing' && sub.trial_ends_at) {
-                    const trialInfoEl = document.getElementById('trial-info');
-                    const trialDateEl = document.getElementById('trial-end-date');
-                    const endDate = new Date(sub.trial_ends_at);
-                    trialDateEl.textContent = endDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-                    trialInfoEl.style.display = 'flex';
-                }
-                const manageBtn = document.getElementById('manage-subscription-btn');
-                const upgradeBtn = document.getElementById('upgrade-to-pro-btn');
-
-                // This is your new requirement:
-                // Only show "Manage" if the plan is "pro" AND the status is "active"
-                if (sub.plan === 'pro' && sub.status === 'active') {
-                    manageBtn.style.display = 'flex';
-                } else {
-                    // Show "Upgrade" for "free" and "trialing" users
-                    upgradeBtn.style.display = 'flex';
-                }
-
-                loadingEl.style.display = 'none';
-                detailsEl.style.display = 'block';
+            if (isPro) {
+                planBadge.textContent = 'PRO';
+                planBadge.className = 'plan-badge pro';
+                planName.textContent = 'Pro Plan';
+                planCard.classList.add('pro');
+            } else if (isTrialing) {
+                planBadge.textContent = 'TRIAL';
+                planBadge.className = 'plan-badge trial';
+                planName.textContent = 'Pro Trial';
+                planCard.classList.add('trial');
             } else {
-                loadingEl.innerHTML = '<p>Could not load subscription details. Please refresh the page.</p>';
+                planBadge.textContent = 'FREE';
+                planBadge.className = 'plan-badge free';
+                planName.textContent = 'Free Plan';
+                planCard.classList.add('free');
             }
 
-            document.getElementById('manage-subscription-btn').addEventListener('click', async () => {
-                const manageBtn = document.getElementById('manage-subscription-btn');
+            // Set status
+            if (sub.status) {
+                planStatus.textContent = sub.status.charAt(0).toUpperCase() + sub.status.slice(1);
+                planStatus.className = `plan-status ${sub.status.toLowerCase()}`;
+            }
+
+            // Trial info
+            if (isTrialing && sub.trial_ends_at) {
+                const endDate = new Date(sub.trial_ends_at);
+                document.getElementById('trial-end-date').textContent = endDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                trialInfo.style.display = 'flex';
+            }
+
+            // Features list
+            const features = isPro || isTrialing ? [
+                'Unlimited design generations',
+                'All formats & dimensions',
+                'High-resolution exports',
+                'Design refinement with AI',
+                'Priority support'
+            ] : [
+                'Limited design generations',
+                'Standard resolution exports',
+                'Single format per generation'
+            ];
+
+            planFeatures.innerHTML = features.map(f => `
+                <div class="feature-item">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    <span>${f}</span>
+                </div>
+            `).join('');
+
+            // Action buttons
+            if (isPro && sub.status === 'active') {
+                manageBtn.style.display = 'inline-flex';
+            } else {
+                upgradeBtn.style.display = 'inline-flex';
+            }
+
+            // Show content
+            loadingEl.style.display = 'none';
+            contentEl.style.display = 'block';
+        }
+
+        // Manage subscription button handler
+        function initManageSubscription() {
+            const manageBtn = document.getElementById('manage-subscription-btn');
+
+            // Reset button state on page load (in case user came back from portal)
+            manageBtn.disabled = false;
+            manageBtn.innerHTML = 'Manage Subscription';
+
+            manageBtn.addEventListener('click', async () => {
                 manageBtn.disabled = true;
-                manageBtn.textContent = 'Loading portal...';
+                manageBtn.innerHTML = `
+                    <span class="btn-loading-spinner"></span>
+                    Loading portal...
+                `;
 
                 try {
                     const response = await authService.fetchAuthenticated('/dodo/portal', {
@@ -251,12 +343,60 @@
                     }
                 } catch (error) {
                     console.error('Failed to create portal session:', error);
-                    alert('Could not load the subscription management portal. If you have an active subscription, please try again later.');
+                    alert('Could not load the subscription management portal. Please try again later.');
                     manageBtn.disabled = false;
-                    manageBtn.textContent = 'Manage Subscription';
+                    manageBtn.innerHTML = 'Manage Subscription';
                 }
             });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            window.layoutCraftNav = layoutCraftNav;
+
+            // Auth check
+            if (!authService.hasToken() || authService.isTokenExpired()) {
+                window.location.href = '/?auth=required';
+                return;
+            }
+
+            // Listen for logout events - redirect to home when user logs out
+            document.addEventListener('authChange', () => {
+                if (!authService.hasToken()) {
+                    window.location.href = '/';
+                }
+            });
+
+            // Initialize UI components
+            initTabNavigation();
+            initCopyButton();
+            initManageSubscription();
+
+            // Populate user data
+            const user = authService.getCurrentUser();
+            populateUserData(user);
+
+            // Handle payment success redirect
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentSuccess = urlParams.has('payment');
+
+            if (paymentSuccess) {
+                const loadingEl = document.getElementById('subscription-loading');
+                loadingEl.innerHTML = '<div class="loading-state"><div class="loading-spinner"></div><p>Thank you! Updating your account...</p></div>';
+                await authService.forceRefreshUserData();
+                history.replaceState(null, '', window.location.pathname + '#subscription');
+
+                // Switch to subscription tab
+                document.querySelector('[data-tab="subscription"]').click();
+            }
+
+            // Fetch and render subscription
+            if (!subscriptionService.hasFetched) {
+                await subscriptionService.fetchSubscription();
+            }
+            const sub = subscriptionService.getSubscription();
+            renderSubscription(sub);
         });
-    </script> -->
+    </script>
 </body>
 </html>
