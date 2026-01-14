@@ -1,4 +1,6 @@
 {
+  "outputDirectory": "public",
+  "buildCommand": "npm run build",
   "rewrites": [
     {
       "source": "/app/(.*)",

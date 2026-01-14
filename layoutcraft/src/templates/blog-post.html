@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{title}}</title>
+    <meta name="description" content="{{description}}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{{canonicalUrl}}">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="{{title}}">
+    <meta property="og:description" content="{{description}}">
+    <meta property="og:url" content="{{canonicalUrl}}">
+    <meta property="og:site_name" content="LayoutCraft Blog">
+    <meta property="og:image" content="{{ogImage}}">
+
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="{{title}}">
+    <meta property="twitter:description" content="{{description}}">
+    <meta property="twitter:image" content="{{ogImage}}">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/shared/css/base.css">
+    <link rel="stylesheet" href="/css/homepage.css">
+    <link rel="stylesheet" href="/blog/css/blog.css">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      "headline": "{{title}}",
+      "description": "{{description}}",
+      "image": "{{ogImage}}",
+      "author": {
+        "@type": "Organization",
+        "name": "LayoutCraft"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "LayoutCraft",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.layoutcraft.tech/favicon-32x32.png"
+        }
+      },
+      "datePublished": "{{dateISO}}",
+      "dateModified": "{{dateModifiedISO}}"
+    }
+    </script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DJ5GEKEX8H"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-DJ5GEKEX8H');
+    </script>
+</head>
+<body>
+    <!-- Navigation -->
+    <div id="main-navigation"></div>
+
+    <!-- Blog Post -->
+    <article class="blog-post">
+        <header class="blog-post-header">
+            <h1 class="blog-post-title">{{title}}</h1>
+            <div class="blog-post-meta">
+                <time datetime="{{dateISO}}">{{date}}</time>
+                <span>•</span>
+                <span>{{readTime}} read</span>
+            </div>
+        </header>
+
+        <div class="blog-post-content">
+            {{content}}
+
+            <div class="blog-cta">
+                <h3>Ready to transform your marketing design workflow?</h3>
+                <p>Create your first professional multi-platform campaign in under 60 seconds.</p>
+                <a href="/app/" class="btn btn-primary" style="margin-top: 1rem;">
+                    Start Creating Free →
+                </a>
+            </div>
+        </div>
+    </article>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <defs>
+                                    <linearGradient id="brandGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#6366f1;"></stop>
+                                        <stop offset="100%" style="stop-color:#8b5cf6;"></stop>
+                                    </linearGradient>
+                                </defs>
+                                <rect width="48" height="48" rx="8" fill="url(#brandGradient)"></rect>
+                                <path
+                                    d="M12 12V28C12 32.4183 15.5817 36 20 36H36V20C36 15.5817 32.4183 12 28 12H20C20 12 20 20 20 20H28C28 20 28 28 28 28"
+                                    stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+                                </path>
+                                <circle cx="24" cy="24" r="2.5" fill="white" opacity="0.9"></circle>
+                            </svg>
+                        </div>
+                        <span class="logo-text">LayoutCraft</span>
+                    </div>
+                    <p class="footer-tagline">AI design tool for the rest of us.</p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <h4>Product</h4>
+                        <a href="/app/">Create Design</a>
+                        <a href="/blog/">Blog</a>
+                        <a href="/about/">About</a>
+                        <a href="/faq/">FAQ</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Resources</h4>
+                        <a href="/blog/posts/writing-better-prompts/">Prompt Guide</a>
+                        <a href="/app/">Templates</a>
+                        <a href="/faq/">Help</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <h4>Legal</h4>
+                        <a href="/legal/terms.html">Terms</a>
+                        <a href="/legal/privacy.html">Privacy</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2025 LayoutCraft. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <link rel="stylesheet" href="/shared/css/navigation.css">
+    <script type="module" src="/shared/js/authService.js"></script>
+    <script type="module" src="/shared/js/navigation.js"></script>
+    <script type="module">
+        import { layoutCraftNav } from '/shared/js/navigation.js';
+        import { authService } from '/shared/js/authService.js';
+        document.addEventListener('DOMContentLoaded', () => {
+            window.layoutCraftNav = layoutCraftNav;
+        });
+    </script>
+</body>
+</html>
